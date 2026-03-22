@@ -60,12 +60,12 @@ describe('authSlice', () => {
     expect(state.accessToken).toBeNull();
   });
 
-  it('logout preserves setup flags', () => {
+  it('logout resets to initial state', () => {
     const authed = authReducer(initial, setAuthenticated({ accessToken: 'tok', refreshToken: 'ref' }));
     const state = authReducer(authed, logout());
     expect(state.status).toBe('idle');
     expect(state.accessToken).toBeNull();
-    expect(state.hasCompletedSetup).toBe(true);
-    expect(state.isFirstTimeSetup).toBe(false);
+    expect(state.hasCompletedSetup).toBe(false);
+    expect(state.isFirstTimeSetup).toBe(true);
   });
 });

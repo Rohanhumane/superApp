@@ -1,0 +1,27 @@
+{
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "typeRoots": [
+      "./apps/mobile/node_modules/@types",
+      "./node_modules/@types"
+    ],
+    "types": ["jest", "react", "react-native", "node"],
+    "paths": {
+      "react": ["./apps/mobile/node_modules/react"],
+      "react-native": ["./apps/mobile/node_modules/react-native"],
+      "@testing-library/react-native": ["./apps/mobile/node_modules/@testing-library/react-native"],
+      "@nbfc/config": ["./packages/config"],
+      "@nbfc/utils": ["./packages/utils"],
+      "@nbfc/ui": ["./packages/ui"],
+      "@nbfc/ui/*": ["./packages/ui/*"],
+      "@nbfc/core": ["./packages/core"],
+      "@nbfc/core/*": ["./packages/core/*"],
+      "@nbfc/security": ["./packages/security"],
+      "@nbfc/network": ["./packages/network"],
+      "@nbfc/i18n": ["./packages/i18n"]
+    }
+  },
+  "include": ["packages/**/*"],
+  "exclude": ["node_modules", "**/node_modules"]
+}
