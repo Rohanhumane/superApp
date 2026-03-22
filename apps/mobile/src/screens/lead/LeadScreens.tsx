@@ -1,0 +1,191 @@
+import React, { useState } from 'react';
+import { View, ScrollView, SafeAreaView, StatusBar, TouchableOpacity, Image, Modal } from 'react-native';
+import { Text, Button, Input, Checkbox, FormTemplate, DropdownSelect, ProductTile, colors, sp } from '@nbfc/ui';
+import { useAppDispatch, useAppSelector, setProfile } from '@nbfc/core';
+import { LOAN_TYPES, PRODUCT_TYPES, EMPLOYMENT_TYPES } from '@nbfc/config';
+import { validators } from '@nbfc/utils';
+import { leadStyles as s } from './lead.styles';
+import { C } from '../../styles/shared';
+
+const logo = require('../../assets/logo.png');
+
+// ===== DATE PICKER MODAL =====
+const DatePickerModal = ({ visible, onClose, onSelect }: { visible: boolean; onClose: () => void; onSelect: (date: string) => void }) => {
+  const currentYear = new Date().getFullYear();
+  const [day, setDay] = useState('');
+  const [month, setMonth] = useState('');
+  const [year, setYear] = useState('');
+  const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+  const handleDone = () => {
+    if (day && month && year) {
+      const monthIdx = months.indexOf(month) + 1;
+      onSelect(`${day.padStart(2, '0')}/${String(monthIdx).padStart(2, '0')}/${year}`);
+      onClose();
+    }
+  };
+
+  return (
+    <Modal visible={visible} transparent animationType="slide">
+      <View style={s.dateModal}>
+        <View style={s.dateModalContent}>
+          <View style={s.dateModalHeader}>
+            <TouchableOpacity onPress={onClose}><Text variant="labelMd" color={colors.text.secondary}>Cancel</Text></TouchableOpacity>
+            <Text variant="labelLg">Select Date of Birth</Text>
+            <TouchableOpacity onPress={handleDone}><Text variant="labelMd" color={colors.primary.navy}>Done</Text></TouchableOpacity>
+          </View>
+          <View style={s.dateColumnsRow}>
+            {[
+              { label: 'Day', flex: 1, data: Array.from({ length: 31 }, (_, i) => String(i + 1).padStart(2, '0')), val: day, set: setDay },
+              { label: 'Month', flex: 1.5, data: months, val: month, set: setMonth },
+              { label: 'Year', flex: 1.2, data: Array.from({ length: 60 }, (_, i) => String(currentYear - 18 - i)), val: year, set: setYear },
+            ].map(col => (
+              <View key={col.label} style={{ flex: col.flex }}>
+                <Text variant="caption" color={colors.text.secondary} style={s.dateColumnLabel}>{col.label}</Text>
+                <ScrollView style={s.dateColumn} showsVerticalScrollIndicator={false}>
+                  {col.data.map(item => (
+                    <TouchableOpacity key={item} style={[s.dateItem, col.val === item && s.dateItemSelected]} onPress={() => col.set(item)}>
+                      <Text variant="bodyMd" color={col.val === item ? '#fff' : colors.text.primary} align="center">{item}</Text>
+                    </TouchableOpacity>
+                  ))}
+                </ScrollView>
+              </View>
+            ))}
+          </View>
+        </View>
+      </View>
+    </Modal>
+  );
+};
+
+// ===== PRODUCT PAGE =====
+export const ProductPageScreen = ({ navigation }: any) => (
+  <SafeAreaView style={s.screen}>
+    <StatusBar barStyle="light-content" backgroundColor={C.navy} />
+    <ScrollView>
+      <View style={s.heroSection}>
+        <Image source={logo} style={s.heroLogo} />
+        <Text variant="h2" color={colors.text.white} style={s.heroTitle}>Get Instant Vehicle{'\n'}Loan Approval</Text>
+        <Text variant="bodyMd" color={colors.text.white} style={s.heroSubtitle}>Get approval in minutes</Text>
+        <TouchableOpacity style={s.applyPill} onPress={() => navigation.navigate('LoginMobile', { flow: 'lead' })}>
+          <Text variant="labelMd" color={C.navy}>Apply Now ➜</Text>
+        </TouchableOpacity>
+      </View>
+      <View style={s.productsArea}>
+        <Text variant="h4" style={s.productsTitle}>Our Products</Text>
+        <View style={s.productsGrid}>
+          {LOAN_TYPES.map(p => <ProductTile key={p.id} label={p.label} icon={p.icon} onPress={() => navigation.navigate('ProductDetail', { productId: p.id, productLabel: p.label })} />)}
+        </View>
+        <Text variant="h4" style={{ marginTop: sp.xl, marginBottom: sp.lg }}>Tools & Services</Text>
+        <View style={s.toolsRow}>
+          {[{ t: 'EMI Calculator', i: '🧮', r: 'EMICalculator' }, { t: 'Eligibility Calculator', i: '📊', r: 'EligibilityCalculator' }].map(c => (
+            <TouchableOpacity key={c.t} style={s.toolCard} onPress={() => navigation.navigate(c.r)}>
+              <Text variant="labelMd">{c.t}</Text><Text style={s.toolIcon}>{c.i}</Text>
+            </TouchableOpacity>
+          ))}
+        </View>
+      </View>
+    </ScrollView>
+    <View style={s.bottomBar}><Button title="Create Account" onPress={() => navigation.navigate('LoginMobile', { flow: 'ntb' })} /></View>
+  </SafeAreaView>
+);
+
+// ===== PRODUCT DETAIL =====
+export const ProductDetailScreen = ({ navigation, route }: any) => {
+  const { productId, productLabel = 'Car Loan' } = route.params || {};
+  return (
+    <SafeAreaView style={s.screen}>
+      <ScrollView contentContainerStyle={{ padding: sp.xl }}>
+        <TouchableOpacity onPress={() => { if (navigation.canGoBack()) navigation.goBack(); }} style={s.backBtn}><Text variant="h3">←</Text></TouchableOpacity>
+        <View style={s.detailIcon}><Text style={s.detailIconText}>🚗</Text></View>
+        <Text variant="h2">{productLabel}</Text>
+        <Text variant="bodyMd" color={colors.text.secondary} style={s.detailDesc}>At SK Finance, we offer loans to help you fulfill your dreams without worrying about finances.</Text>
+        <Text variant="h4" style={{ marginTop: sp.xl }}>Features & Benefits</Text>
+        {['Loans for all owner profiles.', 'Attractive interest rates.', '100% transparency.', 'Up to 90% of value.'].map((f, i) => (
+          <View key={i} style={s.featureRow}>
+            <Text variant="bodyMd" color={colors.primary.green} style={s.featureCheck}>✓</Text>
+            <Text variant="bodyMd" color={colors.text.secondary}>{f}</Text>
+          </View>
+        ))}
+      </ScrollView>
+      <View style={s.bottomBar}><Button title="Apply Now" onPress={() => navigation.navigate('LoginMobile', { flow: 'lead', productId })} /></View>
+    </SafeAreaView>
+  );
+};
+
+// ===== KYC FORM =====
+export const KYCFormScreen = ({ navigation, route }: any) => {
+  const flow = route.params?.flow || 'ntb';
+  const preSelectedProduct = route.params?.productId || '';
+  const isLead = flow === 'lead';
+  const dispatch = useAppDispatch();
+  const authMobile = useAppSelector(st => st.auth.mobileNumber);
+  const authMasked = useAppSelector(st => st.auth.maskedMobile);
+
+  const [showDatePicker, setShowDatePicker] = useState(false);
+  const [f, setF] = useState({ name: '', dob: '', pan: '', email: '', pin: '', loanType: preSelectedProduct, prodType: '', empType: '', consent: false });
+  const [errors, setErrors] = useState<Record<string, string>>({});
+
+  const upd = (k: string, v: any) => { setF(p => ({ ...p, [k]: v })); setErrors(p => ({ ...p, [k]: '' })); };
+
+  const validate = (): boolean => {
+    const e: Record<string, string> = {};
+    if (!f.name.trim()) e.name = 'Name is required';
+    if (!f.dob) e.dob = 'Date of birth is required';
+    if (!f.pan) e.pan = 'PAN is required';
+    else if (!validators.isValidPAN(f.pan)) e.pan = 'Invalid PAN (e.g. ABCDE1234F)';
+    if (!f.consent) e.consent = 'Please accept the terms';
+    if (isLead) {
+      if (f.email && !validators.isValidEmail(f.email)) e.email = 'Invalid email';
+      if (f.pin && !validators.isValidPincode(f.pin)) e.pin = 'Invalid pincode';
+      if (!f.loanType) e.loanType = 'Select loan type';
+      if (!f.empType) e.empType = 'Select employment type';
+    }
+    setErrors(e);
+    return Object.keys(e).length === 0;
+  };
+
+  const handleSubmit = () => {
+    if (!validate()) return;
+    dispatch(setProfile({ fullName: f.name, dob: f.dob, pan: f.pan.toUpperCase(), maskedPAN: 'xxxxxx' + f.pan.slice(-4).toUpperCase(), email: f.email || '', mobile: authMobile, maskedMobile: authMasked || ('xxxxxx' + authMobile.slice(-4)) }));
+    navigation.navigate('MPINIntro', { flow });
+  };
+
+  const isValid = isLead ? (f.name && f.dob && f.pan && f.consent && f.loanType && f.empType) : (f.name && f.dob && f.pan && f.consent);
+
+  return (
+    <FormTemplate title="Tell us more about you" subtitle={isLead ? 'Help us connect you with the right loan expert' : 'This helps us verify your identity'}
+      onBack={() => { if (navigation.canGoBack()) navigation.goBack(); }} btnTitle="Continue" onSubmit={handleSubmit} btnDisabled={!isValid}>
+      <Input label="Full Name (as per PAN Card)" required placeholder="e.g Rahul Sharma" value={f.name} onChangeText={t => upd('name', t)} error={errors.name} />
+
+      <View style={s.dobField}>
+        <View style={s.dobLabelRow}>
+          <Text variant="bodySm" color={colors.text.secondary}>Date of birth</Text>
+          <Text variant="bodySm" color={colors.text.error}> *</Text>
+        </View>
+        <TouchableOpacity style={[s.dobInput, errors.dob ? s.dobInputError : s.dobInputNormal]} onPress={() => setShowDatePicker(true)} activeOpacity={0.7}>
+          <Text variant="bodyLg" color={f.dob ? C.black : C.gray5} style={s.dobPlaceholder}>{f.dob || 'DD/MM/YYYY'}</Text>
+          <Text variant="bodyMd" color={colors.text.tertiary}>📅</Text>
+        </TouchableOpacity>
+        {errors.dob && <Text variant="caption" color={colors.text.error} style={{ marginTop: 4 }}>{errors.dob}</Text>}
+      </View>
+
+      <DatePickerModal visible={showDatePicker} onClose={() => setShowDatePicker(false)} onSelect={d => upd('dob', d)} />
+
+      <Input label="PAN Number" required placeholder="ABCDE1234F" value={f.pan} onChangeText={t => upd('pan', t.toUpperCase())} error={errors.pan} autoCapitalize="characters" maxLength={10} />
+
+      {isLead && (
+        <>
+          <Input label="Email" placeholder="email@example.com" value={f.email} onChangeText={t => upd('email', t)} error={errors.email} keyboardType="email-address" autoCapitalize="none" />
+          <Input label="Pin Code" placeholder="Enter pincode" value={f.pin} onChangeText={t => upd('pin', t.replace(/[^0-9]/g, ''))} error={errors.pin} keyboardType="number-pad" maxLength={6} />
+          <DropdownSelect label="Loan Type" required value={f.loanType} error={errors.loanType} options={LOAN_TYPES.map(l => ({ id: l.id, label: l.label }))} onSelect={o => upd('loanType', o.id)} placeholder="Select Loan Type" />
+          <DropdownSelect label="Product Type" value={f.prodType} options={[...PRODUCT_TYPES]} onSelect={o => upd('prodType', o.id)} placeholder="Select Product Type" />
+          <DropdownSelect label="Employment Type" required value={f.empType} error={errors.empType} options={[...EMPLOYMENT_TYPES]} onSelect={o => upd('empType', o.id)} placeholder="Select Employment Type" />
+        </>
+      )}
+
+      <Checkbox checked={f.consent} onToggle={() => upd('consent', !f.consent)} label="The information provided will be used for processing your loan enquiry." />
+      {errors.consent && <Text variant="caption" color={colors.text.error} style={{ marginTop: -8 }}>{errors.consent}</Text>}
+    </FormTemplate>
+  );
+};

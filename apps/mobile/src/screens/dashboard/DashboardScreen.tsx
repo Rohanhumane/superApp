@@ -1,0 +1,125 @@
+import React from 'react';
+import { View, ScrollView, TouchableOpacity, StatusBar, SafeAreaView } from 'react-native';
+import { DashboardTemplate, Text, LoanCard, SectionHeader, QuickLinkCard, RecommendCard, colors, sp } from '@nbfc/ui';
+import { useAppSelector } from '@nbfc/core';
+import { LOAN_TYPES } from '@nbfc/config';
+import { ds } from './DashboardScreen.styles';
+import { SCREEN_WIDTH, C } from '../../styles/shared';
+
+const ProductIcon = ({ type }: { type: string }) => {
+  const cfg: Record<string, { emoji: string; bg: string }> = {
+    car: { emoji: '🚗', bg: '#EEF2FF' }, tractor: { emoji: '🚜', bg: '#EEF6EE' },
+    truck: { emoji: '🚛', bg: '#EEF2FF' }, equipment: { emoji: '⚙️', bg: '#EEF2FF' },
+    business: { emoji: '🏢', bg: '#EEF6EE' }, home: { emoji: '🏠', bg: '#EEF6EE' },
+  };
+  const c = cfg[type] || { emoji: '📦', bg: '#F5F5F5' };
+  return (
+    <View style={{ width: 56, height: 56, borderRadius: 12, backgroundColor: c.bg, alignItems: 'center', justifyContent: 'center' }}>
+      <Text style={{ fontSize: 28 }}>{c.emoji}</Text>
+    </View>
+  );
+};
+
+export const DashboardScreen = ({ navigation }: any) => {
+  const userType = useAppSelector(s => s.auth.userType);
+  const userName = useAppSelector(s => s.user.profile.fullName);
+  const loans = useAppSelector(s => s.loan.loans);
+  const isETB = userType === 'etb';
+
+  const nav = (screen: string, params?: any) => {
+    try { navigation.getParent()?.navigate(screen, params); } catch (_) {
+      try { navigation.navigate(screen, params); } catch (_) {}
+    }
+  };
+
+  if (isETB) {
+    return (
+      <DashboardTemplate userName={userName.split(' ')[0]} onProfile={() => nav('MyProfile')} onSearch={() => {}} onNotify={() => {}}>
+        {loans.length > 0 && <View style={{ marginTop: sp.lg }}><ScrollView horizontal showsHorizontalScrollIndicator={false} pagingEnabled>
+          {loans.map(l => <LoanCard key={l.id} type={l.type} number={l.number} status={l.status} amount={l.amount} emi={l.emi} onView={() => nav('LoanDetails', { loanId: l.id })} onPay={() => nav('PayEMI', { loanId: l.id })} />)}
+        </ScrollView></View>}
+        <SectionHeader title="Payments & Reminders" />
+        <TouchableOpacity style={[ds.card, { flexDirection: 'row', alignItems: 'center', marginHorizontal: sp.lg }]} onPress={() => nav('SetUpAutoDebit')}>
+          <Text style={{ fontSize: 24, marginRight: sp.md }}>🔄</Text><View style={{ flex: 1 }}><Text variant="bodySm">Never miss an EMI. Set up auto-debit.</Text><Text variant="labelSm" color={C.navy}>Set Up Auto-Debit</Text></View>
+        </TouchableOpacity>
+        <SectionHeader title="Recommended for You" />
+        <RecommendCard title="Pre-Approved Two-Wheeler Loan" sub="Get up to ₹1,50,000 instantly" onPress={() => {}} />
+        <SectionHeader title="Quick Links" />
+        <View style={{ flexDirection: 'row', justifyContent: 'space-around', paddingHorizontal: sp.lg }}>
+          {[{ l: 'My Loans', i: 'loan', r: 'LoanDetails' }, { l: 'Documents', i: 'document', r: 'DocumentsStatement' }, { l: 'Mandate', i: 'mandate', r: 'ViewMandate' }, { l: 'Insurance', i: 'insurance', r: '' }].map(q =>
+            <QuickLinkCard key={q.l} label={q.l} icon={q.i} onPress={() => q.r && nav(q.r, q.r === 'LoanDetails' ? { loanId: loans[0]?.id } : undefined)} />)}
+        </View>
+      </DashboardTemplate>
+    );
+  }
+
+  return (
+    <SafeAreaView style={{ flex: 1, backgroundColor: C.navy }}>
+      <StatusBar barStyle="light-content" backgroundColor={C.navy} />
+      <ScrollView style={{ flex: 1 }} contentContainerStyle={{ paddingBottom: 100 }} showsVerticalScrollIndicator={false} bounces={false}>
+        <View style={ds.navySection}>
+          <View style={ds.topBar}>
+            <TouchableOpacity style={ds.avatarCircle} onPress={() => nav('MyProfile')}><Text style={{ fontSize: 16 }}>👤</Text></TouchableOpacity>
+            <View style={{ flex: 1 }} />
+            <TouchableOpacity style={{ marginRight: 16 }}><Text style={{ fontSize: 22, color: '#fff' }}>🔍</Text></TouchableOpacity>
+            <TouchableOpacity><Text style={{ fontSize: 22, color: '#fff' }}>🔔</Text></TouchableOpacity>
+          </View>
+          <View style={ds.heroContent}>
+            <View style={{ flex: 1 }}>
+              <Text variant="h3" color="#FFFFFF" style={{ lineHeight: 28, fontSize: 20 }}>Get Instant Vehicle{'\n'}Loan Approval</Text>
+              <Text variant="bodySm" color="rgba(255,255,255,0.6)" style={{ marginTop: 4 }}>Get approval in minutes</Text>
+              <TouchableOpacity style={ds.applyBtn} onPress={() => nav('ProductDetail', { productId: 'car_loan', productLabel: 'Car Loan' })}>
+                <Text variant="labelSm" color={C.navy}>Apply Now</Text>
+                <View style={ds.applyBtnIcon}><Text variant="caption" color="#fff">➜</Text></View>
+              </TouchableOpacity>
+            </View>
+            <View style={ds.carArea}>
+              <Text style={{ fontSize: 50 }}>🚚</Text>
+              <View style={{ position: 'absolute', top: -10, right: 4 }}><Text style={{ fontSize: 22 }}>📦</Text></View>
+            </View>
+          </View>
+          <View style={ds.dotsRow}><View style={ds.dotOff} /><View style={ds.dotOn} /><View style={ds.dotOff} /></View>
+        </View>
+        <View style={ds.contentArea}>
+          <View style={ds.statusCard}>
+            <View style={ds.statusIcon}><Text style={{ fontSize: 22 }}>👤</Text></View>
+            <View style={{ flex: 1, marginLeft: 12 }}>
+              <Text style={{ fontSize: 15, fontWeight: '600', color: C.black }}>Your request is in progress.</Text>
+              <Text style={{ fontSize: 12, color: C.gray6, marginTop: 2 }}>Our team will contact you soon..</Text>
+              <TouchableOpacity style={ds.orangeBtn} onPress={() => nav('CustomerCare')}><Text style={{ fontSize: 11, fontWeight: '600', color: '#fff' }}>Contact Support</Text></TouchableOpacity>
+            </View>
+          </View>
+          <Text style={ds.sectionTitle}>Our Products</Text>
+          <View style={{ flexDirection: 'row', flexWrap: 'wrap', paddingHorizontal: 16 }}>
+            {LOAN_TYPES.map(p => (
+              <TouchableOpacity key={p.id} style={ds.prodItem} onPress={() => nav('ProductDetail', { productId: p.id, productLabel: p.label })} activeOpacity={0.7}>
+                <ProductIcon type={p.icon} />
+                <Text style={{ fontSize: 11, textAlign: 'center', marginTop: 6, color: C.black }} numberOfLines={2}>{p.label}</Text>
+              </TouchableOpacity>
+            ))}
+          </View>
+          <Text style={[ds.sectionTitle, { fontStyle: 'italic' }]}>Tools & Services</Text>
+          <View style={{ flexDirection: 'row', paddingHorizontal: 16, gap: 12 }}>
+            <TouchableOpacity style={ds.toolCard} onPress={() => nav('EMICalculator')} activeOpacity={0.7}>
+              <Text style={{ fontSize: 13, fontWeight: '600', color: C.black }}>EMI{'\n'}Calculator</Text>
+              <View style={{ flex: 1, justifyContent: 'flex-end', alignItems: 'center', marginTop: 8 }}><View style={[ds.toolBubble, { backgroundColor: '#F5ECD7' }]}><Text style={{ fontSize: 36 }}>🧮</Text></View></View>
+            </TouchableOpacity>
+            <TouchableOpacity style={ds.toolCard} onPress={() => nav('EligibilityCalculator')} activeOpacity={0.7}>
+              <Text style={{ fontSize: 13, fontWeight: '600', color: C.black }}>Eligibility{'\n'}Calculator</Text>
+              <View style={{ flex: 1, justifyContent: 'flex-end', alignItems: 'center', marginTop: 8 }}><View style={[ds.toolBubble, { backgroundColor: '#E2F0E2' }]}><Text style={{ fontSize: 36 }}>📊</Text></View></View>
+            </TouchableOpacity>
+          </View>
+          <Text style={ds.sectionTitle}>Support</Text>
+          <View style={{ flexDirection: 'row', justifyContent: 'space-around', paddingHorizontal: 16, marginBottom: 32 }}>
+            {[{ l: 'Chat support', i: '💬' }, { l: 'Email', i: '✉️' }, { l: 'Call Us', i: '📞' }, { l: 'Locate Us', i: '📍' }].map(s => (
+              <TouchableOpacity key={s.l} style={{ alignItems: 'center', width: (SCREEN_WIDTH - 48) / 4 }} activeOpacity={0.7}>
+                <View style={ds.supIcon}><Text style={{ fontSize: 20 }}>{s.i}</Text></View>
+                <Text style={{ fontSize: 10, color: C.gray6, textAlign: 'center', marginTop: 6 }}>{s.l}</Text>
+              </TouchableOpacity>
+            ))}
+          </View>
+        </View>
+      </ScrollView>
+    </SafeAreaView>
+  );
+};

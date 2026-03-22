@@ -1,0 +1,76 @@
+{
+  "common": {
+    "continue": "जारी रखें",
+    "submit": "जमा करें",
+    "done": "पूर्ण",
+    "cancel": "रद्द करें",
+    "back": "पीछे",
+    "skip": "छोड़ें",
+    "next": "अगला",
+    "apply_now": "अभी आवेदन करें",
+    "logout": "लॉग आउट",
+    "logout_confirm": "क्या आप लॉग आउट करना चाहते हैं?",
+    "change": "बदलें",
+    "add": "जोड़ें",
+    "update": "अपडेट करें"
+  },
+  "welcome": {
+    "app_name": "सेवक",
+    "get_started": "शुरू करें",
+    "log_in": "लॉग इन करें",
+    "privacy_notice": "खाता बनाकर, आप पुष्टि करते हैं कि आपने हमारी गोपनीयता नीतियों को पढ़ और समझ लिया है"
+  },
+  "login": {
+    "etb_title": "वापसी पर स्वागत है",
+    "etb_subtitle": "अपने SK Finance खाते से जुड़ा फ़ोन नंबर दर्ज करें",
+    "ntb_title": "शुरू करें",
+    "ntb_subtitle": "हम आपके नंबर को सत्यापित करने के लिए एक सुरक्षित OTP भेजेंगे।",
+    "get_otp": "OTP प्राप्त करें",
+    "invalid_mobile": "कृपया एक वैध 10-अंकीय मोबाइल नंबर दर्ज करें"
+  },
+  "otp": {
+    "title_sms": "हमने अभी आपको एक SMS भेजा है",
+    "title_email": "अपना ईमेल सत्यापित करें",
+    "title_mobile": "मोबाइल नंबर सत्यापित करें",
+    "title_reset": "अपनी पहचान सत्यापित करें",
+    "subtitle": "{{contact}} पर भेजा गया {{length}}-अंकीय कोड दर्ज करें",
+    "didnt_receive": "प्राप्त नहीं हुआ?",
+    "resend_in": "{{seconds}} सेकंड में पुनः भेजें"
+  },
+  "mpin": {
+    "intro_title": "अपना ऐप MPIN सेट करें",
+    "intro_subtitle": "त्वरित लॉगिन के लिए 4-अंकीय PIN बनाएं",
+    "setup_title": "MPIN सेट करें",
+    "setup_reset_title": "नया MPIN सेट करें",
+    "confirm_title": "MPIN की पुष्टि करें",
+    "error_mismatch": "MPIN मेल नहीं खाता। कृपया पुनः प्रयास करें।"
+  },
+  "dashboard": {
+    "hero_title": "तत्काल वाहन\nऋण स्वीकृति प्राप्त करें",
+    "hero_subtitle": "मिनटों में स्वीकृति प्राप्त करें",
+    "status_title": "आपका अनुरोध प्रगति में है।",
+    "status_subtitle": "हमारी टीम जल्द ही आपसे संपर्क करेगी..",
+    "contact_support": "सहायता से संपर्क करें",
+    "our_products": "हमारे उत्पाद"
+  },
+  "profile": {
+    "title": "मेरी प्रोफ़ाइल",
+    "personal_info": "व्यक्तिगत जानकारी",
+    "address": "पता",
+    "change_mpin": "MPIN बदलें",
+    "language_pref": "भाषा प्राथमिकता",
+    "refer_earn": "रेफ़र करें और कमाएं",
+    "customer_care": "ग्राहक सेवा से संपर्क करें"
+  },
+  "calculator": {
+    "emi_title": "EMI कैलकुलेटर",
+    "eligibility_title": "पात्रता कैलकुलेटर",
+    "loan_amount": "ऋण राशि",
+    "interest_rate": "ब्याज दर (प्रति वर्ष)",
+    "tenure": "अवधि (महीने)"
+  },
+  "success": {
+    "default_title": "सफल!",
+    "request_submitted": "अनुरोध सफलतापूर्वक जमा किया गया"
+  }
+}

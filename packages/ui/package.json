@@ -1,0 +1,16 @@
+{
+  "name": "@nbfc/ui",
+  "version": "1.0.0",
+  "private": true,
+  "main": "index.ts",
+  "peerDependencies": {
+    "react": "*",
+    "react-native": "*",
+    "@nbfc/config": "*",
+    "@nbfc/utils": "*"
+  },
+  "scripts": {
+    "test": "jest --config ../../jest/jest.config.js --testPathPattern packages/ui",
+    "test:watch": "jest --config ../../jest/jest.config.js --testPathPattern packages/ui --watch"
+  }
+}

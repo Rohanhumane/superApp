@@ -1,0 +1,398 @@
+{
+  "common": {
+    "continue": "Continue",
+    "submit": "Submit",
+    "done": "Done",
+    "cancel": "Cancel",
+    "back": "Back",
+    "skip": "SKIP",
+    "next": "Next",
+    "apply_now": "Apply Now",
+    "logout": "Logout",
+    "logout_confirm": "Are you sure you want to logout?",
+    "change": "Change",
+    "add": "Add",
+    "update": "Update",
+    "download": "Download",
+    "view_more": "View More",
+    "need_help": "Need Help?",
+    "resend_otp": "Resend OTP",
+    "app_version": "App Ver {{version}}"
+  },
+
+  "welcome": {
+    "app_name": "Sevak",
+    "get_started": "Get Started",
+    "log_in": "Log in",
+    "privacy_notice": "By creating an account, you confirm that you have read and understood our Privacy Policies"
+  },
+
+  "login": {
+    "etb_title": "Welcome back",
+    "etb_subtitle": "Enter the phone number associated with your SK Finance account",
+    "ntb_title": "Get started",
+    "ntb_subtitle": "We'll send a secure OTP to verify your number.",
+    "get_otp": "Get OTP",
+    "invalid_mobile": "Please enter a valid 10-digit mobile number"
+  },
+
+  "otp": {
+    "title_sms": "We just sent you an SMS",
+    "title_email": "Verify Your Email",
+    "title_mobile": "Verify Mobile Number",
+    "title_reset": "Verify Your Identity",
+    "subtitle": "Enter the {{length}}-digit code we sent to {{contact}}",
+    "didnt_receive": "Didn't receive it?",
+    "resend_in": "Resend in {{seconds}} secs",
+    "code_expires": "Code expires in",
+    "submit": "Submit"
+  },
+
+  "mpin": {
+    "intro_title": "Set Your App MPIN",
+    "intro_subtitle": "Create a 4-digit PIN for quick login",
+    "setup_title": "Set MPIN",
+    "setup_reset_title": "Set New MPIN",
+    "setup_subtitle": "Create a 4-digit MPIN for quick and secure access to your account.",
+    "confirm_title": "Confirm MPIN",
+    "confirm_subtitle": "Enter the same 4-digit MPIN again to confirm.",
+    "enter_label": "Enter MPIN",
+    "confirm_label": "Confirm MPIN",
+    "error_short": "Please enter 4-digit MPIN",
+    "error_weak": "Please choose a more secure MPIN",
+    "error_mismatch": "MPIN does not match. Please try again.",
+    "reset_success_title": "MPIN Reset Successfully",
+    "reset_success_subtitle": "Please click the 'Login' button to proceed.",
+    "login_btn": "Login"
+  },
+
+  "biometric": {
+    "title": "Enable Face ID",
+    "subtitle": "Use Face ID for faster, secure access. You can change this anytime in settings.",
+    "enable_btn": "Enable Face ID"
+  },
+
+  "login_success": {
+    "title": "Login Successful!",
+    "subtitle": "You can access your dashboard quickly and safely.",
+    "go_dashboard": "Go to dashboard"
+  },
+
+  "subsequent": {
+    "welcome": "Welcome,",
+    "login_mpin": "Login with mPIN",
+    "forgot_mpin": "Forgot mPIN?",
+    "use_face_id": "Use Face ID",
+    "incorrect_mpin": "Incorrect MPIN. Please try again."
+  },
+
+  "forgot_mpin": {
+    "title": "Forgot mPIN",
+    "subtitle": "To reset your MPIN, you need to verify your registered mobile number through OTP.",
+    "registered_mobile": "Registered Mobile Number"
+  },
+
+  "account_locked": {
+    "title": "Account temporarily locked",
+    "subtitle": "Too many incorrect PIN attempts. Try again after 30 minutes.",
+    "reset_btn": "Reset MPIN",
+    "call_support": "Call Support"
+  },
+
+  "session_expired": {
+    "title": "Session expired",
+    "subtitle": "For your security, you've been logged out due to inactivity.",
+    "login_again": "Log in again"
+  },
+
+  "dashboard": {
+    "hero_title": "Get Instant Vehicle\nLoan Approval",
+    "hero_subtitle": "Get approval in minutes",
+    "status_title": "Your request is in progress.",
+    "status_subtitle": "Our team will contact you soon..",
+    "contact_support": "Contact Support",
+    "our_products": "Our Products",
+    "tools_services": "Tools & Services",
+    "support": "Support",
+    "chat_support": "Chat support",
+    "email": "Email",
+    "call_us": "Call Us",
+    "locate_us": "Locate Us",
+    "payments_reminders": "Payments & Reminders",
+    "auto_debit_prompt": "Never miss an EMI. Set up auto-debit.",
+    "setup_auto_debit": "Set Up Auto-Debit",
+    "recommended": "Recommended for You",
+    "quick_links": "Quick Links",
+    "pre_approved_title": "Pre-Approved Two-Wheeler Loan",
+    "pre_approved_sub": "Get up to ₹1,50,000 instantly",
+    "view_offer": "View Offer"
+  },
+
+  "products": {
+    "page_title": "Get Instant Vehicle\nLoan Approval",
+    "page_subtitle": "Get approval in minutes",
+    "our_products": "Our Products",
+    "tools_services": "Tools & Services",
+    "create_account": "Create Account",
+    "features_title": "Features & Benefits",
+    "feature_1": "Loans for all owner profiles.",
+    "feature_2": "Attractive interest rates.",
+    "feature_3": "100% transparency.",
+    "feature_4": "Up to 90% of value.",
+    "detail_desc": "At SK Finance, we offer loans to help you fulfill your dreams without worrying about finances."
+  },
+
+  "kyc": {
+    "title": "Tell us more about you",
+    "subtitle_lead": "Help us connect you with the right loan expert",
+    "subtitle_ntb": "This helps us verify your identity",
+    "full_name": "Full Name (as per PAN Card)",
+    "full_name_placeholder": "e.g Rahul Sharma",
+    "dob": "Date of birth",
+    "dob_placeholder": "DD/MM/YYYY",
+    "pan": "PAN Number",
+    "pan_placeholder": "ABCDE1234F",
+    "email": "Email",
+    "email_placeholder": "email@example.com",
+    "pincode": "Pin Code",
+    "pincode_placeholder": "Enter pincode",
+    "loan_type": "Loan Type",
+    "loan_type_placeholder": "Select Loan Type",
+    "product_type": "Product Type",
+    "product_type_placeholder": "Select Product Type",
+    "employment_type": "Employment Type",
+    "employment_type_placeholder": "Select Employment Type",
+    "consent_text": "The information provided will be used for processing your loan enquiry.",
+    "error_name": "Name is required",
+    "error_dob": "Date of birth is required",
+    "error_pan": "PAN is required",
+    "error_pan_invalid": "Invalid PAN (e.g. ABCDE1234F)",
+    "error_consent": "Please accept the terms",
+    "error_email": "Invalid email",
+    "error_pincode": "Invalid pincode",
+    "error_loan_type": "Select loan type",
+    "error_employment": "Select employment type",
+    "date_picker_title": "Select Date of Birth",
+    "date_day": "Day",
+    "date_month": "Month",
+    "date_year": "Year"
+  },
+
+  "profile": {
+    "title": "My Profile",
+    "account_info": "Account Information",
+    "personal_info": "Personal Information",
+    "address": "Address",
+    "settings": "Settings",
+    "change_mpin": "Change MPIN",
+    "language_pref": "Language Preference",
+    "others": "Others",
+    "refer_earn": "Refer & Earn",
+    "customer_care": "Contact Customer Care",
+    "change_photo": "Change Photo",
+    "take_photo": "Take a photo",
+    "gallery": "Gallery",
+    "full_name": "Full Name",
+    "dob": "Date of Birth",
+    "pan_number": "PAN Number",
+    "mobile_number": "Mobile Number",
+    "alt_mobile": "Alternate Mobile Number",
+    "email_id": "Email ID",
+    "disclaimer_title": "Disclaimer",
+    "disclaimer_text": "Updates made here will only apply to your profile information."
+  },
+
+  "update_mobile": {
+    "title": "Update Mobile Number",
+    "subtitle": "Enter your new mobile number. A verification code will be sent to confirm the change.",
+    "label": "New Mobile Number",
+    "placeholder": "Enter new mobile number",
+    "consent": "I agree that SKF will share the new mobile number entered by me with external agencies for verification purpose.",
+    "error_length": "Enter 10-digit mobile number",
+    "error_invalid": "Enter valid mobile number starting with 6-9"
+  },
+
+  "update_email": {
+    "title": "Update Email Address",
+    "subtitle": "Enter your new email address. All future communications will be sent to this email.",
+    "label": "New Email Address",
+    "placeholder": "Enter new email address",
+    "error_invalid": "Enter a valid email address"
+  },
+
+  "change_mpin": {
+    "title": "Change MPIN",
+    "subtitle": "To change your MPIN, verify your registered mobile number through OTP.",
+    "registered_mobile": "Registered Mobile Number"
+  },
+
+  "language": {
+    "title": "Language Preference",
+    "subtitle": "Select your preferred language"
+  },
+
+  "address": {
+    "title": "Address",
+    "communication": "Communication Address",
+    "permanent": "Permanent Address",
+    "confirm_title": "Confirm Your Address",
+    "confirm_subtitle": "We found the following address from your document."
+  },
+
+  "refer": {
+    "title": "Enter your friend's details",
+    "subtitle": "Your friend's details are safe.",
+    "header": "Fill referral form",
+    "friend_name": "Friend's name",
+    "friend_name_placeholder": "Enter name",
+    "contact": "Contact details",
+    "contact_placeholder": "Enter mobile number",
+    "loan_interest": "Interested Loan",
+    "loan_placeholder": "Select loan type",
+    "submit_btn": "Submit referral"
+  },
+
+  "care": {
+    "title": "Contact Customer Care",
+    "talk_team": "Talk to our team",
+    "all_options": "All Options"
+  },
+
+  "calculator": {
+    "emi_title": "EMI Calculator",
+    "eligibility_title": "Eligibility Calculator",
+    "loan_amount": "Loan Amount",
+    "interest_rate": "Interest Rate (p.a)",
+    "tenure": "Tenure (Months)",
+    "income": "Gross Monthly Income",
+    "other_emi": "Other Loan EMI's",
+    "income_source": "Income Source",
+    "emi_label": "{{loanType}} EMI",
+    "total_interest": "Total Interest\nPayable",
+    "total_amount": "Total Amount\nPayable",
+    "eligibility_label": "{{loanType}} Eligibility is"
+  },
+
+  "payments": {
+    "pay_emi": "Pay EMI",
+    "pay_subtitle": "Select a Loan Account and Payment Type to make a payment",
+    "loan_account": "Loan Account",
+    "payment_type": "Payment Type",
+    "customer_name": "Customer Name",
+    "mobile_number": "Mobile Number",
+    "amount": "Amount",
+    "make_payment": "Make Payment",
+    "payment_success": "Payment Successful!",
+    "payment_success_sub": "Your payment has been completed successfully."
+  },
+
+  "loan_details": {
+    "title": "Loan Details",
+    "overview": "Overview",
+    "documents": "Documents & Statement",
+    "transactions": "Recent Transactions",
+    "repayment_progress": "Repayment Progress",
+    "next_installment": "Next Installment",
+    "emi_amount": "EMI Amount",
+    "loan_amount": "Loan Amount",
+    "tenure": "Tenure",
+    "closure_date": "Loan Closure Date",
+    "paid": "Paid",
+    "remaining": "Remaining",
+    "emi_paid": "EMI Paid",
+    "nach_title": "Auto-Debit Account (NACH)",
+    "insurance_title": "Linked Insurance",
+    "associated_title": "Associated People"
+  },
+
+  "mandate": {
+    "title": "Auto-Debit Mandate",
+    "header": "Auto-Debit & Payments",
+    "select_loan": "Select Loan",
+    "mandate_details": "Mandate Details",
+    "bank_name": "Bank Name",
+    "account_number": "Account Number",
+    "ifsc_code": "IFSC Code",
+    "account_holder": "Account Holder",
+    "emi_amount": "EMI Amount",
+    "end_date": "End Date",
+    "change_bank": "Change Bank Account",
+    "warning_title": "Important Information",
+    "warning_text": "Changing your auto-debit account will replace the existing mandate. You'll need to authorize the new account to continue EMI payments.",
+    "setup_title": "Mandate Details",
+    "setup_subtitle": "Your EMI will be automatically debited from this bank account every month.",
+    "setup_header": "Set Up Auto-Debit",
+    "holder_name": "Account Holder Name",
+    "account_type": "Account Type",
+    "authorize_title": "Mandate Details",
+    "authorize_subtitle": "To activate auto-debit, please complete the bank process.",
+    "authorize_header": "Authorize Auto-Debit",
+    "authorize_btn": "Authorize Mandate"
+  },
+
+  "services": {
+    "title": "Services",
+    "your_relationships": "Your Relationships",
+    "quick_links": "Quick Links",
+    "pay_loan_emi": "Pay Loan\nEMI",
+    "raise_request": "Raise\nRequest",
+    "track_application": "Track\nApplication",
+    "documents": "Documents",
+    "get_documents": "Get Documents & Statement",
+    "knowledge_center": "Knowledge Center",
+    "how_pay_emi": "How to pay EMI",
+    "how_update_mandate": "How to update mandate",
+    "account_management": "Account Management",
+    "profile_details": "Profile Details",
+    "manage_autopay": "Manage Autopay",
+    "download_statement": "Download Statement",
+    "need_assistance": "Need Assistance?",
+    "available_mon_fri": "Available Mon-Fri.",
+    "call_now": "Call Now",
+    "faqs": "FAQs"
+  },
+
+  "service_requests": {
+    "title": "Service Requests",
+    "subtitle": "How can we help you today?",
+    "create_title": "Create Service Request",
+    "create_sub": "Submit a new request for assistance",
+    "track_title": "Track Service Requests",
+    "track_sub": "View status of your existing requests",
+    "select_loan": "Select Loan Account",
+    "select_loan_sub": "Choose the loan for this service request",
+    "active_loans": "Active Loans",
+    "inactive_loans": "Inactive Loans",
+    "other_request": "Other Request",
+    "other_sub": "Select a category and describe your issue",
+    "select_category": "Select Category",
+    "category_placeholder": "e.g., Payments, Documents",
+    "select_sub": "Select Sub-Category",
+    "description": "Description",
+    "description_placeholder": "Describe your issue clearly",
+    "attachments": "Attachments (Optional)",
+    "upload_documents": "Upload Documents",
+    "upload_formats": "Formats: jpg, png, pdf, etc. Max Size: 10MB",
+    "submit_request": "Submit Request",
+    "no_requests": "No requests found"
+  },
+
+  "success": {
+    "default_title": "Success!",
+    "request_submitted": "Request Submitted Successfully",
+    "application_submitted": "Application Submitted Successfully",
+    "application_sub": "Our team will review and contact you soon.",
+    "view_ticket": "View Service Ticket",
+    "back_home": "Back to Home",
+    "go_dashboard": "Go to Dashboard",
+    "confirm_details": "Confirm Details",
+    "mobile_update_sub": "Your mobile number will be updated within {{hours}} hours.",
+    "email_update_sub": "Your email address will be updated within {{hours}} hours.",
+    "address_update_sub": "Your address will be updated within 24 hours.",
+    "language_update_sub": "Your Language Preference will be updated within 24 hours.",
+    "referral_title": "Referral submitted successfully",
+    "referral_sub": "We'll contact your friend shortly",
+    "mandate_sub": "Your Mandate Details will be updated within 24 hours.",
+    "service_sub": "Your request will be processed within 24 hours."
+  }
+}

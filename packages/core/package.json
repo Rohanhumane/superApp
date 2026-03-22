@@ -1,0 +1,1 @@
+{"name":"@nbfc/core","version":"1.0.0","private":true,"main":"index.ts","dependencies":{"@reduxjs/toolkit":"^2.0.1","react-redux":"^9.0.4"},"peerDependencies":{"@nbfc/config":"*","@nbfc/network":"*","@nbfc/security":"*"}}
