@@ -1,6 +1,6 @@
 import React from 'react';
-import { View, ScrollView, TouchableOpacity, StatusBar, SafeAreaView } from 'react-native';
-import { DashboardTemplate, Text, LoanCard, SectionHeader, QuickLinkCard, RecommendCard, colors, sp } from '@nbfc/ui';
+import { View, ScrollView, TouchableOpacity, StatusBar, SafeAreaView, Alert, Linking } from 'react-native';
+import { DashboardTemplate, Text, LoanCard, SectionHeader, QuickLinkCard, RecommendCard, Icon, colors, sp } from '@nbfc/ui';
 import { useAppSelector } from '@nbfc/core';
 import { LOAN_TYPES } from '@nbfc/config';
 import { ds } from './DashboardScreen.styles';
@@ -12,7 +12,7 @@ const ProductIcon = ({ type }: { type: string }) => {
     truck: { emoji: '🚛', bg: '#EEF2FF' }, equipment: { emoji: '⚙️', bg: '#EEF2FF' },
     business: { emoji: '🏢', bg: '#EEF6EE' }, home: { emoji: '🏠', bg: '#EEF6EE' },
   };
-  const c = cfg[type] || { emoji: '📦', bg: '#F5F5F5' };
+  const c = cfg[type] || { emoji: '📦', bg: '#FAFAFA' };
   return (
     <View style={{ width: 56, height: 56, borderRadius: 12, backgroundColor: c.bg, alignItems: 'center', justifyContent: 'center' }}>
       <Text style={{ fontSize: 28 }}>{c.emoji}</Text>
@@ -35,19 +35,20 @@ export const DashboardScreen = ({ navigation }: any) => {
   if (isETB) {
     return (
       <DashboardTemplate userName={userName.split(' ')[0]} onProfile={() => nav('MyProfile')} onSearch={() => {}} onNotify={() => {}}>
-        {loans.length > 0 && <View style={{ marginTop: sp.lg }}><ScrollView horizontal showsHorizontalScrollIndicator={false} pagingEnabled>
+        {loans.length > 0 && <View style={{ marginTop: sp.base }}><ScrollView horizontal showsHorizontalScrollIndicator={false} pagingEnabled>
           {loans.map(l => <LoanCard key={l.id} type={l.type} number={l.number} status={l.status} amount={l.amount} emi={l.emi} onView={() => nav('LoanDetails', { loanId: l.id })} onPay={() => nav('PayEMI', { loanId: l.id })} />)}
         </ScrollView></View>}
         <SectionHeader title="Payments & Reminders" />
-        <TouchableOpacity style={[ds.card, { flexDirection: 'row', alignItems: 'center', marginHorizontal: sp.lg }]} onPress={() => nav('SetUpAutoDebit')}>
-          <Text style={{ fontSize: 24, marginRight: sp.md }}>🔄</Text><View style={{ flex: 1 }}><Text variant="bodySm">Never miss an EMI. Set up auto-debit.</Text><Text variant="labelSm" color={C.navy}>Set Up Auto-Debit</Text></View>
+        <TouchableOpacity style={[ds.card, { flexDirection: 'row', alignItems: 'center', marginHorizontal: sp.base }]} onPress={() => nav('SetUpAutoDebit')}>
+          <Text style={{ fontSize: 24, marginRight: sp.base }}>🔄</Text><View style={{ flex: 1 }}><Text variant="bodySm">Never miss an EMI. Set up auto-debit.</Text><Text variant="labelSm" color={C.navy}>Set Up Auto-Debit</Text></View>
         </TouchableOpacity>
         <SectionHeader title="Recommended for You" />
-        <RecommendCard title="Pre-Approved Two-Wheeler Loan" sub="Get up to ₹1,50,000 instantly" onPress={() => {}} />
+        <RecommendCard title="Pre-Approved Two-Wheeler Loan" sub="Get up to ₹1,50,000 instantly" onPress={() => nav('ProductDetail', { productId: 'two_wheeler_loan', productLabel: 'Two-Wheeler Loan' })} />
         <SectionHeader title="Quick Links" />
-        <View style={{ flexDirection: 'row', justifyContent: 'space-around', paddingHorizontal: sp.lg }}>
-          {[{ l: 'My Loans', i: 'loan', r: 'LoanDetails' }, { l: 'Documents', i: 'document', r: 'DocumentsStatement' }, { l: 'Mandate', i: 'mandate', r: 'ViewMandate' }, { l: 'Insurance', i: 'insurance', r: '' }].map(q =>
-            <QuickLinkCard key={q.l} label={q.l} icon={q.i} onPress={() => q.r && nav(q.r, q.r === 'LoanDetails' ? { loanId: loans[0]?.id } : undefined)} />)}
+        <View style={{ flexDirection: 'row', justifyContent: 'space-around', paddingHorizontal: sp.base }}>
+          {[{ l: 'My Loans', i: 'loan', r: 'LoanDetails' }, { l: 'Documents', i: 'document', r: 'DocumentsStatement' }, { l: 'Mandate', i: 'mandate', r: 'ViewMandate' }].map(q =>
+            <QuickLinkCard key={q.l} label={q.l} icon={q.i} onPress={() => nav(q.r, q.r === 'LoanDetails' ? { loanId: loans[0]?.id } : undefined)} />)}
+          <QuickLinkCard label="Insurance" icon="insurance" onPress={() => Alert.alert('Coming Soon', 'Insurance services will be available soon.')} />
         </View>
       </DashboardTemplate>
     );
@@ -59,10 +60,10 @@ export const DashboardScreen = ({ navigation }: any) => {
       <ScrollView style={{ flex: 1 }} contentContainerStyle={{ paddingBottom: 100 }} showsVerticalScrollIndicator={false} bounces={false}>
         <View style={ds.navySection}>
           <View style={ds.topBar}>
-            <TouchableOpacity style={ds.avatarCircle} onPress={() => nav('MyProfile')}><Text style={{ fontSize: 16 }}>👤</Text></TouchableOpacity>
+            <TouchableOpacity style={ds.avatarCircle} onPress={() => nav('MyProfile')}><Icon name="user" size={20} color="#fff" /></TouchableOpacity>
             <View style={{ flex: 1 }} />
-            <TouchableOpacity style={{ marginRight: 16 }}><Text style={{ fontSize: 22, color: '#fff' }}>🔍</Text></TouchableOpacity>
-            <TouchableOpacity><Text style={{ fontSize: 22, color: '#fff' }}>🔔</Text></TouchableOpacity>
+            <TouchableOpacity style={{ marginRight: 16 }}><Icon name="search" size={22} color="#fff" /></TouchableOpacity>
+            <TouchableOpacity><Icon name="bell" size={22} color="#fff" /></TouchableOpacity>
           </View>
           <View style={ds.heroContent}>
             <View style={{ flex: 1 }}>
@@ -82,10 +83,10 @@ export const DashboardScreen = ({ navigation }: any) => {
         </View>
         <View style={ds.contentArea}>
           <View style={ds.statusCard}>
-            <View style={ds.statusIcon}><Text style={{ fontSize: 22 }}>👤</Text></View>
+            <View style={ds.statusIcon}><Icon name="user" size={22} color={C.navy} /></View>
             <View style={{ flex: 1, marginLeft: 12 }}>
               <Text style={{ fontSize: 15, fontWeight: '600', color: C.black }}>Your request is in progress.</Text>
-              <Text style={{ fontSize: 12, color: C.gray6, marginTop: 2 }}>Our team will contact you soon..</Text>
+              <Text style={{ fontSize: 12, color: C.gray500, marginTop: 2 }}>Our team will contact you soon..</Text>
               <TouchableOpacity style={ds.orangeBtn} onPress={() => nav('CustomerCare')}><Text style={{ fontSize: 11, fontWeight: '600', color: '#fff' }}>Contact Support</Text></TouchableOpacity>
             </View>
           </View>
@@ -111,10 +112,10 @@ export const DashboardScreen = ({ navigation }: any) => {
           </View>
           <Text style={ds.sectionTitle}>Support</Text>
           <View style={{ flexDirection: 'row', justifyContent: 'space-around', paddingHorizontal: 16, marginBottom: 32 }}>
-            {[{ l: 'Chat support', i: '💬' }, { l: 'Email', i: '✉️' }, { l: 'Call Us', i: '📞' }, { l: 'Locate Us', i: '📍' }].map(s => (
-              <TouchableOpacity key={s.l} style={{ alignItems: 'center', width: (SCREEN_WIDTH - 48) / 4 }} activeOpacity={0.7}>
+            {[{ l: 'Chat support', i: '💬', action: () => Alert.alert('Chat Support', 'Chat support will be available soon.') }, { l: 'Email', i: '✉️', action: () => Linking.openURL('mailto:support@skfinance.in') }, { l: 'Call Us', i: '📞', action: () => Linking.openURL('tel:18001234567') }, { l: 'Locate Us', i: '📍', action: () => Linking.openURL('https://maps.google.com/?q=SK+Finance') }].map(s => (
+              <TouchableOpacity key={s.l} style={{ alignItems: 'center', width: (SCREEN_WIDTH - 48) / 4 }} activeOpacity={0.7} onPress={s.action}>
                 <View style={ds.supIcon}><Text style={{ fontSize: 20 }}>{s.i}</Text></View>
-                <Text style={{ fontSize: 10, color: C.gray6, textAlign: 'center', marginTop: 6 }}>{s.l}</Text>
+                <Text style={{ fontSize: 10, color: C.gray500, textAlign: 'center', marginTop: 6 }}>{s.l}</Text>
               </TouchableOpacity>
             ))}
           </View>

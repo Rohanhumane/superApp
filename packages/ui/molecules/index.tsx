@@ -51,7 +51,7 @@ export const MPINInput: React.FC<MPINProps> = ({ length = 4, onComplete, secure,
     }
   };
   return <View>
-    {label && <Text variant="labelLg" color={colors.text.primary} style={{ marginBottom: sp.md }}>{label}</Text>}
+    {label && <Text variant="labelLg" color={colors.text.primary} style={{ marginBottom: sp.base }}>{label}</Text>}
     <View style={{ flexDirection: 'row', justifyContent: 'center', gap: 16 }}>
       {Array(length).fill(0).map((_, i) => (
         <TextInput key={i} ref={r => { if (r) refs.current[i] = r; }}
@@ -69,15 +69,15 @@ export const MPINInput: React.FC<MPINProps> = ({ length = 4, onComplete, secure,
 interface PhoneProps { value: string; onChangeText: (t: string) => void; error?: string; }
 export const PhoneInput: React.FC<PhoneProps> = ({ value, onChangeText, error }) => {
   const [focused, setFocused] = useState(false);
-  return <View style={{ marginBottom: sp.lg }}>
+  return <View style={{ marginBottom: sp.base }}>
     <View style={[s.phoneBox, { borderColor: error ? colors.border.error : focused ? colors.border.focus : colors.border.light }]}>
-      <View style={{ paddingHorizontal: sp.lg, paddingVertical: sp.md + 2 }}>
+      <View style={{ paddingHorizontal: sp.base, paddingVertical: sp.base + 2 }}>
         <Text variant="bodyLg" color={colors.text.primary}>+91</Text>
       </View>
       <View style={{ width: 1, height: 24, backgroundColor: colors.border.light }} />
       <TextInput style={s.phoneInput} value={value}
         onChangeText={t => onChangeText(t.replace(/[^0-9]/g, '').slice(0, 10))}
-        placeholder="Enter Mobile Number" placeholderTextColor={colors.text.tertiary}
+        placeholder="Enter Mobile Number" placeholderTextColor={colors.text.secondary}
         keyboardType="phone-pad" maxLength={10}
         onFocus={() => setFocused(true)} onBlur={() => setFocused(false)} />
     </View>
@@ -91,20 +91,20 @@ interface DDProps { label?: string; value: string; options: readonly DDOption[] 
 export const DropdownSelect: React.FC<DDProps> = ({ label, value, options, onSelect, placeholder = 'Select', required, error }) => {
   const [open, setOpen] = useState(false);
   const sel = (options as DDOption[]).find(o => o.id === value || o.label === value);
-  return <View style={{ marginBottom: sp.lg }}>
+  return <View style={{ marginBottom: sp.base }}>
     {label && <View style={{ flexDirection: 'row', marginBottom: sp.sm }}>
       <Text variant="bodySm" color={colors.text.secondary}>{label}</Text>
       {required && <Text variant="bodySm" color={colors.text.error}> *</Text>}
     </View>}
     <TouchableOpacity style={[s.ddBox, error ? { borderColor: colors.border.error } : {}]} onPress={() => setOpen(!open)}>
-      <Text variant="bodyLg" color={sel ? colors.text.primary : colors.text.tertiary} style={{ flex: 1 }}>{sel?.label || placeholder}</Text>
-      <Text variant="bodyMd" color={colors.text.tertiary}>▾</Text>
+      <Text variant="bodyLg" color={sel ? colors.text.primary : colors.text.secondary} style={{ flex: 1 }}>{sel?.label || placeholder}</Text>
+      <Text variant="bodyMd" color={colors.text.secondary}>▾</Text>
     </TouchableOpacity>
     {open && <View style={s.ddList}>
       {(options as DDOption[]).map(o => (
         <TouchableOpacity key={o.id} style={[s.ddItem, o.id === value && { backgroundColor: colors.bg.secondary }]}
           onPress={() => { onSelect(o); setOpen(false); }}>
-          <Text variant="bodyMd" color={o.id === value ? colors.primary.navy : colors.text.primary}>{o.label}</Text>
+          <Text variant="bodyMd" color={o.id === value ? colors.primary.dark : colors.text.primary}>{o.label}</Text>
         </TouchableOpacity>
       ))}
     </View>}
@@ -116,8 +116,8 @@ export const DropdownSelect: React.FC<DDProps> = ({ label, value, options, onSel
 interface SliderProps { label: string; value: number; min: number; max: number; step?: number; formatValue: (v: number) => string; formatMin?: string; formatMax?: string; onValueChange: (v: number) => void; }
 export const SliderWithValue: React.FC<SliderProps> = ({ label, value, min, max, step = 1, formatValue, formatMin, formatMax, onValueChange }) => {
   const progress = Math.min(Math.max((value - min) / (max - min), 0), 1);
-  return <View style={{ marginBottom: sp.xl }}>
-    <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: sp.md }}>
+  return <View style={{ marginBottom: sp.lg }}>
+    <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: sp.base }}>
       <Text variant="bodyMd" color={colors.text.secondary}>{label}</Text>
       <View style={{ paddingHorizontal: 12, paddingVertical: 4, borderRadius: 14, borderWidth: 1, borderColor: colors.border.light }}>
         <Text variant="labelMd">{formatValue(value)}</Text>
@@ -133,23 +133,23 @@ export const SliderWithValue: React.FC<SliderProps> = ({ label, value, min, max,
         onValueChange(Math.min(Math.max(nv, min), max));
       }}>
       <View style={{ height: 4, backgroundColor: colors.border.light, borderRadius: 2, overflow: 'hidden' }}>
-        <View style={{ height: '100%', width: `${progress * 100}%`, backgroundColor: colors.primary.green, borderRadius: 2 }} />
+        <View style={{ height: '100%', width: `${progress * 100}%`, backgroundColor: colors.secondary.base, borderRadius: 2 }} />
       </View>
     </View>
     <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-      <Text variant="caption" color={colors.text.tertiary}>{formatMin || formatValue(min)}</Text>
-      <Text variant="caption" color={colors.text.tertiary}>{formatMax || formatValue(max)}</Text>
+      <Text variant="caption" color={colors.text.secondary}>{formatMin || formatValue(min)}</Text>
+      <Text variant="caption" color={colors.text.secondary}>{formatMax || formatValue(max)}</Text>
     </View>
   </View>;
 };
 
 const s = StyleSheet.create({
-  otpBox: { width: 52, height: 56, borderWidth: 1, borderColor: colors.border.light, borderRadius: br.md, textAlign: 'center', ...typography.h3, color: colors.text.primary, backgroundColor: colors.white },
+  otpBox: { width: 52, height: 56, borderWidth: 1, borderColor: colors.border.light, borderRadius: br.sm, textAlign: 'center', ...typography.h3, color: colors.text.primary, backgroundColor: colors.white },
   otpFilled: { borderColor: colors.border.focus },
-  mpinBox: { width: 60, height: 64, borderWidth: 1, borderColor: colors.border.light, borderRadius: br.md, textAlign: 'center', ...typography.h2, color: colors.text.primary, backgroundColor: colors.white },
-  phoneBox: { flexDirection: 'row', alignItems: 'center', borderWidth: 1, borderRadius: br.md, backgroundColor: colors.bg.input, overflow: 'hidden' },
-  phoneInput: { flex: 1, paddingHorizontal: sp.lg, ...typography.bodyLg, color: colors.text.primary, paddingVertical: sp.md + 2 },
-  ddBox: { flexDirection: 'row', alignItems: 'center', borderWidth: 1, borderColor: colors.border.light, borderRadius: br.md, backgroundColor: colors.bg.input, paddingHorizontal: sp.lg, paddingVertical: sp.md + 2 },
-  ddList: { borderWidth: 1, borderColor: colors.border.light, borderRadius: br.md, backgroundColor: colors.white, marginTop: 4, elevation: 3, shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.1, shadowRadius: 4 },
-  ddItem: { paddingHorizontal: sp.lg, paddingVertical: sp.md },
+  mpinBox: { width: 60, height: 64, borderWidth: 1, borderColor: colors.border.light, borderRadius: br.sm, textAlign: 'center', ...typography.h2, color: colors.text.primary, backgroundColor: colors.white },
+  phoneBox: { flexDirection: 'row', alignItems: 'center', borderWidth: 1, borderRadius: br.sm, backgroundColor: colors.bg.secondary, overflow: 'hidden' },
+  phoneInput: { flex: 1, paddingHorizontal: sp.base, ...typography.bodyLg, color: colors.text.primary, paddingVertical: sp.base + 2 },
+  ddBox: { flexDirection: 'row', alignItems: 'center', borderWidth: 1, borderColor: colors.border.light, borderRadius: br.sm, backgroundColor: colors.bg.secondary, paddingHorizontal: sp.base, paddingVertical: sp.base + 2 },
+  ddList: { borderWidth: 1, borderColor: colors.border.light, borderRadius: br.sm, backgroundColor: colors.white, marginTop: 4, elevation: 3, shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.1, shadowRadius: 4 },
+  ddItem: { paddingHorizontal: sp.base, paddingVertical: sp.base },
 });

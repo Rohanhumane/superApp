@@ -38,7 +38,7 @@ export const calcStyles = StyleSheet.create({
     flexDirection: 'row', justifyContent: 'space-between',
     alignItems: 'center', marginTop: 20,
   },
-  resultLabel: { color: C.gray6 },
+  resultLabel: { color: C.gray500 },
   resultValue: { fontSize: 24, fontWeight: '700', color: C.green },
 
   // Breakdown
@@ -48,7 +48,7 @@ export const calcStyles = StyleSheet.create({
     borderTopWidth: 1, borderTopColor: C.borderLight,
   },
   breakdownItem: { alignItems: 'center' },
-  breakdownLabel: { color: C.gray5, marginBottom: 4 },
+  breakdownLabel: { color: C.gray500, marginBottom: 4 },
   breakdownValue: { fontWeight: '600' },
 
   // Donut area
@@ -60,7 +60,7 @@ export const calcStyles = StyleSheet.create({
     marginTop: 16, alignItems: 'center',
   },
   eligibilityAmount: { fontSize: 28, fontWeight: '700', color: C.green, marginTop: 8 },
-  eligibilityLabel: { marginTop: 4, color: C.gray6 },
+  eligibilityLabel: { marginTop: 4, color: C.gray500 },
 
   // Apply button
   applyBtn: { marginTop: 20 },

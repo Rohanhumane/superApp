@@ -43,7 +43,7 @@ export const leadStyles = StyleSheet.create({
   dobLabelRow: { flexDirection: 'row', marginBottom: 8 },
   dobInput: {
     flexDirection: 'row', alignItems: 'center', borderWidth: 1,
-    borderRadius: 8, backgroundColor: C.bgInput,
+    borderRadius: 8, backgroundColor: C.gray50,
     paddingHorizontal: 16, paddingVertical: 14,
   },
   dobInputError: { borderColor: C.error },

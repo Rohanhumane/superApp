@@ -105,7 +105,7 @@ export const OTPVerificationScreen = ({ navigation, route }: any) => {
                 <Text variant="labelMd" color={colors.text.primary}>{formatTime(timer)}</Text>
               </View>
               <TouchableOpacity>
-                <Text variant="labelMd" color={colors.primary.navy}>Need Help?</Text>
+                <Text variant="labelMd" color={colors.primary.dark}>Need Help?</Text>
               </TouchableOpacity>
             </View>
           ) : (
@@ -113,11 +113,11 @@ export const OTPVerificationScreen = ({ navigation, route }: any) => {
               {timer > 0 ? (
                 <Text variant="bodySm" color={colors.text.secondary}>
                   Didn't receive it?{' '}
-                  <Text variant="labelMd" color={colors.primary.navy}>Resend in {timer} secs</Text>
+                  <Text variant="labelMd" color={colors.primary.dark}>Resend in {timer} secs</Text>
                 </Text>
               ) : (
                 <TouchableOpacity onPress={() => setTimer(timerDuration)}>
-                  <Text variant="labelMd" color={colors.primary.navy}>Resend OTP</Text>
+                  <Text variant="labelMd" color={colors.primary.dark}>Resend OTP</Text>
                 </TouchableOpacity>
               )}
             </View>

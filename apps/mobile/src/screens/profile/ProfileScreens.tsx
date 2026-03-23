@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { profileStyles as ps } from "./profile.styles";
-import { View, ScrollView, SafeAreaView, TouchableOpacity, Alert, StatusBar } from 'react-native';
-import { Text, Button, Input, Avatar, Checkbox, RadioButton, Divider, MenuItem, FormTemplate, DropdownSelect, colors, sp } from '@nbfc/ui';
-import { useAppSelector, useAppDispatch, setLanguage, logout } from '@nbfc/core';
+import { View, ScrollView, SafeAreaView, TouchableOpacity, Alert, StatusBar, Linking } from 'react-native';
+import { Text, Button, Input, Avatar, Checkbox, RadioButton, Divider, MenuItem, FormTemplate, DropdownSelect, colors, sp, Icon } from '@nbfc/ui';
+import { useAppSelector, useAppDispatch, setLanguage, logout, updateMobile, updateEmail } from '@nbfc/core';
 import { LANGUAGES, SUPPORT_OPTIONS } from '@nbfc/config';
 import { validators } from '@nbfc/utils';
 
@@ -14,24 +14,24 @@ export const MyProfileScreen = ({ navigation }: any) => {
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: colors.white }}>
       <StatusBar barStyle="dark-content" />
-      <View style={{ flexDirection: 'row', alignItems: 'center', padding: sp.lg, borderBottomWidth: 1, borderBottomColor: colors.border.light }}>
-        <TouchableOpacity onPress={() => { if (navigation.canGoBack()) navigation.goBack(); }}><Text variant="h3">←</Text></TouchableOpacity>
-        <Text variant="labelLg" style={{ marginLeft: sp.md }}>My Profile</Text>
+      <View style={{ flexDirection: 'row', alignItems: 'center', padding: sp.base, borderBottomWidth: 1, borderBottomColor: colors.border.light }}>
+        <TouchableOpacity onPress={() => { if (navigation.canGoBack()) navigation.goBack(); }}><Icon name="back" size={24} color={colors.text.primary} /></TouchableOpacity>
+        <Text variant="labelLg" style={{ marginLeft: sp.base }}>My Profile</Text>
       </View>
       <ScrollView contentContainerStyle={{ paddingBottom: 40 }}>
-        <View style={{ alignItems: 'center', paddingVertical: sp.xxl }}>
+        <View style={{ alignItems: 'center', paddingVertical: sp.lg }}>
           <Avatar uri={p.photo} name={p.fullName} size={80} onEdit={() => Alert.alert('Change Photo', '', [{ text: 'Take a photo' }, { text: 'Gallery' }, { text: 'Cancel', style: 'cancel' }])} />
-          <Text variant="h4" style={{ marginTop: sp.md }}>{p.fullName}</Text>
+          <Text variant="h4" style={{ marginTop: sp.base }}>{p.fullName}</Text>
         </View>
-        <Text variant="labelMd" color={colors.text.secondary} style={{ paddingHorizontal: sp.lg, marginBottom: sp.sm }}>Account Information</Text>
+        <Text variant="labelMd" color={colors.text.secondary} style={{ paddingHorizontal: sp.base, marginBottom: sp.sm }}>Account Information</Text>
         <MenuItem icon="👤" label="Personal Information" onPress={() => navigation.navigate('PersonalInfo')} />
         <MenuItem icon="📍" label="Address" onPress={() => navigation.navigate('Address')} />
         <Divider gap={8} />
-        <Text variant="labelMd" color={colors.text.secondary} style={{ paddingHorizontal: sp.lg, marginTop: sp.md, marginBottom: sp.sm }}>Settings</Text>
+        <Text variant="labelMd" color={colors.text.secondary} style={{ paddingHorizontal: sp.base, marginTop: sp.base, marginBottom: sp.sm }}>Settings</Text>
         <MenuItem icon="🔒" label="Change MPIN" onPress={() => navigation.navigate('ChangeMPIN')} />
         <MenuItem icon="🌐" label="Language Preference" onPress={() => navigation.navigate('LanguagePreference')} />
         <Divider gap={8} />
-        <Text variant="labelMd" color={colors.text.secondary} style={{ paddingHorizontal: sp.lg, marginTop: sp.md, marginBottom: sp.sm }}>Others</Text>
+        <Text variant="labelMd" color={colors.text.secondary} style={{ paddingHorizontal: sp.base, marginTop: sp.base, marginBottom: sp.sm }}>Others</Text>
         <MenuItem icon="🎁" label="Refer & Earn" onPress={() => navigation.navigate('ReferEarn')} />
         <MenuItem icon="🎧" label="Contact Customer Care" onPress={() => navigation.navigate('CustomerCare')} />
         <Divider gap={8} />
@@ -51,69 +51,75 @@ export const MyProfileScreen = ({ navigation }: any) => {
 // ===== PERSONAL INFO — with mobile Change button =====
 export const PersonalInfoScreen = ({ navigation }: any) => {
   const p = useAppSelector(s => s.user.profile);
+  const [showPAN, setShowPAN] = useState(false);
+  const [showMobile, setShowMobile] = useState(false);
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: colors.white }}>
       <StatusBar barStyle="dark-content" />
-      <View style={{ flexDirection: 'row', alignItems: 'center', padding: sp.lg, borderBottomWidth: 1, borderBottomColor: colors.border.light }}>
-        <TouchableOpacity onPress={() => { if (navigation.canGoBack()) navigation.goBack(); }}><Text variant="h3">←</Text></TouchableOpacity>
-        <Text variant="labelLg" style={{ marginLeft: sp.md }}>Personal Information</Text>
+      <View style={{ flexDirection: 'row', alignItems: 'center', padding: sp.base, borderBottomWidth: 1, borderBottomColor: colors.border.light }}>
+        <TouchableOpacity onPress={() => { if (navigation.canGoBack()) navigation.goBack(); }}><Icon name="back" size={24} color={colors.text.primary} /></TouchableOpacity>
+        <Text variant="labelLg" style={{ marginLeft: sp.base }}>Personal Information</Text>
       </View>
-      <ScrollView contentContainerStyle={{ padding: sp.xl, paddingBottom: 40 }}>
+      <ScrollView contentContainerStyle={{ padding: sp.lg, paddingBottom: 40 }}>
         {/* Read-only: Name */}
-        <View style={{ marginBottom: sp.xl }}>
+        <View style={{ marginBottom: sp.lg }}>
           <Text variant="caption" color={colors.text.secondary}>Full Name</Text>
           <Text variant="bodyLg" style={{ marginTop: 4 }}>{p.fullName || '—'}</Text>
         </View>
 
         {/* Read-only: DOB */}
-        <View style={{ marginBottom: sp.xl }}>
+        <View style={{ marginBottom: sp.lg }}>
           <Text variant="caption" color={colors.text.secondary}>Date of Birth</Text>
           <Text variant="bodyLg" style={{ marginTop: 4 }}>{p.dob || '—'}</Text>
         </View>
 
         {/* Masked: PAN */}
-        <View style={{ marginBottom: sp.xl }}>
+        <View style={{ marginBottom: sp.lg }}>
           <Text variant="caption" color={colors.text.secondary}>PAN Number</Text>
           <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 4 }}>
-            <Text variant="bodyLg">{p.maskedPAN || '—'}</Text>
-            <Text variant="bodyMd" color={colors.text.tertiary} style={{ marginLeft: 8 }}>👁️</Text>
+            <Text variant="bodyLg">{showPAN ? (p.pan || '—') : (p.maskedPAN || '—')}</Text>
+            <TouchableOpacity onPress={() => setShowPAN(!showPAN)}>
+              <Text variant="bodyMd" color={colors.text.secondary} style={{ marginLeft: 8 }}>{showPAN ? '🙈' : '👁️'}</Text>
+            </TouchableOpacity>
           </View>
         </View>
 
         {/* Mobile Number — with CHANGE button */}
-        <View style={{ marginBottom: sp.xl }}>
+        <View style={{ marginBottom: sp.lg }}>
           <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
             <Text variant="caption" color={colors.text.secondary}>Mobile Number</Text>
             <TouchableOpacity onPress={() => navigation.navigate('UpdateMobile')}>
-              <Text variant="labelMd" color={colors.primary.navy}>Change</Text>
+              <Text variant="labelMd" color={colors.primary.dark}>Change</Text>
             </TouchableOpacity>
           </View>
           <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 4 }}>
-            <Text variant="bodyLg">{p.maskedMobile || '—'}</Text>
-            <Text variant="bodyMd" color={colors.text.tertiary} style={{ marginLeft: 8 }}>👁️</Text>
+            <Text variant="bodyLg">{showMobile ? (p.mobile || '—') : (p.maskedMobile || '—')}</Text>
+            <TouchableOpacity onPress={() => setShowMobile(!showMobile)}>
+              <Text variant="bodyMd" color={colors.text.secondary} style={{ marginLeft: 8 }}>{showMobile ? '🙈' : '👁️'}</Text>
+            </TouchableOpacity>
           </View>
         </View>
 
         {/* Alternate Mobile — Add link */}
         <TouchableOpacity
-          style={{ flexDirection: 'row', justifyContent: 'space-between', paddingVertical: sp.md, borderBottomWidth: 1, borderBottomColor: colors.border.light }}
+          style={{ flexDirection: 'row', justifyContent: 'space-between', paddingVertical: sp.base, borderBottomWidth: 1, borderBottomColor: colors.border.light }}
           onPress={() => navigation.navigate('UpdateMobile')}
         >
           <Text variant="bodyMd">Alternate Mobile Number</Text>
-          <Text variant="labelMd" color={colors.primary.navy}>Add</Text>
+          <Text variant="labelMd" color={colors.primary.dark}>Add</Text>
         </TouchableOpacity>
 
         {/* Email — Add/Update link */}
         <TouchableOpacity
-          style={{ flexDirection: 'row', justifyContent: 'space-between', paddingVertical: sp.md, borderBottomWidth: 1, borderBottomColor: colors.border.light, marginTop: sp.sm }}
+          style={{ flexDirection: 'row', justifyContent: 'space-between', paddingVertical: sp.base, borderBottomWidth: 1, borderBottomColor: colors.border.light, marginTop: sp.sm }}
           onPress={() => navigation.navigate('UpdateEmail')}
         >
           <Text variant="bodyMd">Email ID</Text>
-          <Text variant="labelMd" color={colors.primary.navy}>{p.email ? 'Update' : 'Add'}</Text>
+          <Text variant="labelMd" color={colors.primary.dark}>{p.email ? 'Update' : 'Add'}</Text>
         </TouchableOpacity>
 
         {/* Disclaimer */}
-        <View style={{ backgroundColor: colors.bg.secondary, borderRadius: 8, padding: sp.md, flexDirection: 'row', marginTop: sp.xl }}>
+        <View style={{ backgroundColor: colors.bg.secondary, borderRadius: 8, padding: sp.base, flexDirection: 'row', marginTop: sp.lg }}>
           <Text variant="bodyMd" color={colors.text.secondary} style={{ marginRight: 8 }}>ⓘ</Text>
           <View style={{ flex: 1 }}>
             <Text variant="labelSm">Disclaimer</Text>
@@ -127,6 +133,7 @@ export const PersonalInfoScreen = ({ navigation }: any) => {
 
 // ===== UPDATE MOBILE NUMBER =====
 export const UpdateMobileScreen = ({ navigation }: any) => {
+  const dispatch = useAppDispatch();
   const [mobile, setMobile] = useState('');
   const [consent, setConsent] = useState(false);
   const [error, setError] = useState('');
@@ -134,13 +141,13 @@ export const UpdateMobileScreen = ({ navigation }: any) => {
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: colors.white }}>
       <StatusBar barStyle="dark-content" />
-      <View style={{ flexDirection: 'row', alignItems: 'center', padding: sp.lg, borderBottomWidth: 1, borderBottomColor: colors.border.light }}>
-        <TouchableOpacity onPress={() => { if (navigation.canGoBack()) navigation.goBack(); }}><Text variant="h3">←</Text></TouchableOpacity>
-        <Text variant="labelLg" style={{ marginLeft: sp.md }}>Update Mobile Number</Text>
+      <View style={{ flexDirection: 'row', alignItems: 'center', padding: sp.base, borderBottomWidth: 1, borderBottomColor: colors.border.light }}>
+        <TouchableOpacity onPress={() => { if (navigation.canGoBack()) navigation.goBack(); }}><Icon name="back" size={24} color={colors.text.primary} /></TouchableOpacity>
+        <Text variant="labelLg" style={{ marginLeft: sp.base }}>Update Mobile Number</Text>
       </View>
-      <ScrollView style={{ flex: 1 }} contentContainerStyle={{ padding: sp.xl }} keyboardShouldPersistTaps="handled">
+      <ScrollView style={{ flex: 1 }} contentContainerStyle={{ padding: sp.lg }} keyboardShouldPersistTaps="handled">
         <Text variant="h2" style={{ marginBottom: sp.sm }}>Update Mobile Number</Text>
-        <Text variant="bodyMd" color={colors.text.secondary} style={{ marginBottom: sp.xxl, lineHeight: 22 }}>
+        <Text variant="bodyMd" color={colors.text.secondary} style={{ marginBottom: sp.lg, lineHeight: 22 }}>
           Enter your new mobile number. A verification code will be sent to confirm the change.
         </Text>
         <Input label="New Mobile Number" required placeholder="Enter new mobile number"
@@ -149,10 +156,11 @@ export const UpdateMobileScreen = ({ navigation }: any) => {
         <Checkbox checked={consent} onToggle={() => setConsent(!consent)}
           label="I agree that SKF will share the new mobile number entered by me with external agencies for verification purpose." />
       </ScrollView>
-      <View style={{ paddingHorizontal: sp.xl, paddingBottom: sp.xxl, paddingTop: sp.md, borderTopWidth: 1, borderTopColor: colors.border.light }}>
+      <View style={{ paddingHorizontal: sp.lg, paddingBottom: sp.lg, paddingTop: sp.base, borderTopWidth: 1, borderTopColor: colors.border.light }}>
         <Button title="Continue" onPress={() => {
           if (!mobile || mobile.length < 10) { setError('Enter 10-digit mobile number'); return; }
           if (!validators.isValidMobile(mobile)) { setError('Enter valid mobile number starting with 6-9'); return; }
+          dispatch(updateMobile(mobile));
           navigation.navigate('OTPVerification', { verifyType: 'mobile', mobile });
         }} disabled={!mobile || mobile.length < 10 || !consent} />
       </View>
@@ -162,24 +170,26 @@ export const UpdateMobileScreen = ({ navigation }: any) => {
 
 // ===== UPDATE EMAIL =====
 export const UpdateEmailScreen = ({ navigation }: any) => {
+  const dispatch = useAppDispatch();
   const [email, setEmail] = useState('');
   const [error, setError] = useState('');
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: colors.white }}>
       <StatusBar barStyle="dark-content" />
-      <View style={{ flexDirection: 'row', alignItems: 'center', padding: sp.lg, borderBottomWidth: 1, borderBottomColor: colors.border.light }}>
-        <TouchableOpacity onPress={() => { if (navigation.canGoBack()) navigation.goBack(); }}><Text variant="h3">←</Text></TouchableOpacity>
-        <Text variant="labelLg" style={{ marginLeft: sp.md }}>Update Email ID</Text>
+      <View style={{ flexDirection: 'row', alignItems: 'center', padding: sp.base, borderBottomWidth: 1, borderBottomColor: colors.border.light }}>
+        <TouchableOpacity onPress={() => { if (navigation.canGoBack()) navigation.goBack(); }}><Icon name="back" size={24} color={colors.text.primary} /></TouchableOpacity>
+        <Text variant="labelLg" style={{ marginLeft: sp.base }}>Update Email ID</Text>
       </View>
-      <ScrollView style={{ flex: 1 }} contentContainerStyle={{ padding: sp.xl }} keyboardShouldPersistTaps="handled">
+      <ScrollView style={{ flex: 1 }} contentContainerStyle={{ padding: sp.lg }} keyboardShouldPersistTaps="handled">
         <Text variant="h2" style={{ marginBottom: sp.sm }}>Update Email Address</Text>
-        <Text variant="bodyMd" color={colors.text.secondary} style={{ marginBottom: sp.xxl, lineHeight: 22 }}>Enter your new email address.</Text>
+        <Text variant="bodyMd" color={colors.text.secondary} style={{ marginBottom: sp.lg, lineHeight: 22 }}>Enter your new email address.</Text>
         <Input label="New Email Address" required placeholder="Enter new email address" value={email}
           onChangeText={t => { setEmail(t); setError(''); }} error={error} keyboardType="email-address" autoCapitalize="none" />
       </ScrollView>
-      <View style={{ paddingHorizontal: sp.xl, paddingBottom: sp.xxl, paddingTop: sp.md, borderTopWidth: 1, borderTopColor: colors.border.light }}>
+      <View style={{ paddingHorizontal: sp.lg, paddingBottom: sp.lg, paddingTop: sp.base, borderTopWidth: 1, borderTopColor: colors.border.light }}>
         <Button title="Continue" onPress={() => {
           if (!validators.isValidEmail(email)) { setError('Enter valid email'); return; }
+          dispatch(updateEmail(email));
           navigation.navigate('OTPVerification', { verifyType: 'email', email });
         }} disabled={!email} />
       </View>
@@ -193,10 +203,10 @@ export const AddressScreen = ({ navigation }: any) => {
   return (
     <FormTemplate title="" headerTitle="Address" onBack={() => { if (navigation.canGoBack()) navigation.goBack(); }} subtitle="">
       {addrs.map((a, i) => (
-        <View key={i} style={{ marginBottom: sp.xl }}>
+        <View key={i} style={{ marginBottom: sp.lg }}>
           <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: sp.sm }}>
-            <Text variant="caption" color={colors.primary.navy}>{a.type === 'communication' ? 'Communication Address' : 'Permanent Address'}</Text>
-            <TouchableOpacity onPress={() => navigation.navigate('ConfirmAddress')}><Text variant="labelMd" color={colors.primary.navy}>Update</Text></TouchableOpacity>
+            <Text variant="caption" color={colors.primary.dark}>{a.type === 'communication' ? 'Communication Address' : 'Permanent Address'}</Text>
+            <TouchableOpacity onPress={() => navigation.navigate('ConfirmAddress')}><Text variant="labelMd" color={colors.primary.dark}>Update</Text></TouchableOpacity>
           </View>
           <Text variant="bodyMd">{a.full}</Text>
         </View>
@@ -216,8 +226,8 @@ export const ConfirmAddressScreen = ({ navigation }: any) => {
         primaryBtn: { title: 'View Service Ticket', route: 'TrackRequests' }, secondaryBtn: { title: 'Back to Home', route: 'MainTabs' },
       })}>
       {[{ i: '📅', t: `DOB - ${p.dob || '—'}` }, { i: '👤', t: `Father name: ${p.fatherName || '—'}` }, { i: '🏠', t: a[0]?.full || '—' }].map((x, i) => (
-        <View key={i} style={{ flexDirection: 'row', alignItems: 'flex-start', marginBottom: sp.xl }}>
-          <Text style={{ fontSize: 20, marginRight: sp.md }}>{x.i}</Text><Text variant="bodyMd" style={{ flex: 1 }}>{x.t}</Text>
+        <View key={i} style={{ flexDirection: 'row', alignItems: 'flex-start', marginBottom: sp.lg }}>
+          <Text style={{ fontSize: 20, marginRight: sp.base }}>{x.i}</Text><Text variant="bodyMd" style={{ flex: 1 }}>{x.t}</Text>
         </View>
       ))}
     </FormTemplate>
@@ -246,7 +256,7 @@ export const ChangeMPINScreen = ({ navigation }: any) => {
     <FormTemplate title="Change MPIN" subtitle="To change your MPIN, verify your registered mobile number through OTP."
       headerTitle="Change MPIN" onBack={() => { if (navigation.canGoBack()) navigation.goBack(); }}
       btnTitle="Continue" onSubmit={() => navigation.navigate('OTPVerification', { flow: 'reset' })}>
-      <View style={{ backgroundColor: colors.bg.secondary, borderRadius: 12, padding: sp.lg }}>
+      <View style={{ backgroundColor: colors.bg.secondary, borderRadius: 12, padding: sp.base }}>
         <Text variant="caption" color={colors.text.secondary}>Registered Mobile Number</Text>
         <Text variant="labelLg" style={{ marginTop: sp.xs }}>{masked}</Text>
       </View>
@@ -272,12 +282,16 @@ export const ReferEarnScreen = ({ navigation }: any) => {
 export const CustomerCareScreen = ({ navigation }: any) => (
   <SafeAreaView style={{ flex: 1, backgroundColor: colors.white }}>
     <StatusBar barStyle="dark-content" />
-    <View style={{ flexDirection: 'row', alignItems: 'center', padding: sp.lg, borderBottomWidth: 1, borderBottomColor: colors.border.light }}>
-      <TouchableOpacity onPress={() => { if (navigation.canGoBack()) navigation.goBack(); }}><Text variant="h3">←</Text></TouchableOpacity>
-      <Text variant="labelLg" style={{ marginLeft: sp.md }}>Contact Customer Care</Text>
+    <View style={{ flexDirection: 'row', alignItems: 'center', padding: sp.base, borderBottomWidth: 1, borderBottomColor: colors.border.light }}>
+      <TouchableOpacity onPress={() => { if (navigation.canGoBack()) navigation.goBack(); }}><Icon name="back" size={24} color={colors.text.primary} /></TouchableOpacity>
+      <Text variant="labelLg" style={{ marginLeft: sp.base }}>Contact Customer Care</Text>
     </View>
-    <View style={{ alignItems: 'center', paddingVertical: sp.xxxxl }}><Text style={{ fontSize: 64 }}>🎧</Text><Text variant="h4" style={{ marginTop: sp.lg }}>Talk to our team</Text></View>
-    <Text variant="labelMd" style={{ paddingHorizontal: sp.xl, marginBottom: sp.md }}>All Options</Text>
-    {SUPPORT_OPTIONS.map(o => <MenuItem key={o.id} icon={o.icon === 'email' ? '✉️' : o.icon === 'phone' ? '📞' : '💬'} label={`${o.label}\n${o.subtitle}`} onPress={() => {}} />)}
+    <View style={{ alignItems: 'center', paddingVertical: sp.xl }}><Text style={{ fontSize: 64 }}>🎧</Text><Text variant="h4" style={{ marginTop: sp.base }}>Talk to our team</Text></View>
+    <Text variant="labelMd" style={{ paddingHorizontal: sp.lg, marginBottom: sp.base }}>All Options</Text>
+    {SUPPORT_OPTIONS.map(o => <MenuItem key={o.id} icon={o.icon === 'email' ? '✉️' : o.icon === 'phone' ? '📞' : '💬'} label={`${o.label}\n${o.subtitle}`} onPress={() => {
+      if (o.id === 'email') Linking.openURL('mailto:support@skfinance.in');
+      else if (o.id === 'call') Linking.openURL('tel:18001234567');
+      else Alert.alert('Chat Support', 'Chat support coming soon');
+    }} />)}
   </SafeAreaView>
 );

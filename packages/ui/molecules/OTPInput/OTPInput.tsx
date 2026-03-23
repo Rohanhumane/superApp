@@ -20,8 +20,8 @@ export const OTPInput: React.FC<OTPInputProps> = ({ length, onComplete, autoSubm
 
   // Responsive sizing: smaller boxes for 6 digits
   const boxSize = length >= 6
-    ? { width: 44, height: 50, fontSize: 18 }
-    : { width: 52, height: 56, fontSize: 22 };
+    ? { width: 44, height: 52, fontSize: 18 }
+    : { width: 52, height: 60, fontSize: 22 };
   const gap = length >= 6 ? 8 : 12;
 
   const handleChange = (text: string, i: number) => {
@@ -51,7 +51,7 @@ export const OTPInput: React.FC<OTPInputProps> = ({ length, onComplete, autoSubm
                 height: boxSize.height,
                 borderWidth: 1,
                 borderColor: error ? colors.border.error : otp[i] ? colors.border.focus : colors.border.light,
-                borderRadius: br.md,
+                borderRadius: br.sm,
                 textAlign: 'center',
                 fontSize: boxSize.fontSize,
                 fontWeight: '600',

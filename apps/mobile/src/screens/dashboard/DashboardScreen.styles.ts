@@ -4,9 +4,9 @@ import { C, SCREEN_WIDTH } from '../../styles/shared';
 export const ds = StyleSheet.create({
   // ETB card
   card: {
-    backgroundColor: C.white, borderRadius: 12, padding: 16,
-    shadowColor: '#000', shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.06, shadowRadius: 4, elevation: 2,
+    backgroundColor: C.white, borderRadius: 8, padding: 16,
+    shadowColor: '#000', shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.08, shadowRadius: 6, elevation: 2,
   },
 
   // Navy section (continuous header for Lead/NTB)
@@ -45,16 +45,16 @@ export const ds = StyleSheet.create({
   // Status card
   statusCard: {
     flexDirection: 'row', alignItems: 'flex-start', backgroundColor: C.white,
-    borderRadius: 14, padding: 16, marginHorizontal: 16,
+    borderRadius: 8, padding: 16, marginHorizontal: 16,
     shadowColor: '#000', shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.06, shadowRadius: 8, elevation: 3,
+    shadowOpacity: 0.08, shadowRadius: 6, elevation: 2,
   },
   statusIcon: {
     width: 44, height: 44, borderRadius: 22,
     backgroundColor: '#EBEBEB', alignItems: 'center', justifyContent: 'center',
   },
   orangeBtn: {
-    backgroundColor: C.orange, borderRadius: 16,
+    backgroundColor: C.warning, borderRadius: 16,
     paddingVertical: 7, paddingHorizontal: 18,
     alignSelf: 'flex-start', marginTop: 10,
   },
@@ -68,10 +68,10 @@ export const ds = StyleSheet.create({
 
   // Tools
   toolCard: {
-    flex: 1, backgroundColor: C.white, borderRadius: 14, padding: 16,
+    flex: 1, backgroundColor: C.white, borderRadius: 8, padding: 16,
     minHeight: 140, overflow: 'hidden',
-    shadowColor: '#000', shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.05, shadowRadius: 4, elevation: 1,
+    shadowColor: '#000', shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.08, shadowRadius: 6, elevation: 2,
   },
   toolBubble: { width: 80, height: 80, borderRadius: 40, alignItems: 'center', justifyContent: 'center' },
 

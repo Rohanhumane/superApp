@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { View, ScrollView, SafeAreaView, TouchableOpacity, StatusBar } from 'react-native';
-import { Text, Button, Input, DashboardTemplate, FormTemplate, LoanCard, SectionHeader, QuickLinkCard, RecommendCard, MenuItem, ServiceTicketCard, DropdownSelect, colors, sp } from '@nbfc/ui';
+import { View, ScrollView, SafeAreaView, TouchableOpacity, StatusBar, Alert, Linking } from 'react-native';
+import { Text, Button, Input, DashboardTemplate, FormTemplate, LoanCard, SectionHeader, QuickLinkCard, RecommendCard, MenuItem, ServiceTicketCard, DropdownSelect, colors, sp, Icon } from '@nbfc/ui';
 import { useAppSelector, useAppDispatch, addTicket } from '@nbfc/core';
 import { SERVICE_CATEGORIES } from '@nbfc/config';
 import { generateTicketId, formatDate } from '@nbfc/utils';
@@ -11,27 +11,27 @@ export const ServicesHomeScreen = ({ navigation }: any) => {
   const loans = useAppSelector(st => st.loan.loans);
   return (
     <DashboardTemplate headerTitle="Services" onSearch={() => {}} onNotify={() => {}}>
-      {loans.length > 0 && <View style={{ marginTop: sp.lg }}><Text variant="labelMd" color={colors.text.secondary} style={{ paddingHorizontal: sp.lg, marginBottom: sp.sm }}>Your Relationships</Text>
+      {loans.length > 0 && <View style={{ marginTop: sp.base }}><Text variant="labelMd" color={colors.text.secondary} style={{ paddingHorizontal: sp.base, marginBottom: sp.sm }}>Your Relationships</Text>
         <LoanCard type={loans[0].type} number={loans[0].number} status={loans[0].status} amount={loans[0].amount} emi={loans[0].emi} onView={() => navigation.navigate('LoanDetails', { loanId: loans[0].id })} onPay={() => navigation.navigate('PayEMI')} /></View>}
       <SectionHeader title="Quick Links" />
-      <View style={{ flexDirection: 'row', justifyContent: 'space-around', paddingHorizontal: sp.lg }}>
+      <View style={{ flexDirection: 'row', justifyContent: 'space-around', paddingHorizontal: sp.base }}>
         {[{ l: 'Pay Loan\nEMI', i: 'payment', r: 'PayEMI' }, { l: 'Raise\nRequest', i: 'request', r: 'ServiceRequests' }, { l: 'Track\nApplication', i: 'track', r: 'TrackRequests' }].map(q =>
           <QuickLinkCard key={q.l} label={q.l} icon={q.i} onPress={() => navigation.navigate(q.r)} />)}
       </View>
       <SectionHeader title="Documents" />
       <MenuItem icon="📄" label="Get Documents & Statement" onPress={() => navigation.navigate('DocumentsStatement')} />
       <SectionHeader title="Recommended for You" />
-      <RecommendCard title="Pre-Approved Two-Wheeler Loan" sub="Get up to ₹1,50,000 instantly" onPress={() => {}} />
+      <RecommendCard title="Pre-Approved Two-Wheeler Loan" sub="Get up to ₹1,50,000 instantly" onPress={() => navigation.navigate('ProductDetail', { productId: 'two_wheeler_loan', productLabel: 'Two-Wheeler Loan' })} />
       <SectionHeader title="Knowledge Center" />
-      <View style={{ flexDirection: 'row', paddingHorizontal: sp.lg, gap: sp.md }}>
-        {['How to pay EMI', 'How to update mandate'].map((t, i) => <TouchableOpacity key={i} style={s.knowledgeCard}><Text style={{ fontSize: 24 }}>▶️</Text><Text variant="caption" align="center" style={{ marginTop: 4 }}>{t}</Text></TouchableOpacity>)}
+      <View style={{ flexDirection: 'row', paddingHorizontal: sp.base, gap: sp.base }}>
+        {['How to pay EMI', 'How to update mandate'].map((t, i) => <TouchableOpacity key={i} style={s.knowledgeCard} onPress={() => Alert.alert('Video', 'This video will be available soon.')}><Text style={{ fontSize: 24 }}>▶️</Text><Text variant="caption" align="center" style={{ marginTop: 4 }}>{t}</Text></TouchableOpacity>)}
       </View>
       <SectionHeader title="Account Management" />
       <MenuItem icon="👤" label="Profile Details" onPress={() => navigation.navigate('MyProfile')} />
       <MenuItem icon="💳" label="Manage Autopay" onPress={() => navigation.navigate('ViewMandate')} />
       <MenuItem icon="📥" label="Download Statement" onPress={() => navigation.navigate('DocumentsStatement')} />
       <View style={s.supportSection}><Text style={s.supportIcon}>🎧</Text><Text variant="labelMd">Need Assistance?</Text><Text variant="caption" color={colors.text.secondary}>Available Mon-Fri.</Text>
-        <View style={s.supportBtnRow}><Button title="Call Now" onPress={() => {}} fullWidth={false} style={{ paddingHorizontal: 24, paddingVertical: 10, borderRadius: 20 }} /><TouchableOpacity><Text variant="labelMd" color={colors.text.secondary}>FAQs</Text></TouchableOpacity></View></View>
+        <View style={s.supportBtnRow}><Button title="Call Now" onPress={() => Linking.openURL('tel:18001234567')} fullWidth={false} style={{ paddingHorizontal: 24, paddingVertical: 10, borderRadius: 20 }} /><TouchableOpacity><Text variant="labelMd" color={colors.text.secondary}>FAQs</Text></TouchableOpacity></View></View>
     </DashboardTemplate>
   );
 };
@@ -39,10 +39,10 @@ export const ServicesHomeScreen = ({ navigation }: any) => {
 export const ServiceRequestsScreen = ({ navigation }: any) => (
   <SafeAreaView style={s.screen}>
     <StatusBar barStyle="dark-content" />
-    <View style={s.header}><TouchableOpacity onPress={() => navigation.goBack()}><Text variant="h3">←</Text></TouchableOpacity><Text variant="labelLg" style={s.headerTitle}>Service Requests</Text></View>
-    <View style={{ padding: sp.xl }}><Text variant="h3">Service Requests</Text><Text variant="bodyMd" color={colors.text.secondary} style={{ marginTop: 4 }}>How can we help you today?</Text>
+    <View style={s.header}><TouchableOpacity onPress={() => navigation.goBack()}><Icon name="back" size={24} color={colors.text.primary} /></TouchableOpacity><Text variant="labelLg" style={s.headerTitle}>Service Requests</Text></View>
+    <View style={{ padding: sp.lg }}><Text variant="h3">Service Requests</Text><Text variant="bodyMd" color={colors.text.secondary} style={{ marginTop: 4 }}>How can we help you today?</Text>
       {[{ t: 'Create Service Request', sub: 'Submit a new request', bg: '#E8F5E9', i: '+', ic: C.green, r: 'SelectLoan' },
-        { t: 'Track Service Requests', sub: 'View status of existing requests', bg: '#FFF3E0', i: '📋', ic: C.orange, r: 'TrackRequests' }].map(x =>
+        { t: 'Track Service Requests', sub: 'View status of existing requests', bg: '#FFF3E0', i: '📋', ic: C.warning, r: 'TrackRequests' }].map(x =>
         <TouchableOpacity key={x.t} style={s.requestCard} onPress={() => navigation.navigate(x.r)}>
           <View style={s.requestCardRow}><View style={[s.requestIcon, { backgroundColor: x.bg }]}><Text variant="bodyLg" color={x.ic}>{x.i}</Text></View>
           <View><Text variant="labelLg">{x.t}</Text><Text variant="caption" color={colors.text.secondary}>{x.sub}</Text></View></View>
@@ -56,15 +56,15 @@ export const SelectLoanScreen = ({ navigation }: any) => {
   const [tab, setTab] = useState<'active' | 'inactive'>('active');
   return (
     <SafeAreaView style={s.screen}>
-      <View style={s.header}><TouchableOpacity onPress={() => navigation.goBack()}><Text variant="h3">←</Text></TouchableOpacity><Text variant="labelLg" style={s.headerTitle}>Create Service Request</Text></View>
-      <View style={{ padding: sp.xl }}><Text variant="h3">Select Loan Account</Text><Text variant="bodyMd" color={colors.text.secondary}>Choose the loan for this service request</Text>
+      <View style={s.header}><TouchableOpacity onPress={() => navigation.goBack()}><Icon name="back" size={24} color={colors.text.primary} /></TouchableOpacity><Text variant="labelLg" style={s.headerTitle}>Create Service Request</Text></View>
+      <View style={{ padding: sp.lg }}><Text variant="h3">Select Loan Account</Text><Text variant="bodyMd" color={colors.text.secondary}>Choose the loan for this service request</Text>
         <View style={s.tabRow}>
           {(['active', 'inactive'] as const).map(t => <TouchableOpacity key={t} style={[s.tab, tab === t ? s.tabActive : {}]} onPress={() => setTab(t)}><Text variant="labelMd" color={tab === t ? C.white : colors.text.secondary}>{t === 'active' ? 'Active Loans' : 'Inactive Loans'}</Text></TouchableOpacity>)}
         </View>
         {loans.filter(l => tab === 'active' ? l.status === 'active' : l.status !== 'active').map(l =>
           <TouchableOpacity key={l.id} style={s.loanSelectCard} onPress={() => navigation.navigate('OtherRequest', { loanId: l.id })}>
             <Text variant="labelSm" color={colors.text.secondary}>{l.type.toUpperCase()}</Text><Text variant="labelLg">{l.number}</Text>
-            <View style={s.loanSelectAmounts}><View><Text variant="caption" color={colors.text.tertiary}>LOAN AMOUNT</Text><Text variant="labelMd">₹{l.amount.toLocaleString('en-IN')}</Text></View><View style={{ alignItems: 'flex-end' }}><Text variant="caption" color={colors.text.tertiary}>EMI AMOUNT</Text><Text variant="labelMd">₹{l.emi.toLocaleString('en-IN')}</Text></View></View>
+            <View style={s.loanSelectAmounts}><View><Text variant="caption" color={colors.text.secondary}>LOAN AMOUNT</Text><Text variant="labelMd">₹{l.amount.toLocaleString('en-IN')}</Text></View><View style={{ alignItems: 'flex-end' }}><Text variant="caption" color={colors.text.secondary}>EMI AMOUNT</Text><Text variant="labelMd">₹{l.emi.toLocaleString('en-IN')}</Text></View></View>
           </TouchableOpacity>)}
       </View>
     </SafeAreaView>
@@ -83,8 +83,8 @@ export const OtherRequestScreen = ({ navigation, route }: any) => {
     <DropdownSelect label="Select Category" value={f.cat} options={[...SERVICE_CATEGORIES]} onSelect={o => setF(p => ({ ...p, cat: o.label }))} placeholder="e.g., Payments, Documents" />
     <DropdownSelect label="Select Sub-Category" value={f.sub} options={[{ id: 'general', label: 'General' }, { id: 'urgent', label: 'Urgent' }]} onSelect={o => setF(p => ({ ...p, sub: o.label }))} placeholder="Select Sub-Category" />
     <Input label="Description" required placeholder="Describe your issue clearly" value={f.desc} onChangeText={t => setF(p => ({ ...p, desc: t }))} multiline numberOfLines={4} style={{ height: 100, textAlignVertical: 'top' }} />
-    <View style={{ marginTop: sp.md }}><Text variant="bodySm" color={colors.text.secondary}>Attachments (Optional)</Text>
-      <TouchableOpacity style={s.uploadArea}><Text style={{ fontSize: 24 }}>📤</Text><Text variant="labelMd">Upload Documents</Text><Text variant="caption" color={colors.text.tertiary}>Formats: jpg, png, pdf, etc. Max Size: 10MB</Text></TouchableOpacity></View>
+    <View style={{ marginTop: sp.base }}><Text variant="bodySm" color={colors.text.secondary}>Attachments (Optional)</Text>
+      <TouchableOpacity style={s.uploadArea} onPress={() => Alert.alert('Upload', 'Choose source', [{text:'Camera'},{text:'Gallery'},{text:'Cancel',style:'cancel'}])}><Text style={{ fontSize: 24 }}>📤</Text><Text variant="labelMd">Upload Documents</Text><Text variant="caption" color={colors.text.secondary}>Formats: jpg, png, pdf, etc. Max Size: 10MB</Text></TouchableOpacity></View>
   </FormTemplate>);
 };
 
@@ -95,14 +95,14 @@ export const TrackRequestsScreen = ({ navigation }: any) => {
   return (
     <SafeAreaView style={s.screen}>
       <StatusBar barStyle="dark-content" />
-      <View style={s.header}><TouchableOpacity onPress={() => navigation.goBack()}><Text variant="h3">←</Text></TouchableOpacity><Text variant="labelLg" style={s.headerTitle}>Track Service Requests</Text></View>
+      <View style={s.header}><TouchableOpacity onPress={() => navigation.goBack()}><Icon name="back" size={24} color={colors.text.primary} /></TouchableOpacity><Text variant="labelLg" style={s.headerTitle}>Track Service Requests</Text></View>
       <View style={s.filterRow}>
         {['All', 'Pending', 'Active', 'Done'].map(f => { const k = f.toLowerCase(); const a = filter === k;
           return <TouchableOpacity key={f} style={[s.filterTab, a && s.filterActive]} onPress={() => setFilter(k)}><Text variant="labelMd" color={a ? C.white : colors.text.secondary}>{f}</Text></TouchableOpacity>; })}
       </View>
-      <ScrollView style={{ flex: 1, paddingHorizontal: sp.lg }}>
+      <ScrollView style={{ flex: 1, paddingHorizontal: sp.base }}>
         {filtered.map(t => <ServiceTicketCard key={t.id} title={t.title} refId={t.refId} desc={t.desc} status={t.status} created={t.created} updated={t.updated} />)}
-        {filtered.length === 0 && <View style={s.emptyState}><Text variant="bodyMd" color={colors.text.tertiary}>No requests found</Text></View>}
+        {filtered.length === 0 && <View style={s.emptyState}><Text variant="bodyMd" color={colors.text.secondary}>No requests found</Text></View>}
       </ScrollView>
     </SafeAreaView>
   );

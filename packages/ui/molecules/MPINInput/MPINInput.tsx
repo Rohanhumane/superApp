@@ -27,8 +27,8 @@ export const MPINInput: React.FC<MPINInputProps> = ({ length = 4, onComplete, se
 
   return (
     <View>
-      {label && <Text variant="labelLg" color={colors.text.primary} style={{ marginBottom: sp.md }}>{label}</Text>}
-      <View style={{ flexDirection: 'row', justifyContent: 'center', gap: 16 }}>
+      {label && <Text variant="labelLg" color={colors.text.primary} style={{ marginBottom: sp.base }}>{label}</Text>}
+      <View style={{ flexDirection: 'row', justifyContent: 'center', gap: 8 }}>
         {Array(length).fill(0).map((_, i) => (
           <TextInput key={i} ref={r => { if (r) refs.current[i] = r; }}
             style={[s.box, mpin[i] ? s.filled : {}, error ? { borderColor: colors.border.error } : {}]}
@@ -43,6 +43,6 @@ export const MPINInput: React.FC<MPINInputProps> = ({ length = 4, onComplete, se
 };
 
 const s = StyleSheet.create({
-  box: { width: 60, height: 64, borderWidth: 1, borderColor: colors.border.light, borderRadius: br.md, textAlign: 'center', ...typography.h2, color: colors.text.primary, backgroundColor: colors.white },
+  box: { width: 52, height: 60, borderWidth: 1, borderColor: colors.border.light, borderRadius: br.sm, textAlign: 'center', ...typography.h2, color: colors.text.primary, backgroundColor: colors.white, letterSpacing: 2 },
   filled: { borderColor: colors.border.focus },
 });

@@ -1,16 +1,22 @@
 export const colors = {
-  primary: { navy: '#1B2B5E', navyDark: '#0F1B3D', green: '#2D8B57', greenDark: '#1E6B3F', greenLight: '#3DA86D' },
-  bg: { primary: '#FFFFFF', secondary: '#F5F5F5', tertiary: '#FAFAFA', dark: '#1B2B5E', input: '#F8F8F8' },
-  text: { primary: '#1A1A1A', secondary: '#666666', tertiary: '#999999', white: '#FFFFFF', link: '#1B2B5E', error: '#E53935', success: '#2D8B57', warning: '#F5A623' },
-  border: { light: '#E8E8E8', medium: '#D0D0D0', focus: '#1B2B5E', error: '#E53935' },
-  status: {
-    active: { bg: '#E8F5E9', text: '#2D8B57', border: '#2D8B57' },
-    pending: { bg: '#FFF3E0', text: '#F5A623', border: '#F5A623' },
-    inProgress: { bg: '#E3F2FD', text: '#1565C0', border: '#1565C0' },
-    resolved: { bg: '#E8F5E9', text: '#2D8B57', border: '#2D8B57' },
-    failed: { bg: '#FFEBEE', text: '#E53935', border: '#E53935' },
-  },
-  btn: { primary: '#2D8B57', primaryText: '#FFFFFF', disabled: '#A5D6BA' },
-  overlay: 'rgba(0,0,0,0.5)',
+  // Base — Neutrals
   white: '#FFFFFF',
+  gray: { 50: '#FAFAFA', 200: '#E0E0E0', 500: '#757575', 900: '#212121' },
+  // Primary — Brand Blue
+  primary: { dark: '#1A1C4D', base: '#2E3192', light: '#EDEFFB' },
+  // Secondary — Brand Green
+  secondary: { dark: '#0C8749', base: '#1EA862', light: '#C9EEDC' },
+  // Semantic mappings
+  bg: { primary: '#FFFFFF', secondary: '#FAFAFA', dark: '#1A1C4D' },
+  text: { primary: '#212121', secondary: '#757575', white: '#FFFFFF', link: '#2E3192', error: '#D32F2F', success: '#0C8749', warning: '#E65100' },
+  border: { light: '#E0E0E0', focus: '#2E3192', error: '#D32F2F', success: '#1EA862', disabled: '#EEEEEE' },
+  status: {
+    active: { bg: '#C9EEDC', text: '#0C8749', border: '#0C8749' },
+    pending: { bg: '#FFF3E0', text: '#E65100', border: '#E65100' },
+    inProgress: { bg: '#EDEFFB', text: '#1A1C4D', border: '#1A1C4D' },
+    resolved: { bg: '#C9EEDC', text: '#0C8749', border: '#0C8749' },
+    failed: { bg: '#FFEBEE', text: '#C62828', border: '#C62828' },
+  },
+  btn: { primary: '#1EA862', primaryPressed: '#0C8749', primaryText: '#FFFFFF', outline: '#2E3192', outlinePressed: '#EDEFFB', disabled: '#E0E0E0', disabledText: '#9E9E9E' },
+  overlay: 'rgba(0,0,0,0.5)',
 } as const;

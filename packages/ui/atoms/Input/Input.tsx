@@ -21,7 +21,7 @@ export const Input: React.FC<InputProps> = ({
   const borderColor = error ? colors.border.error : focused ? colors.border.focus : colors.border.light;
 
   return (
-    <View style={{ marginBottom: sp.lg }}>
+    <View style={{ marginBottom: sp.base }}>
       {label && (
         <View style={{ flexDirection: 'row', marginBottom: sp.sm }}>
           <Text variant="bodySm" color={colors.text.secondary}>{label}</Text>
@@ -31,7 +31,7 @@ export const Input: React.FC<InputProps> = ({
       <View style={[s.box, { borderColor }, disabled && { opacity: 0.6 }]}>
         <TextInput
           style={[s.input, style]}
-          placeholderTextColor={colors.text.tertiary}
+          placeholderTextColor={colors.text.secondary}
           editable={!disabled}
           onFocus={e => { setFocused(true); onFocus?.(e); }}
           onBlur={e => { setFocused(false); onBlur?.(e); }}
@@ -49,6 +49,6 @@ export const Input: React.FC<InputProps> = ({
 };
 
 const s = StyleSheet.create({
-  box: { flexDirection: 'row', alignItems: 'center', borderWidth: 1, borderRadius: br.md, backgroundColor: colors.bg.input, paddingHorizontal: sp.lg },
-  input: { flex: 1, ...typography.bodyLg, color: colors.text.primary, paddingVertical: sp.md + 2 },
+  box: { flexDirection: 'row', alignItems: 'center', borderWidth: 1, borderRadius: br.sm, backgroundColor: colors.bg.secondary, paddingHorizontal: sp.base },
+  input: { flex: 1, ...typography.bodyLg, color: colors.text.primary, paddingVertical: sp.base + 2 },
 });

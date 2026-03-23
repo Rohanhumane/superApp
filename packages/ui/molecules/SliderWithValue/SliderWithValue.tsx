@@ -9,8 +9,8 @@ export interface SliderWithValueProps { label: string; value: number; min: numbe
 export const SliderWithValue: React.FC<SliderWithValueProps> = ({ label, value, min, max, step = 1, formatValue, formatMin, formatMax, onValueChange }) => {
   const progress = Math.min(Math.max((value - min) / (max - min), 0), 1);
   return (
-    <View style={{ marginBottom: sp.xl }}>
-      <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: sp.md }}>
+    <View style={{ marginBottom: sp.lg }}>
+      <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: sp.base }}>
         <Text variant="bodyMd" color={colors.text.secondary}>{label}</Text>
         <View style={{ paddingHorizontal: 12, paddingVertical: 4, borderRadius: 14, borderWidth: 1, borderColor: colors.border.light }}>
           <Text variant="labelMd">{formatValue(value)}</Text>
@@ -23,12 +23,12 @@ export const SliderWithValue: React.FC<SliderWithValueProps> = ({ label, value, 
         onValueChange(Math.min(Math.max(nv, min), max));
       }}>
         <View style={{ height: 4, backgroundColor: colors.border.light, borderRadius: 2, overflow: 'hidden' }}>
-          <View style={{ height: '100%', width: `${progress * 100}%`, backgroundColor: colors.primary.green, borderRadius: 2 }} />
+          <View style={{ height: '100%', width: `${progress * 100}%`, backgroundColor: colors.secondary.base, borderRadius: 2 }} />
         </View>
       </View>
       <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-        <Text variant="caption" color={colors.text.tertiary}>{formatMin || formatValue(min)}</Text>
-        <Text variant="caption" color={colors.text.tertiary}>{formatMax || formatValue(max)}</Text>
+        <Text variant="caption" color={colors.text.secondary}>{formatMin || formatValue(min)}</Text>
+        <Text variant="caption" color={colors.text.secondary}>{formatMax || formatValue(max)}</Text>
       </View>
     </View>
   );

@@ -19,9 +19,9 @@ export interface ButtonProps {
 
 const VARIANTS: Record<ButtonVariant, { bg: string; text: string; border?: string }> = {
   primary: { bg: colors.btn.primary, text: colors.btn.primaryText },
-  secondary: { bg: 'transparent', text: colors.primary.navy, border: colors.primary.navy },
-  outline: { bg: 'transparent', text: colors.text.secondary, border: colors.border.medium },
-  link: { bg: 'transparent', text: colors.primary.navy },
+  secondary: { bg: 'transparent', text: colors.primary.dark, border: colors.primary.dark },
+  outline: { bg: 'transparent', text: colors.text.secondary, border: colors.border.light },
+  link: { bg: 'transparent', text: colors.primary.dark },
   orange: { bg: colors.text.warning, text: colors.white },
 };
 
@@ -55,6 +55,6 @@ export const Button: React.FC<ButtonProps> = ({
 const styles = StyleSheet.create({
   base: {
     flexDirection: 'row', alignItems: 'center', justifyContent: 'center',
-    paddingVertical: sp.lg, paddingHorizontal: sp.xxl, borderRadius: br.xl,
+    paddingVertical: sp.base, paddingHorizontal: sp.lg, borderRadius: br.lg,
   },
 });

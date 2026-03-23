@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, ScrollView, SafeAreaView, StatusBar, TouchableOpacity, Image, Modal } from 'react-native';
-import { Text, Button, Input, Checkbox, FormTemplate, DropdownSelect, ProductTile, colors, sp } from '@nbfc/ui';
+import { Text, Button, Input, Checkbox, FormTemplate, DropdownSelect, ProductTile, Icon, colors, sp } from '@nbfc/ui';
 import { useAppDispatch, useAppSelector, setProfile } from '@nbfc/core';
 import { LOAN_TYPES, PRODUCT_TYPES, EMPLOYMENT_TYPES } from '@nbfc/config';
 import { validators } from '@nbfc/utils';
@@ -32,7 +32,7 @@ const DatePickerModal = ({ visible, onClose, onSelect }: { visible: boolean; onC
           <View style={s.dateModalHeader}>
             <TouchableOpacity onPress={onClose}><Text variant="labelMd" color={colors.text.secondary}>Cancel</Text></TouchableOpacity>
             <Text variant="labelLg">Select Date of Birth</Text>
-            <TouchableOpacity onPress={handleDone}><Text variant="labelMd" color={colors.primary.navy}>Done</Text></TouchableOpacity>
+            <TouchableOpacity onPress={handleDone}><Text variant="labelMd" color={colors.primary.dark}>Done</Text></TouchableOpacity>
           </View>
           <View style={s.dateColumnsRow}>
             {[
@@ -76,7 +76,7 @@ export const ProductPageScreen = ({ navigation }: any) => (
         <View style={s.productsGrid}>
           {LOAN_TYPES.map(p => <ProductTile key={p.id} label={p.label} icon={p.icon} onPress={() => navigation.navigate('ProductDetail', { productId: p.id, productLabel: p.label })} />)}
         </View>
-        <Text variant="h4" style={{ marginTop: sp.xl, marginBottom: sp.lg }}>Tools & Services</Text>
+        <Text variant="h4" style={{ marginTop: sp.lg, marginBottom: sp.base }}>Tools & Services</Text>
         <View style={s.toolsRow}>
           {[{ t: 'EMI Calculator', i: '🧮', r: 'EMICalculator' }, { t: 'Eligibility Calculator', i: '📊', r: 'EligibilityCalculator' }].map(c => (
             <TouchableOpacity key={c.t} style={s.toolCard} onPress={() => navigation.navigate(c.r)}>
@@ -95,15 +95,15 @@ export const ProductDetailScreen = ({ navigation, route }: any) => {
   const { productId, productLabel = 'Car Loan' } = route.params || {};
   return (
     <SafeAreaView style={s.screen}>
-      <ScrollView contentContainerStyle={{ padding: sp.xl }}>
-        <TouchableOpacity onPress={() => { if (navigation.canGoBack()) navigation.goBack(); }} style={s.backBtn}><Text variant="h3">←</Text></TouchableOpacity>
+      <ScrollView contentContainerStyle={{ padding: sp.lg }}>
+        <TouchableOpacity onPress={() => { if (navigation.canGoBack()) navigation.goBack(); }} style={s.backBtn}><Icon name="back" size={24} color={colors.text.primary} /></TouchableOpacity>
         <View style={s.detailIcon}><Text style={s.detailIconText}>🚗</Text></View>
         <Text variant="h2">{productLabel}</Text>
         <Text variant="bodyMd" color={colors.text.secondary} style={s.detailDesc}>At SK Finance, we offer loans to help you fulfill your dreams without worrying about finances.</Text>
-        <Text variant="h4" style={{ marginTop: sp.xl }}>Features & Benefits</Text>
+        <Text variant="h4" style={{ marginTop: sp.lg }}>Features & Benefits</Text>
         {['Loans for all owner profiles.', 'Attractive interest rates.', '100% transparency.', 'Up to 90% of value.'].map((f, i) => (
           <View key={i} style={s.featureRow}>
-            <Text variant="bodyMd" color={colors.primary.green} style={s.featureCheck}>✓</Text>
+            <Text variant="bodyMd" color={colors.secondary.base} style={s.featureCheck}>✓</Text>
             <Text variant="bodyMd" color={colors.text.secondary}>{f}</Text>
           </View>
         ))}
@@ -164,8 +164,8 @@ export const KYCFormScreen = ({ navigation, route }: any) => {
           <Text variant="bodySm" color={colors.text.error}> *</Text>
         </View>
         <TouchableOpacity style={[s.dobInput, errors.dob ? s.dobInputError : s.dobInputNormal]} onPress={() => setShowDatePicker(true)} activeOpacity={0.7}>
-          <Text variant="bodyLg" color={f.dob ? C.black : C.gray5} style={s.dobPlaceholder}>{f.dob || 'DD/MM/YYYY'}</Text>
-          <Text variant="bodyMd" color={colors.text.tertiary}>📅</Text>
+          <Text variant="bodyLg" color={f.dob ? C.black : C.gray500} style={s.dobPlaceholder}>{f.dob || 'DD/MM/YYYY'}</Text>
+          <Text variant="bodyMd" color={colors.text.secondary}>📅</Text>
         </TouchableOpacity>
         {errors.dob && <Text variant="caption" color={colors.text.error} style={{ marginTop: 4 }}>{errors.dob}</Text>}
       </View>

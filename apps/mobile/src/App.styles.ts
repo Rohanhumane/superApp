@@ -19,5 +19,5 @@ export const appStyles = StyleSheet.create({
   },
   errorIcon: { fontSize: 48 },
   errorTitle: { fontSize: 18, fontWeight: '600', marginTop: 16, color: C.black },
-  errorMessage: { fontSize: 12, color: C.gray6, marginTop: 8, textAlign: 'center' },
+  errorMessage: { fontSize: 12, color: C.gray500, marginTop: 8, textAlign: 'center' },
 });

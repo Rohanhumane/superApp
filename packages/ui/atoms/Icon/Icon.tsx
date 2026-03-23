@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { View, Text as RNText, StyleSheet } from 'react-native';
 
@@ -75,7 +76,7 @@ interface IconProps {
   color?: string;
 }
 
-export const Icon: React.FC<IconProps> = ({ name, size = 24, color = '#1A1A1A' }) => {
+export const Icon: React.FC<IconProps> = ({ name, size = 24, color = '#212121' }) => {
   if (MCI && VECTOR[name]) {
     return <MCI name={VECTOR[name]} size={size} color={color} />;
   }
@@ -90,8 +91,8 @@ interface IconBadgeProps extends IconProps {
 }
 
 export const IconBadge: React.FC<IconBadgeProps> = ({
-  name, size = 22, color = '#1B2B5E',
-  bgColor = '#F5F5F5', containerSize, borderRadius,
+  name, size = 22, color = '#1A1C4D',
+  bgColor = '#FAFAFA', containerSize, borderRadius,
 }) => {
   const cs = containerSize || size * 2;
   return (
@@ -104,16 +105,16 @@ export const IconBadge: React.FC<IconBadgeProps> = ({
 // ===== PRODUCT ICON (colored bg per product type) =====
 const PRODUCT_THEME: Record<string, { bg: string; fg: string }> = {
   car: { bg: '#EEF2FF', fg: '#3B5998' },
-  tractor: { bg: '#EEF6EE', fg: '#2D8B57' },
-  truck: { bg: '#E8EAF6', fg: '#283593' },
-  equipment: { bg: '#FFF8E1', fg: '#F5A623' },
-  business: { bg: '#E8F5E9', fg: '#2D8B57' },
+  tractor: { bg: '#EEF6EE', fg: '#0C8749' },
+  truck: { bg: '#E8EAF6', fg: '#1A1C4D' },
+  equipment: { bg: '#FFF8E1', fg: '#E65100' },
+  business: { bg: '#C9EEDC', fg: '#0C8749' },
   home: { bg: '#FCE4EC', fg: '#C62828' },
   home_loan: { bg: '#FCE4EC', fg: '#C62828' },
 };
 
 export const ProductIcon: React.FC<{ type: string; size?: number }> = ({ type, size = 56 }) => {
-  const t = PRODUCT_THEME[type] || { bg: '#F5F5F5', fg: '#666' };
+  const t = PRODUCT_THEME[type] || { bg: '#FAFAFA', fg: '#757575' };
   const iconName = (type === 'home' ? 'home_loan' : type) as IconName;
   return (
     <View style={[s.center, { width: size, height: size, borderRadius: size * 0.21, backgroundColor: t.bg }]}>

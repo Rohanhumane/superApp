@@ -4,7 +4,7 @@ import { NavigationContainer, createNavigationContainerRef } from '@react-naviga
 import { Provider } from 'react-redux';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import { store } from '@nbfc/core';
+import { store, useSessionMonitor } from '@nbfc/core';
 import { RootNavigator } from './src/navigation/RootNavigator';
 const SHOW_STORYBOOK = false; // Change to true to see Storybook
 
@@ -30,12 +30,12 @@ const SplashScreen = ({ onFinish }: { onFinish: () => void }) => {
   }, []);
 
   return (
-    <View style={{ flex: 1, backgroundColor: '#1B2B5E', justifyContent: 'center', alignItems: 'center' }}>
-      <StatusBar barStyle="light-content" backgroundColor="#1B2B5E" />
+    <View style={{ flex: 1, backgroundColor: '#1A1C4D', justifyContent: 'center', alignItems: 'center' }}>
+      <StatusBar barStyle="light-content" backgroundColor="#1A1C4D" />
       <Animated.View style={{ opacity: fadeAnim, transform: [{ scale: scaleAnim }], alignItems: 'center' }}>
         <Image source={logo} style={{ width: 180, height: 100, resizeMode: 'contain' }} />
         <View style={{ marginTop: 40, width: 120, height: 3, backgroundColor: 'rgba(255,255,255,0.1)', borderRadius: 2, overflow: 'hidden' }}>
-          <Animated.View style={{ width: '100%', height: '100%', backgroundColor: '#2D8B57', borderRadius: 2, opacity: fadeAnim }} />
+          <Animated.View style={{ width: '100%', height: '100%', backgroundColor: '#1EA862', borderRadius: 2, opacity: fadeAnim }} />
         </View>
       </Animated.View>
     </View>
@@ -51,14 +51,20 @@ class ErrorBoundary extends React.Component<{ children: React.ReactNode }, { has
       return (
         <SafeAreaView style={{ flex: 1, justifyContent: 'center', alignItems: 'center', padding: 20, backgroundColor: '#fff' }}>
           <Text style={{ fontSize: 48 }}>⚠️</Text>
-          <Text style={{ fontSize: 18, fontWeight: '600', marginTop: 16, color: '#1A1A1A' }}>Something went wrong</Text>
-          <Text style={{ fontSize: 12, color: '#666', marginTop: 8, textAlign: 'center' }}>{String(this.state.error?.message || 'Unknown error')}</Text>
+          <Text style={{ fontSize: 18, fontWeight: '600', marginTop: 16, color: '#212121' }}>Something went wrong</Text>
+          <Text style={{ fontSize: 12, color: '#757575', marginTop: 8, textAlign: 'center' }}>{String(this.state.error?.message || 'Unknown error')}</Text>
         </SafeAreaView>
       );
     }
     return this.props.children;
   }
 }
+
+// ===== APP CONTENT WITH SESSION MONITORING =====
+const AppContent = () => {
+  const { recordActivity } = useSessionMonitor();
+  return <RootNavigator />;
+};
 
 // ===== MAIN APP =====
 const App = () => {
@@ -74,7 +80,7 @@ const App = () => {
         <Provider store={store}>
           <SafeAreaProvider>
             <NavigationContainer ref={navigationRef}>
-              <RootNavigator />
+              <AppContent />
             </NavigationContainer>
           </SafeAreaProvider>
         </Provider>

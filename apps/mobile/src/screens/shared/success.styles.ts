@@ -12,10 +12,10 @@ export const successStyles = StyleSheet.create({
   // Check icon
   checkCircle: {
     width: 88, height: 88, borderRadius: 44,
-    backgroundColor: '#E8F5E9',
+    backgroundColor: '#C9EEDC',
     alignItems: 'center', justifyContent: 'center', marginBottom: 24,
   },
-  checkIcon: { fontSize: 40 },
+  checkIcon: { fontSize: 40, lineHeight: 52, color: '#0C8749' },
 
   // Title
   title: { marginBottom: 8 },

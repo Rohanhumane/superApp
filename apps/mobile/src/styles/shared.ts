@@ -2,29 +2,27 @@ import { StyleSheet, Dimensions } from 'react-native';
 
 export const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 
-// SK Finance brand colors (single source of truth)
+// SK Finance brand colors (single source of truth — matches Styles and Themes doc)
 export const C = {
-  navy: '#1B2B5E',
-  green: '#2D8B57',
-  orange: '#F5A623',
+  navy: '#1A1C4D',
+  blue: '#2E3192',
+  blueLight: '#EDEFFB',
+  green: '#1EA862',
+  greenDark: '#0C8749',
+  greenLight: '#C9EEDC',
   white: '#FFFFFF',
-  black: '#1A1A1A',
-  gray1: '#F8F8F8',
-  gray2: '#F5F5F5',
-  gray3: '#E8E8E8',
-  gray4: '#CCCCCC',
-  gray5: '#999999',
-  gray6: '#666666',
-  gray7: '#333333',
-  error: '#E53935',
-  success: '#2D8B57',
-  warning: '#F5A623',
-  info: '#1565C0',
-  bgInput: '#F8F8F8',
+  black: '#212121',
+  gray50: '#FAFAFA',
+  gray200: '#E0E0E0',
+  gray500: '#757575',
+  error: '#D32F2F',
+  success: '#0C8749',
+  warning: '#E65100',
+  info: '#1A1C4D',
   bgCard: '#FFFFFF',
-  bgPage: '#F5F5F5',
-  borderLight: '#E8E8E8',
-  borderFocus: '#1B2B5E',
+  bgPage: '#FAFAFA',
+  borderLight: '#E0E0E0',
+  borderFocus: '#2E3192',
 };
 
 // Reusable layout patterns
@@ -40,14 +38,14 @@ export const shared = StyleSheet.create({
   },
   headerTitle: { marginLeft: 12, fontSize: 16, fontWeight: '600', color: C.black },
 
-  // Cards
+  // Cards (radius 8, padding 16, level 1 shadow per style guide)
   card: {
-    backgroundColor: C.white, borderRadius: 14, padding: 16,
+    backgroundColor: C.white, borderRadius: 8, padding: 16,
     shadowColor: '#000', shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.06, shadowRadius: 8, elevation: 3,
+    shadowOpacity: 0.08, shadowRadius: 6, elevation: 2,
   },
   cardFlat: {
-    backgroundColor: C.white, borderRadius: 12, padding: 16,
+    backgroundColor: C.white, borderRadius: 8, padding: 16,
     borderWidth: 1, borderColor: C.borderLight,
   },
 
@@ -60,7 +58,7 @@ export const shared = StyleSheet.create({
 
   // Bottom button area
   bottomBar: {
-    paddingHorizontal: 20, paddingBottom: 24, paddingTop: 12,
+    paddingHorizontal: 16, paddingBottom: 24, paddingTop: 12,
     borderTopWidth: 1, borderTopColor: C.borderLight,
   },
 

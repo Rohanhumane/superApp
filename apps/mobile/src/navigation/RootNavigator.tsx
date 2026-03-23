@@ -29,7 +29,7 @@ const TabIcon = ({ name, focused }: { name: string; focused: boolean }) => {
 const OffersScreen = () => (
   <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#fff' }}>
     <RNText style={{ fontSize: 48 }}>🎁</RNText>
-    <RNText style={{ fontSize: 18, color: '#666', marginTop: 16 }}>Offers Coming Soon</RNText>
+    <RNText style={{ fontSize: 18, color: '#757575', marginTop: 16 }}>Offers Coming Soon</RNText>
   </View>
 );
 
@@ -53,9 +53,9 @@ const MainTabs = () => (
   <Tab.Navigator screenOptions={({ route }) => ({
     headerShown: false,
     tabBarIcon: ({ focused }) => <TabIcon name={route.name} focused={focused} />,
-    tabBarActiveTintColor: '#1B2B5E', tabBarInactiveTintColor: '#999',
-    tabBarStyle: { backgroundColor: '#fff', borderTopWidth: 1, borderTopColor: '#E8E8E8', height: 60, paddingBottom: 8 },
-    tabBarLabelStyle: { fontSize: 11 },
+    tabBarActiveTintColor: '#2E3192', tabBarInactiveTintColor: '#757575',
+    tabBarStyle: { backgroundColor: '#FFFFFF', borderTopWidth: 1, borderTopColor: '#E0E0E0', height: 60, paddingBottom: 8 },
+    tabBarLabelStyle: { fontSize: 12, fontWeight: '500' },
   })}>
     <Tab.Screen name="Home" component={DashboardScreen} />
     <Tab.Screen name="Services" component={ServicesHomeScreen} />

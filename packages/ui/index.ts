@@ -17,6 +17,8 @@ export type { CheckboxProps } from './atoms/Checkbox';
 export { RadioButton } from './atoms/RadioButton';
 export type { RadioButtonProps } from './atoms/RadioButton';
 export { Divider } from './atoms/Divider';
+export { Icon, IconBadge, ProductIcon, OutlinedIcon } from './atoms/Icon';
+export type { IconName } from './atoms/Icon';
 export { MenuItem } from './atoms/MenuItem';
 export type { MenuItemProps } from './atoms/MenuItem';
 

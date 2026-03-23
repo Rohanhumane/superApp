@@ -12,9 +12,9 @@ interface Props {
 
 const variantStyles: Record<Variant, { bg: string; text: string; border?: string }> = {
   primary: { bg: colors.btn.primary, text: colors.btn.primaryText },
-  secondary: { bg: 'transparent', text: colors.primary.navy, border: colors.primary.navy },
-  outline: { bg: 'transparent', text: colors.text.secondary, border: colors.border.medium },
-  link: { bg: 'transparent', text: colors.primary.navy },
+  secondary: { bg: 'transparent', text: colors.primary.dark, border: colors.primary.dark },
+  outline: { bg: 'transparent', text: colors.text.secondary, border: colors.border.light },
+  link: { bg: 'transparent', text: colors.primary.dark },
   orange: { bg: colors.text.warning, text: colors.white },
 };
 
@@ -24,8 +24,8 @@ export const Button: React.FC<Props> = ({ title, onPress, variant = 'primary', d
     <TouchableOpacity
       style={[{
         flexDirection: 'row', alignItems: 'center', justifyContent: 'center',
-        paddingVertical: variant === 'link' ? sp.sm : sp.lg, paddingHorizontal: sp.xxl,
-        borderRadius: br.xl, backgroundColor: v.bg, opacity: disabled || loading ? 0.5 : 1,
+        paddingVertical: variant === 'link' ? sp.sm : sp.base, paddingHorizontal: sp.lg,
+        borderRadius: br.lg, backgroundColor: v.bg, opacity: disabled || loading ? 0.5 : 1,
         width: fullWidth ? '100%' : undefined,
       }, v.border ? { borderWidth: 1, borderColor: v.border } : {}, style]}
       onPress={onPress} disabled={disabled || loading} activeOpacity={0.7}

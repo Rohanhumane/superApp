@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { View, SafeAreaView, StatusBar, TouchableOpacity, Image } from 'react-native';
-import { Text, Button, MPINInput, SupportBar, AuthTemplate, colors } from '@nbfc/ui';
+import { View, SafeAreaView, StatusBar, TouchableOpacity, Image, Linking } from 'react-native';
+import { Text, Button, MPINInput, SupportBar, AuthTemplate, Icon, colors } from '@nbfc/ui';
 import { useAppDispatch, useAppSelector, setAuthenticated, incrementMPINAttempts } from '@nbfc/core';
 import { APP_CONFIG } from '@nbfc/config';
 import { subsequent as s } from './auth.styles';
@@ -32,7 +32,7 @@ export const MPINLoginScreen = ({ navigation }: any) => {
       </View>
       <View style={s.centerArea}>
         <View style={s.avatarCircle}>
-          <Text variant="h3" color={colors.primary.navy}>👤</Text>
+          <Icon name="user" size={24} color={colors.primary.dark} />
         </View>
         <Text variant="h4" color={colors.text.secondary} style={s.welcomeText}>Welcome,</Text>
         <Text variant="h3">{userName}</Text>
@@ -40,7 +40,7 @@ export const MPINLoginScreen = ({ navigation }: any) => {
           <Text variant="labelMd" style={s.mpinLabel}>Login with mPIN</Text>
           <MPINInput secure onComplete={handleLogin} error={error} />
           <TouchableOpacity onPress={() => navigation.navigate('ForgotMPIN')} style={s.forgotLink}>
-            <Text variant="labelMd" color={colors.primary.navy}>Forgot mPIN?</Text>
+            <Text variant="labelMd" color={colors.primary.dark}>Forgot mPIN?</Text>
           </TouchableOpacity>
           {biometricEnabled && (
             <TouchableOpacity
@@ -50,12 +50,12 @@ export const MPINLoginScreen = ({ navigation }: any) => {
               }}
               style={s.faceIdBtn}
             >
-              <Text variant="bodyMd" color={colors.text.secondary}>🪪 Use Face ID</Text>
+              <Text variant="bodyMd" color={colors.text.secondary}><Icon name="face_id" size={16} color={colors.text.secondary} /> Use Face ID</Text>
             </TouchableOpacity>
           )}
         </View>
       </View>
-      <Text variant="caption" color={colors.text.tertiary} align="center" style={s.versionText}>
+      <Text variant="caption" color={colors.text.secondary} align="center" style={s.versionText}>
         App Ver {APP_CONFIG.APP_VERSION}
       </Text>
       <SupportBar
@@ -94,7 +94,7 @@ export const AccountLockedScreen = ({ navigation }: any) => (
   <SafeAreaView style={s.screen}>
     <StatusBar barStyle="dark-content" />
     <View style={s.centerArea}>
-      <Text style={s.bigIcon}>🔒</Text>
+      <Icon name="lock" size={80} color={colors.primary.dark} />
       <Text variant="h3" align="center" style={s.lockTitle}>Account temporarily locked</Text>
       <Text variant="bodyMd" color={colors.text.secondary} align="center" style={s.lockSubtitle}>
         Too many incorrect PIN attempts. Try again after 30 minutes.
@@ -102,8 +102,8 @@ export const AccountLockedScreen = ({ navigation }: any) => (
     </View>
     <View style={s.bottomBar}>
       <Button title="Reset MPIN" onPress={() => navigation.navigate('ForgotMPIN')} />
-      <TouchableOpacity style={s.supportLink}>
-        <Text variant="labelMd" color={colors.text.secondary}>📞 Call Support</Text>
+      <TouchableOpacity style={s.supportLink} onPress={() => Linking.openURL('tel:18001234567')}>
+        <Text variant="labelMd" color={colors.text.secondary}><Icon name="phone" size={14} color={colors.text.secondary} /> Call Support</Text>
       </TouchableOpacity>
     </View>
   </SafeAreaView>
@@ -114,7 +114,7 @@ export const SessionExpiredScreen = ({ navigation }: any) => (
   <SafeAreaView style={s.screen}>
     <StatusBar barStyle="dark-content" />
     <View style={s.centerArea}>
-      <Text style={s.bigIcon}>⏳</Text>
+      <Icon name="timer" size={80} color={colors.primary.dark} />
       <Text variant="h3" align="center" style={s.lockTitle}>Session expired</Text>
       <Text variant="bodyMd" color={colors.text.secondary} align="center" style={s.lockSubtitle}>
         For your security, you've been logged out due to inactivity.

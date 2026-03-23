@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { View, ScrollView, SafeAreaView, TouchableOpacity, StatusBar } from 'react-native';
-import { Text, Button, DropdownSelect, SliderWithValue, DonutChart, colors, sp } from '@nbfc/ui';
+import { Text, Button, DropdownSelect, SliderWithValue, DonutChart, colors, sp, Icon } from '@nbfc/ui';
 import { LOAN_TYPES, INCOME_SOURCES, EMI_LIMITS, ELIGIBILITY_LIMITS } from '@nbfc/config';
 import { calculateEMI, calculateEligibility, formatCurrency, formatCurrencyCompact } from '@nbfc/utils';
 import { calcStyles as s } from './calculator.styles';
@@ -18,7 +18,7 @@ export const EMICalculatorScreen = ({ navigation }: any) => {
   return (
     <SafeAreaView style={s.screen}>
       <StatusBar barStyle="dark-content" />
-      <TouchableOpacity onPress={() => navigation.goBack()} style={s.header}><Text variant="h3">←</Text></TouchableOpacity>
+      <TouchableOpacity onPress={() => navigation.goBack()} style={s.header}><Icon name="back" size={24} color={colors.text.primary} /></TouchableOpacity>
       <ScrollView contentContainerStyle={s.content}>
         <Text variant="h2">EMI Calculator</Text>
         <DropdownSelect label="Loan Type" required value={lt} options={LOAN_TYPES.map(l => ({ id: l.id, label: l.label }))} onSelect={o => setLt(o.id)} />
@@ -38,7 +38,7 @@ export const EMICalculatorScreen = ({ navigation }: any) => {
         </View>
         <View style={s.donutArea}><DonutChart principal={amt} interest={interest} /></View>
       </ScrollView>
-      <View style={{ padding: sp.lg, borderTopWidth: 1, borderTopColor: colors.border.light }}>
+      <View style={{ padding: sp.base, borderTopWidth: 1, borderTopColor: colors.border.light }}>
         <Button title="Apply Now" onPress={() => navigation.navigate('LoginMobile', { flow: 'lead' })} style={s.applyBtn} />
       </View>
     </SafeAreaView>
@@ -57,7 +57,7 @@ export const EligibilityCalculatorScreen = ({ navigation }: any) => {
   return (
     <SafeAreaView style={s.screen}>
       <StatusBar barStyle="dark-content" />
-      <TouchableOpacity onPress={() => navigation.goBack()} style={s.header}><Text variant="h3">←</Text></TouchableOpacity>
+      <TouchableOpacity onPress={() => navigation.goBack()} style={s.header}><Icon name="back" size={24} color={colors.text.primary} /></TouchableOpacity>
       <ScrollView contentContainerStyle={s.content}>
         <Text variant="h2">Eligibility Calculator</Text>
         <DropdownSelect label="Loan Type" required value={lt} options={LOAN_TYPES.map(l => ({ id: l.id, label: l.label }))} onSelect={o => setLt(o.id)} />
@@ -69,12 +69,12 @@ export const EligibilityCalculatorScreen = ({ navigation }: any) => {
           <SliderWithValue label="Tenure (Months)" value={ten} min={ELIGIBILITY_LIMITS.TENURE_MIN} max={ELIGIBILITY_LIMITS.TENURE_MAX} step={1} formatValue={v => `${v}M`} formatMin={`${ELIGIBILITY_LIMITS.TENURE_MIN}M`} formatMax={`${ELIGIBILITY_LIMITS.TENURE_MAX}M`} onValueChange={setTen} />
         </View>
         <View style={s.eligibilityCard}>
-          <Text style={{ fontSize: 32 }}>✅</Text>
+          <Icon name="success" size={32} color={colors.secondary.base} />
           <Text variant="bodyMd" style={s.eligibilityLabel}>{LOAN_TYPES.find(l => l.id === lt)?.label} Eligibility is</Text>
           <Text variant="h2" style={s.eligibilityAmount}>{formatCurrency(elig)}</Text>
         </View>
       </ScrollView>
-      <View style={{ padding: sp.lg, borderTopWidth: 1, borderTopColor: colors.border.light }}>
+      <View style={{ padding: sp.base, borderTopWidth: 1, borderTopColor: colors.border.light }}>
         <Button title="Apply Now" onPress={() => navigation.navigate('LoginMobile', { flow: 'lead' })} />
       </View>
     </SafeAreaView>
