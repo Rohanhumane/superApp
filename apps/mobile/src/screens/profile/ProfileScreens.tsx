@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { profileStyles as ps } from "./profile.styles";
 import { View, ScrollView, SafeAreaView, TouchableOpacity, Alert, StatusBar, Linking } from 'react-native';
 import { Text, Button, Input, Avatar, Checkbox, RadioButton, Divider, MenuItem, FormTemplate, DropdownSelect, colors, sp, Icon } from '@nbfc/ui';
-import { useAppSelector, useAppDispatch, setLanguage, logout, updateMobile, updateEmail } from '@nbfc/core';
+import { useAppSelector, useAppDispatch, setLanguage, fullReset, updateMobile, updateEmail } from '@nbfc/core';
 import { LANGUAGES, SUPPORT_OPTIONS } from '@nbfc/config';
 import { validators } from '@nbfc/utils';
 
@@ -38,9 +38,9 @@ export const MyProfileScreen = ({ navigation }: any) => {
         <MenuItem icon="🚪" label="Logout" onPress={() => Alert.alert('Logout', 'Are you sure you want to logout?', [
           { text: 'Cancel', style: 'cancel' },
           { text: 'Logout', style: 'destructive', onPress: () => {
-            // fullReset clears ALL state back to initial
-            // key={navKey} in RootNavigator forces remount → Welcome screen
-            dispatch(logout());
+            // fullReset clears ALL redux state (auth + user + loan + service)
+            // NavigationContainer key in App.tsx changes → full nav tree reset → Welcome screen
+            dispatch(fullReset());
           }},
         ])} />
       </ScrollView>

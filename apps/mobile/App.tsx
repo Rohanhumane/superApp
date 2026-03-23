@@ -4,7 +4,7 @@ import { NavigationContainer, createNavigationContainerRef } from '@react-naviga
 import { Provider } from 'react-redux';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import { store, useSessionMonitor } from '@nbfc/core';
+import { store, useSessionMonitor, useAppSelector } from '@nbfc/core';
 import { RootNavigator } from './src/navigation/RootNavigator';
 const SHOW_STORYBOOK = false; // Change to true to see Storybook
 
@@ -62,8 +62,21 @@ class ErrorBoundary extends React.Component<{ children: React.ReactNode }, { has
 
 // ===== APP CONTENT WITH SESSION MONITORING =====
 const AppContent = () => {
-  const { recordActivity } = useSessionMonitor();
-  return <RootNavigator />;
+  useSessionMonitor();
+  const authStatus = useAppSelector(s => s.auth.status);
+  const hasCompletedSetup = useAppSelector(s => s.auth.hasCompletedSetup);
+
+  // Key the NavigationContainer on auth state so the ENTIRE navigation tree
+  // (including native stack internal state) resets when auth status changes.
+  // Without this, dispatching logout() changes the rendered screens but
+  // NavigationContainer keeps stale navigation state from the old stack.
+  const navContainerKey = authStatus === 'authenticated' ? 'auth' : hasCompletedSetup ? 'returning' : 'fresh';
+
+  return (
+    <NavigationContainer key={navContainerKey} ref={navigationRef}>
+      <RootNavigator />
+    </NavigationContainer>
+  );
 };
 
 // ===== MAIN APP =====
@@ -79,9 +92,7 @@ const App = () => {
       <GestureHandlerRootView style={{ flex: 1 }}>
         <Provider store={store}>
           <SafeAreaProvider>
-            <NavigationContainer ref={navigationRef}>
-              <AppContent />
-            </NavigationContainer>
+            <AppContent />
           </SafeAreaProvider>
         </Provider>
       </GestureHandlerRootView>
