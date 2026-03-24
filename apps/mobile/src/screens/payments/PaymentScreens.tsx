@@ -24,7 +24,7 @@ export const PayEMIScreen = ({ navigation, route }: any) => {
         const amount = isEditable ? parseFloat(customAmount.replace(/[^0-9.]/g, '')) || 0 : (loan?.emi || 0);
         const refId = generateRefId();
         await MockApi.payments.payEMI({ loanId: selLoan, amount, payType });
-        dispatch(addTransaction({ id: refId, date: new Date().toISOString(), desc: `EMI Payment - ${loan?.number || ''}`, amount, status: 'success', type: 'debit', refId }));
+        dispatch(addTransaction({ id: refId, date: new Date().toISOString().split('T')[0], desc: `EMI Payment - ${loan?.number || ''}`, amount, status: 'received', installment: (loan?.emiPaid || 0) + 1 }));
         navigation.navigate('SuccessScreen', { title: 'Payment Successful!', subtitle: 'Your payment has been completed successfully.', showDownload: true, details: [{ label: 'Total Amount (₹)', value: formatCurrency(amount) }, { label: 'Payment Time', value: formatDate(new Date(), 'full') }, { label: 'Reference No', value: refId }, { label: 'Loan Account No.', value: loan?.number || '' }], primaryBtn: { title: 'Done', route: 'MainTabs' } });
       } catch (e: any) {
         Alert.alert('Payment Failed', e?.message || 'Something went wrong. Please try again.');
@@ -41,7 +41,7 @@ export const PayEMIScreen = ({ navigation, route }: any) => {
 };
 
 export const LoanDetailsScreen = ({ navigation, route }: any) => {
-  const loans = useAppSelector(s => s.loan.loans); const txns = useAppSelector(s => s.loan.transactions); const mandates = useAppSelector(s => s.loan.mandates); const assoc = useAppSelector(s => s.loan.associates);
+  const loans = useAppSelector(s => s.loan.loans); const txns = useAppSelector(s => s.loan.transactions); const mandates = useAppSelector(s => s.loan.mandates); const assoc = useAppSelector(s => s.loan.associates); const insurances = useAppSelector(s => s.loan.insurances);
   const loan = loans.find(l => l.id === route.params?.loanId) || loans[0]; const [tab, setTab] = useState('overview');
   if (!loan) return null;
   return (
@@ -71,6 +71,12 @@ export const LoanDetailsScreen = ({ navigation, route }: any) => {
           {txns.slice(0, 3).map(t => <TransactionRow key={t.id} date={t.date} desc={t.desc} amount={t.amount} status={t.status} />)}
           <SectionHeader title="Auto-Debit Account (NACH)" />
           {mandates.map(m => <View key={m.id} style={{ flexDirection: 'row', alignItems: 'center', backgroundColor: colors.white, borderRadius: br.md, padding: sp.base, ...shadow.sm }}><Text style={{ fontSize: 24, marginRight: sp.base }}>🏦</Text><View style={{ flex: 1 }}><Text variant="labelMd">{m.bank}</Text><Text variant="caption" color={colors.text.secondary}>Account No. {m.masked}</Text><Text variant="caption" color={colors.text.secondary}>IFSC: {m.ifsc}</Text></View><Badge label="Active" variant="active" /></View>)}
+          <SectionHeader title="Linked Insurance" />
+          {insurances.map(ins => <View key={ins.id} style={{ flexDirection: 'row', alignItems: 'center', backgroundColor: colors.white, borderRadius: br.md, padding: sp.base, ...shadow.sm, marginHorizontal: sp.base }}>
+            <View style={{ width: 40, height: 40, borderRadius: 8, backgroundColor: '#FFF0F0', alignItems: 'center', justifyContent: 'center', marginRight: sp.base }}><Text style={{ fontSize: 14, fontWeight: '700', color: '#C62828' }}>A</Text></View>
+            <View style={{ flex: 1 }}><Text variant="labelMd">{ins.provider}</Text><Text variant="caption" color={colors.text.secondary}>Policy No: {ins.policyNo}</Text><Text variant="caption" color={colors.text.secondary}>Valid till: {formatDate(ins.validTill)}</Text></View>
+            <Badge label={ins.status === 'active' ? 'Active' : 'Expired'} variant={ins.status === 'active' ? 'active' : 'failed'} />
+          </View>)}
           <SectionHeader title="Associated People" />
           {assoc.map(a => <MenuItem key={a.id} icon="👤" label={`${a.role}\n${a.name}`} onPress={() => {}} />)}
           <View style={{ alignItems: 'center', paddingVertical: sp.lg }}><Text style={{ fontSize: 48 }}>🎧</Text><Text variant="labelMd">Need Assistance?</Text><Text variant="caption" color={colors.text.secondary}>Available Mon-Fri.</Text>
@@ -148,8 +154,9 @@ export const AuthorizeMandateScreen = ({ navigation, route }: any) => {
         holder: f.name || '',
         emi: loan?.emi || 0,
         endDate: loan?.closeDate || new Date().toISOString(),
+        startDate: new Date().toISOString().split('T')[0],
         status: 'active',
-        type: f.type === 'savings' ? 'Savings' : 'Current',
+        accType: f.type === 'savings' ? 'savings' : 'current',
       }));
       navigation.navigate('SuccessScreen', { title: 'Request Submitted Successfully', subtitle: 'Your Mandate Details will be updated within 24 hours.', primaryBtn: { title: 'View Service Ticket', route: 'TrackRequests' }, secondaryBtn: { title: 'Back to Home', route: 'MainTabs' } });
     }}>

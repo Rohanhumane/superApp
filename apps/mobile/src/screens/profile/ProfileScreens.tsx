@@ -1,26 +1,58 @@
 import React, { useState } from 'react';
 import { profileStyles as ps } from "./profile.styles";
-import { View, ScrollView, SafeAreaView, TouchableOpacity, Alert, StatusBar, Linking } from 'react-native';
+import { View, ScrollView, SafeAreaView, TouchableOpacity, Alert, StatusBar, Linking, Modal } from 'react-native';
 import { Text, Button, Input, Avatar, Checkbox, RadioButton, Divider, MenuItem, FormTemplate, DropdownSelect, colors, sp, Icon } from '@nbfc/ui';
 import { useAppSelector, useAppDispatch, setLanguage, fullReset, updateMobile, updateEmail } from '@nbfc/core';
 import { LANGUAGES, SUPPORT_OPTIONS } from '@nbfc/config';
 import { validators } from '@nbfc/utils';
 
+// ===== CAMERA PERMISSION MODAL =====
+const CameraPermissionModal = ({ visible, onAllow, onDeny }: { visible: boolean; onAllow: () => void; onDeny: () => void }) => (
+  <Modal visible={visible} transparent animationType="fade">
+    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0,0,0,0.5)' }}>
+      <View style={{ backgroundColor: colors.white, borderRadius: 16, padding: 24, marginHorizontal: 40, alignItems: 'center', width: '80%' }}>
+        <View style={{ width: 56, height: 56, borderRadius: 28, backgroundColor: '#F5F5F5', alignItems: 'center', justifyContent: 'center', marginBottom: 16 }}>
+          <Icon name="camera" size={28} color={colors.text.primary} />
+        </View>
+        <Text variant="labelLg" style={{ marginBottom: 8 }}>Camera Permission</Text>
+        <Text variant="bodyMd" color={colors.text.secondary} align="center" style={{ marginBottom: 24, lineHeight: 20 }}>
+          We need access to your camera to take photos. Your privacy is important to us.
+        </Text>
+        <View style={{ flexDirection: 'row', gap: 12, width: '100%' }}>
+          <TouchableOpacity onPress={onDeny} style={{ flex: 1, paddingVertical: 12, borderRadius: 8, borderWidth: 1, borderColor: colors.border.light, alignItems: 'center' }}>
+            <Text variant="labelMd" color={colors.text.secondary}>Don't Allow</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={onAllow} style={{ flex: 1, paddingVertical: 12, borderRadius: 8, backgroundColor: '#1EA862', alignItems: 'center' }}>
+            <Text variant="labelMd" color={colors.white}>Allow</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+    </View>
+  </Modal>
+);
+
 // ===== MY PROFILE =====
 export const MyProfileScreen = ({ navigation }: any) => {
   const p = useAppSelector(s => s.user.profile);
   const dispatch = useAppDispatch();
+  const [showCameraModal, setShowCameraModal] = useState(false);
+
+  const handleCameraAllow = () => {
+    setShowCameraModal(false);
+    Alert.alert('Change Photo', 'Choose source', [{ text: 'Take a photo' }, { text: 'Gallery' }, { text: 'Cancel', style: 'cancel' }]);
+  };
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: colors.white }}>
       <StatusBar barStyle="dark-content" />
+      <CameraPermissionModal visible={showCameraModal} onAllow={handleCameraAllow} onDeny={() => setShowCameraModal(false)} />
       <View style={{ flexDirection: 'row', alignItems: 'center', padding: sp.base, borderBottomWidth: 1, borderBottomColor: colors.border.light }}>
         <TouchableOpacity onPress={() => { if (navigation.canGoBack()) navigation.goBack(); }}><Icon name="back" size={24} color={colors.text.primary} /></TouchableOpacity>
         <Text variant="labelLg" style={{ marginLeft: sp.base }}>My Profile</Text>
       </View>
       <ScrollView contentContainerStyle={{ paddingBottom: 40 }}>
         <View style={{ alignItems: 'center', paddingVertical: sp.lg }}>
-          <Avatar uri={p.photo} name={p.fullName} size={80} onEdit={() => Alert.alert('Change Photo', '', [{ text: 'Take a photo' }, { text: 'Gallery' }, { text: 'Cancel', style: 'cancel' }])} />
+          <Avatar uri={p.photo} name={p.fullName} size={80} onEdit={() => setShowCameraModal(true)} />
           <Text variant="h4" style={{ marginTop: sp.base }}>{p.fullName}</Text>
         </View>
         <Text variant="labelMd" color={colors.text.secondary} style={{ paddingHorizontal: sp.base, marginBottom: sp.sm }}>Account Information</Text>

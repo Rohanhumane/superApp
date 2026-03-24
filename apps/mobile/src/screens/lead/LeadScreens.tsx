@@ -5,7 +5,7 @@ import { useAppDispatch, useAppSelector, setProfile } from '@nbfc/core';
 import { LOAN_TYPES, PRODUCT_TYPES, EMPLOYMENT_TYPES } from '@nbfc/config';
 import { validators } from '@nbfc/utils';
 import { leadStyles as s } from './lead.styles';
-import { C } from '../../styles/shared';
+import { C, SCREEN_WIDTH } from '../../styles/shared';
 
 const logo = require('../../assets/logo.png');
 
@@ -148,7 +148,7 @@ export const KYCFormScreen = ({ navigation, route }: any) => {
   const handleSubmit = () => {
     if (!validate()) return;
     dispatch(setProfile({ fullName: f.name, dob: f.dob, pan: f.pan.toUpperCase(), maskedPAN: 'xxxxxx' + f.pan.slice(-4).toUpperCase(), email: f.email || '', mobile: authMobile, maskedMobile: authMasked || ('xxxxxx' + authMobile.slice(-4)) }));
-    navigation.navigate('MPINIntro', { flow });
+    navigation.navigate('SelfieCapture', { flow });
   };
 
   const isValid = isLead ? (f.name && f.dob && f.pan && f.consent && f.loanType && f.empType) : (f.name && f.dob && f.pan && f.consent);
@@ -187,5 +187,88 @@ export const KYCFormScreen = ({ navigation, route }: any) => {
       <Checkbox checked={f.consent} onToggle={() => upd('consent', !f.consent)} label="The information provided will be used for processing your loan enquiry." />
       {errors.consent && <Text variant="caption" color={colors.text.error} style={{ marginTop: -8 }}>{errors.consent}</Text>}
     </FormTemplate>
+  );
+};
+
+// ===== SELFIE CAPTURE =====
+export const SelfieCaptureScreen = ({ navigation, route }: any) => {
+  const flow = route.params?.flow || 'ntb';
+  const [captured, setCaptured] = useState(false);
+
+  const FRAME_SIZE = SCREEN_WIDTH * 0.65;
+
+  const handleCapture = () => {
+    setCaptured(true);
+    // Simulate capture delay then proceed
+    setTimeout(() => {
+      navigation.navigate('MPINIntro', { flow });
+    }, 1200);
+  };
+
+  const handleRetry = () => {
+    setCaptured(false);
+  };
+
+  return (
+    <SafeAreaView style={{ flex: 1, backgroundColor: colors.white }}>
+      <StatusBar barStyle="dark-content" />
+      {/* Camera preview area */}
+      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: '#F5F5F5' }}>
+        {/* Oval face frame */}
+        <View style={{
+          width: FRAME_SIZE, height: FRAME_SIZE * 1.2,
+          borderRadius: FRAME_SIZE * 0.6,
+          borderWidth: 3, borderColor: captured ? '#1EA862' : '#1EA862',
+          alignItems: 'center', justifyContent: 'center',
+          backgroundColor: captured ? '#E8F5E9' : '#FAFAFA',
+          overflow: 'hidden',
+        }}>
+          {captured ? (
+            <View style={{ alignItems: 'center' }}>
+              <Icon name="success" size={64} color="#1EA862" />
+              <Text variant="labelMd" color="#1EA862" style={{ marginTop: 8 }}>Photo Captured</Text>
+            </View>
+          ) : (
+            <View style={{ alignItems: 'center' }}>
+              <Icon name="user" size={80} color="#BDBDBD" />
+              <Text variant="caption" color={colors.text.secondary} style={{ marginTop: 8 }}>Position your face here</Text>
+            </View>
+          )}
+        </View>
+      </View>
+
+      {/* Controls */}
+      <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-around', paddingVertical: 24, paddingHorizontal: 40, backgroundColor: colors.white }}>
+        {/* Close button */}
+        <TouchableOpacity
+          onPress={() => { if (navigation.canGoBack()) navigation.goBack(); }}
+          style={{ width: 48, height: 48, borderRadius: 24, backgroundColor: '#F5F5F5', alignItems: 'center', justifyContent: 'center' }}
+        >
+          <Icon name="close" size={24} color={colors.text.primary} />
+        </TouchableOpacity>
+
+        {/* Shutter button */}
+        <TouchableOpacity
+          onPress={handleCapture}
+          disabled={captured}
+          style={{
+            width: 72, height: 72, borderRadius: 36,
+            borderWidth: 4, borderColor: '#1A1C4D',
+            alignItems: 'center', justifyContent: 'center',
+            backgroundColor: captured ? '#E0E0E0' : colors.white,
+          }}
+        >
+          <View style={{ width: 56, height: 56, borderRadius: 28, backgroundColor: captured ? '#BDBDBD' : colors.white }} />
+        </TouchableOpacity>
+
+        {/* Retry button */}
+        <TouchableOpacity
+          onPress={handleRetry}
+          style={{ width: 48, height: 48, borderRadius: 24, backgroundColor: '#F5F5F5', alignItems: 'center', justifyContent: 'center' }}
+        >
+          <Icon name="refresh" size={24} color={colors.text.primary} />
+        </TouchableOpacity>
+      </View>
+    </SafeAreaView>
   );
 };

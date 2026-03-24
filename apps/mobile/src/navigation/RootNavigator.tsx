@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text as RNText } from 'react-native';
+import { Text as RNText } from 'react-native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { useAppSelector } from '@nbfc/core';
@@ -9,13 +9,15 @@ import { LoginMobileScreen } from '../screens/auth/LoginMobileScreen';
 import { OTPVerificationScreen } from '../screens/auth/OTPVerificationScreen';
 import { MPINIntroScreen, MPINSetupScreen, MPINConfirmScreen, BiometricSetupScreen, LoginSuccessScreen } from '../screens/auth/MPINScreens';
 import { MPINLoginScreen, ForgotMPINScreen, AccountLockedScreen, SessionExpiredScreen } from '../screens/auth/SubsequentLoginScreens';
-import { ProductPageScreen, ProductDetailScreen, KYCFormScreen } from '../screens/lead/LeadScreens';
+import { ProductPageScreen, ProductDetailScreen, KYCFormScreen, SelfieCaptureScreen } from '../screens/lead/LeadScreens';
 import { DashboardScreen } from '../screens/dashboard/DashboardScreen';
 import { ServicesHomeScreen, ServiceRequestsScreen, SelectLoanScreen, OtherRequestScreen, TrackRequestsScreen } from '../screens/services/ServiceScreens';
 import { PayEMIScreen, LoanDetailsScreen, LoanCardScreen, ViewMandateScreen, SetUpAutoDebitScreen, AuthorizeMandateScreen, DocumentsStatementScreen } from '../screens/payments/PaymentScreens';
 import { MyProfileScreen, PersonalInfoScreen, UpdateMobileScreen, UpdateEmailScreen, AddressScreen, ConfirmAddressScreen, LanguagePreferenceScreen, ChangeMPINScreen, ReferEarnScreen, CustomerCareScreen } from '../screens/profile/ProfileScreens';
 import { EMICalculatorScreen, EligibilityCalculatorScreen } from '../screens/calculators/CalculatorScreens';
 import { SuccessScreen } from '../screens/shared/SuccessScreen';
+import { OffersScreen } from '../screens/offers/OffersScreen';
+import { MenuScreen as MenuTabScreen } from '../screens/menu/MenuScreen';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -26,25 +28,7 @@ const TabIcon = ({ name, focused }: { name: string; focused: boolean }) => {
   return <RNText style={{ fontSize: 20, opacity: focused ? 1 : 0.5 }}>{icons[name] || '📱'}</RNText>;
 };
 
-const OffersScreen = () => (
-  <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#fff' }}>
-    <RNText style={{ fontSize: 48 }}>🎁</RNText>
-    <RNText style={{ fontSize: 18, color: '#757575', marginTop: 16 }}>Offers Coming Soon</RNText>
-  </View>
-);
-
-const MenuScreen = ({ navigation }: any) => {
-  React.useEffect(() => {
-    const unsub = navigation.addListener('tabPress', (e: any) => {
-      e.preventDefault();
-      try { navigation.getParent()?.navigate('MyProfile');
-        
-       } catch(e) {}
-    });
-    return unsub;
-  }, [navigation]);
-  return <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#fff' }}><RNText style={{ fontSize: 48 }}>☰</RNText></View>;
-};
+// Offers and Menu are now full screens imported from their own files
 
 
 
@@ -60,7 +44,7 @@ const MainTabs = () => (
     <Tab.Screen name="Home" component={DashboardScreen} />
     <Tab.Screen name="Services" component={ServicesHomeScreen} />
     <Tab.Screen name="Offers" component={OffersScreen} />
-    <Tab.Screen name="Menu" component={MenuScreen} />
+    <Tab.Screen name="Menu" component={MenuTabScreen} />
   </Tab.Navigator>
 );
 
@@ -142,6 +126,7 @@ export const RootNavigator = () => {
           <Stack.Screen name="LoginMobile" component={LoginMobileScreen} />
           <Stack.Screen name="OTPVerification" component={OTPVerificationScreen} />
           <Stack.Screen name="KYCForm" component={KYCFormScreen} />
+          <Stack.Screen name="SelfieCapture" component={SelfieCaptureScreen} />
           <Stack.Screen name="MPINIntro" component={MPINIntroScreen} />
           <Stack.Screen name="MPINSetup" component={MPINSetupScreen} />
           <Stack.Screen name="MPINConfirm" component={MPINConfirmScreen} />

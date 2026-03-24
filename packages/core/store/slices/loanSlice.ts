@@ -8,8 +8,9 @@ export interface LoanAccount {
 }
 export interface Transaction { id: string; date: string; desc: string; amount: number; status: 'received' | 'failed' | 'pending'; installment: number; }
 export interface Mandate { id: string; loanId: string; bank: string; accountNo: string; masked: string; ifsc: string; holder: string; emi: number; endDate: string; startDate: string; accType: string; status: string; }
+export interface Insurance { id: string; loanId: string; provider: string; policyNo: string; validTill: string; status: 'active' | 'expired'; }
 
-interface LoanState { loans: LoanAccount[]; transactions: Transaction[]; mandates: Mandate[]; associates: { id: string; name: string; role: string }[]; }
+interface LoanState { loans: LoanAccount[]; transactions: Transaction[]; mandates: Mandate[]; associates: { id: string; name: string; role: string }[]; insurances: Insurance[]; }
 
 const init: LoanState = {
   loans: [{
@@ -25,6 +26,7 @@ const init: LoanState = {
   ],
   mandates: [{ id: 'm1', loanId: '1', bank: 'HDFC Bank', accountNo: '5010067541234', masked: 'XXXX XXXX 5623', ifsc: 'HDFC0001929', holder: 'Rajesh Kumar', emi: 11634, endDate: '2029-06-01', startDate: '2026-04-01', accType: 'savings', status: 'active' }],
   associates: [{ id: 'a1', name: 'Smita Agarwal', role: 'Co-Borrower' }, { id: 'a2', name: 'Prakash Kumar', role: 'Guarantor' }],
+  insurances: [{ id: 'ins1', loanId: '1', provider: 'Axis Max', policyNo: '1234567890123', validTill: '2026-02-05', status: 'active' }],
 };
 
 const slice = createSlice({
