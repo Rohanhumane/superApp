@@ -22,9 +22,20 @@ export const SliderWithValue: React.FC<SliderWithValueProps> = ({ label, value, 
         nv = Math.round(nv / step) * step;
         onValueChange(Math.min(Math.max(nv, min), max));
       }}>
-        <View style={{ height: 4, backgroundColor: colors.border.light, borderRadius: 2, overflow: 'hidden' }}>
+        <View style={{ height: 4, backgroundColor: colors.border.light, borderRadius: 2 }}>
           <View style={{ height: '100%', width: `${progress * 100}%`, backgroundColor: colors.secondary.base, borderRadius: 2 }} />
         </View>
+        <View style={{
+          position: 'absolute',
+          left: `${progress * 100}%`,
+          marginLeft: -8,
+          width: 16,
+          height: 16,
+          borderRadius: 8,
+          backgroundColor: colors.secondary.base,
+          borderWidth: 2,
+          borderColor: colors.secondary.base,
+        }} />
       </View>
       <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
         <Text variant="caption" color={colors.text.secondary}>{formatMin || formatValue(min)}</Text>

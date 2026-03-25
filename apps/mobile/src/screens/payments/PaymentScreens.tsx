@@ -18,10 +18,11 @@ export const PayEMIScreen = ({ navigation, route }: any) => {
   const [customAmount, setCustomAmount] = useState('');
   const displayAmount = isEditable ? customAmount : (loan ? formatCurrency(loan.emi) : '');
   return (<FormTemplate title="Pay EMI" subtitle="Select a Loan Account and Payment Type to make a payment" headerTitle="Back" onBack={() => navigation.goBack()}
-    btnTitle={loading ? "Processing..." : "Make Payment"} btnDisabled={loading} onSubmit={async () => {
+    btnTitle={loading ? "Processing..." : "Make Payment"} btnDisabled={loading || (isEditable && (!customAmount || parseFloat(customAmount) <= 0))} onSubmit={async () => {
       setLoading(true);
       try {
         const amount = isEditable ? parseFloat(customAmount.replace(/[^0-9.]/g, '')) || 0 : (loan?.emi || 0);
+        if (amount <= 0) { Alert.alert('Invalid Amount', 'Please enter a valid payment amount.'); setLoading(false); return; }
         const refId = generateRefId();
         await MockApi.payments.payEMI({ loanId: selLoan, amount, payType });
         dispatch(addTransaction({ id: refId, date: new Date().toISOString().split('T')[0], desc: `EMI Payment - ${loan?.number || ''}`, amount, status: 'received', installment: (loan?.emiPaid || 0) + 1 }));
@@ -95,7 +96,7 @@ export const LoanCardScreen = ({ navigation, route }: any) => {
   return (<FormTemplate title="" headerTitle={loan.type} onBack={() => navigation.goBack()} subtitle="">
     <View style={{ backgroundColor: colors.white, borderRadius: br.md, padding: sp.base, ...shadow.sm }}>
       <Text variant="h4" style={{ marginBottom: sp.base }}>Loan Details</Text>
-      {[['Loan Account No.', loan.accountNo], ['Loan Type', loan.type], ['Sanctioned Amount', formatCurrency(loan.amount)], ['Closure Date', formatDate(loan.closeDate)], ['Disbursal Date', formatDate(loan.disbursalDate)], ['First EMI Date', formatDate(loan.firstEMIDate)], ['Tenure', `${loan.tenure} Months`], ['Remaining Tenure', `${loan.remainingTenure} Months`], ['Current EMI', formatCurrency(loan.emi)], ['Next Due', formatDate(loan.nextDate)], ['Repayment Bank', loan.bank]].map(([l, v], i) =>
+      {[['Loan Account No.', loan.accountNo], ['Loan Type', loan.type], ['Loan Sanctioned Amount', formatCurrency(loan.amount)], ['Loan Closure Date', formatDate(loan.closeDate)], ['Disbursal Date', formatDate(loan.disbursalDate)], ['First EMI Date', formatDate(loan.firstEMIDate)], ['Tenure', `${loan.tenure} Months`], ['Remaining Tenure', `${loan.remainingTenure} Months`], ['Current EMI', formatCurrency(loan.emi)], ['Next Installment Due', formatDate(loan.nextDate)], ['Repayment Bank', loan.bank]].map(([l, v], i) =>
         <View key={i} style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: sp.base }}><Text variant="caption" color={colors.text.secondary}>{l}</Text><Text variant="labelMd">{v}</Text></View>)}
       <TouchableOpacity style={{ alignSelf: 'center', marginTop: sp.base }} onPress={() => Alert.alert('Download', 'Document will be sent to your registered email')}><Text variant="labelMd" color={colors.primary.dark}>Download ⬇</Text></TouchableOpacity>
     </View>
@@ -149,7 +150,7 @@ export const AuthorizeMandateScreen = ({ navigation, route }: any) => {
         loanId: loan?.id || '',
         bank: f.bank || 'HDFC Bank',
         accountNo: f.acc || '',
-        masked: f.acc ? `XXXX XXXX ${f.acc.slice(-4)}` : '',
+        masked: f.acc ? `xxx xxx ${f.acc.slice(-4)}` : '',
         ifsc: f.ifsc || '',
         holder: f.name || '',
         emi: loan?.emi || 0,

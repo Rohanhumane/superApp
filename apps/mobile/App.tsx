@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, StatusBar, Animated, SafeAreaView, Image } from 'react-native';
+import React, { useState, useEffect, useRef } from 'react';
+import { View, Text, StatusBar, Animated, SafeAreaView, Image, Dimensions } from 'react-native';
 import { NavigationContainer, createNavigationContainerRef } from '@react-navigation/native';
 import { Provider } from 'react-redux';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
@@ -8,37 +8,33 @@ import { store, useSessionMonitor, useAppSelector } from '@nbfc/core';
 import { RootNavigator } from './src/navigation/RootNavigator';
 const SHOW_STORYBOOK = false; // Change to true to see Storybook
 
-
 const logo = require('./src/assets/logo.png');
 export const navigationRef = createNavigationContainerRef();
 
 // ===== SPLASH SCREEN =====
 const SplashScreen = ({ onFinish }: { onFinish: () => void }) => {
-  const fadeAnim = new Animated.Value(0);
-  const scaleAnim = new Animated.Value(0.8);
+  const opacity = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
-    Animated.parallel([
-      Animated.timing(fadeAnim, { toValue: 1, duration: 800, useNativeDriver: true }),
-      Animated.spring(scaleAnim, { toValue: 1, friction: 8, tension: 40, useNativeDriver: true }),
-    ]).start();
+    // Fade in
+    Animated.timing(opacity, { toValue: 1, duration: 500, useNativeDriver: true }).start();
 
+    // Hold then fade out
     const timer = setTimeout(() => {
-      Animated.timing(fadeAnim, { toValue: 0, duration: 400, useNativeDriver: true }).start(() => onFinish());
+      Animated.timing(opacity, { toValue: 0, duration: 400, useNativeDriver: true }).start(() => onFinish());
     }, 2000);
     return () => clearTimeout(timer);
   }, []);
 
   return (
-    <View style={{ flex: 1, backgroundColor: '#1A1C4D', justifyContent: 'center', alignItems: 'center' }}>
-      <StatusBar barStyle="light-content" backgroundColor="#1A1C4D" />
-      <Animated.View style={{ opacity: fadeAnim, transform: [{ scale: scaleAnim }], alignItems: 'center' }}>
-        <Image source={logo} style={{ width: 180, height: 100, resizeMode: 'contain' }} />
-        <View style={{ marginTop: 40, width: 120, height: 3, backgroundColor: 'rgba(255,255,255,0.1)', borderRadius: 2, overflow: 'hidden' }}>
-          <Animated.View style={{ width: '100%', height: '100%', backgroundColor: '#1EA862', borderRadius: 2, opacity: fadeAnim }} />
-        </View>
-      </Animated.View>
-    </View>
+    <Animated.View style={{
+      position: 'absolute', top: 0, left: 0, right: 0, bottom: 0,
+      backgroundColor: '#FFFFFF', justifyContent: 'center', alignItems: 'center',
+      zIndex: 999, opacity,
+    }}>
+      <StatusBar barStyle="dark-content" backgroundColor="#FFFFFF" />
+      <Image source={logo} style={{ width: 240, height: 135, resizeMode: 'contain' }} />
+    </Animated.View>
   );
 };
 
@@ -70,7 +66,10 @@ const AppContent = () => {
   // (including native stack internal state) resets when auth status changes.
   // Without this, dispatching logout() changes the rendered screens but
   // NavigationContainer keeps stale navigation state from the old stack.
-  const navContainerKey = authStatus === 'authenticated' ? 'auth' : hasCompletedSetup ? 'returning' : 'fresh';
+  const navContainerKey = authStatus === 'authenticated' ? 'auth'
+    : authStatus === 'locked' ? 'locked'
+    : authStatus === 'session_expired' ? 'expired'
+    : hasCompletedSetup ? 'returning' : 'fresh';
 
   return (
     <NavigationContainer key={navContainerKey} ref={navigationRef}>
@@ -83,18 +82,15 @@ const AppContent = () => {
 const App = () => {
   const [showSplash, setShowSplash] = useState(true);
 
-  if (showSplash) {
-    return <SplashScreen onFinish={() => setShowSplash(false)} />;
-  }
-
   return (
     <ErrorBoundary>
-      <GestureHandlerRootView style={{ flex: 1 }}>
+      <GestureHandlerRootView style={{ flex: 1, backgroundColor: '#FFFFFF' }}>
         <Provider store={store}>
           <SafeAreaProvider>
             <AppContent />
           </SafeAreaProvider>
         </Provider>
+        {showSplash && <SplashScreen onFinish={() => setShowSplash(false)} />}
       </GestureHandlerRootView>
     </ErrorBoundary>
   );

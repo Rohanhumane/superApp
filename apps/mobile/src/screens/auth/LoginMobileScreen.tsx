@@ -28,7 +28,7 @@ export const LoginMobileScreen = ({ navigation, route }: any) => {
       subtitle={isETB ? 'Enter the phone number associated with your SK Finance account' : "We'll send a secure OTP to verify your number."}
       onBack={() => { if (navigation.canGoBack()) navigation.goBack(); }}
       showTerms
-      bottomContent={<Button title="Get OTP" onPress={handleGetOTP} disabled={mobile.length < 10} />}
+      bottomContent={<Button title={isETB ? 'Get Started' : 'Get OTP'} onPress={handleGetOTP} disabled={mobile.length < 10} />}
     >
       <PhoneInput value={mobile} onChangeText={t => { setMobile(t); setError(''); }} error={error} />
     </AuthTemplate>

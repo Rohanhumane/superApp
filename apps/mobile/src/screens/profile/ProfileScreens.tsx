@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import { profileStyles as ps } from "./profile.styles";
 import { View, ScrollView, SafeAreaView, TouchableOpacity, Alert, StatusBar, Linking, Modal } from 'react-native';
 import { Text, Button, Input, Avatar, Checkbox, RadioButton, Divider, MenuItem, FormTemplate, DropdownSelect, colors, sp, Icon } from '@nbfc/ui';
-import { useAppSelector, useAppDispatch, setLanguage, fullReset, updateMobile, updateEmail } from '@nbfc/core';
+import { useAppSelector, useAppDispatch, setLanguage, fullReset, updateMobile, updateEmail, addTicket } from '@nbfc/core';
 import { LANGUAGES, SUPPORT_OPTIONS } from '@nbfc/config';
-import { validators } from '@nbfc/utils';
+import { validators, generateTicketId, formatDate } from '@nbfc/utils';
 
 // ===== CAMERA PERMISSION MODAL =====
 const CameraPermissionModal = ({ visible, onAllow, onDeny }: { visible: boolean; onAllow: () => void; onDeny: () => void }) => (
@@ -214,7 +214,7 @@ export const UpdateEmailScreen = ({ navigation }: any) => {
       </View>
       <ScrollView style={{ flex: 1 }} contentContainerStyle={{ padding: sp.lg }} keyboardShouldPersistTaps="handled">
         <Text variant="h2" style={{ marginBottom: sp.sm }}>Update Email Address</Text>
-        <Text variant="bodyMd" color={colors.text.secondary} style={{ marginBottom: sp.lg, lineHeight: 22 }}>Enter your new email address.</Text>
+        <Text variant="bodyMd" color={colors.text.secondary} style={{ marginBottom: sp.lg, lineHeight: 22 }}>Enter your new email address. All future communications will be sent to this email.</Text>
         <Input label="New Email Address" required placeholder="Enter new email address" value={email}
           onChangeText={t => { setEmail(t); setError(''); }} error={error} keyboardType="email-address" autoCapitalize="none" />
       </ScrollView>
@@ -250,14 +250,22 @@ export const AddressScreen = ({ navigation }: any) => {
 export const ConfirmAddressScreen = ({ navigation }: any) => {
   const p = useAppSelector(s => s.user.profile);
   const a = useAppSelector(s => s.user.addresses);
+  const dispatch = useAppDispatch();
+  const handleSubmit = () => {
+    const today = new Date().toISOString().split('T')[0];
+    const refId = generateTicketId();
+    dispatch(addTicket({ id: Date.now().toString(), refId, title: 'Address Update', desc: 'Request to update communication/permanent address.', category: 'Profile Update', status: 'pending', created: today, updated: today, expected: new Date(Date.now() + 86400000).toISOString().split('T')[0], loanId: '' }));
+    navigation.navigate('SuccessScreen', {
+      title: 'Request Submitted Successfully', subtitle: 'Your address will be updated within 24 hours.',
+      details: [{ label: 'Reference ID', value: refId }, { label: 'Status', value: 'Pending' }, { label: 'Submitted On', value: formatDate(today) }],
+      primaryBtn: { title: 'View Service Ticket', route: 'TrackRequests' }, secondaryBtn: { title: 'Back to Home', route: 'MainTabs' },
+    });
+  };
   return (
     <FormTemplate title="Confirm Your Address" subtitle="We found the following address from your document."
       headerTitle="Confirm Your Address" onBack={() => { if (navigation.canGoBack()) navigation.goBack(); }}
-      btnTitle="Confirm" onSubmit={() => navigation.navigate('SuccessScreen', {
-        title: 'Request Submitted Successfully', subtitle: 'Your address will be updated within 24 hours.',
-        primaryBtn: { title: 'View Service Ticket', route: 'TrackRequests' }, secondaryBtn: { title: 'Back to Home', route: 'MainTabs' },
-      })}>
-      {[{ i: '📅', t: `DOB - ${p.dob || '—'}` }, { i: '👤', t: `Father name: ${p.fatherName || '—'}` }, { i: '🏠', t: a[0]?.full || '—' }].map((x, i) => (
+      btnTitle="Confirm" onSubmit={handleSubmit}>
+      {[{ i: '📅', t: `DOB - ${p.dob || '—'}` }, { i: '🎂', t: `Age - ${p.age || '—'}` }, { i: '👤', t: `Father name: ${p.fatherName || '—'}` }, { i: '🏠', t: a[0]?.full || '—' }].map((x, i) => (
         <View key={i} style={{ flexDirection: 'row', alignItems: 'flex-start', marginBottom: sp.lg }}>
           <Text style={{ fontSize: 20, marginRight: sp.base }}>{x.i}</Text><Text variant="bodyMd" style={{ flex: 1 }}>{x.t}</Text>
         </View>
@@ -270,13 +278,22 @@ export const LanguagePreferenceScreen = ({ navigation }: any) => {
   const cur = useAppSelector(s => s.user.language);
   const dispatch = useAppDispatch();
   const [sel, setSel] = useState(cur);
+  const selectedLabel = LANGUAGES.find(l => l.id === sel)?.label || sel;
+  const handleSubmit = () => {
+    dispatch(setLanguage(sel));
+    const today = new Date().toISOString().split('T')[0];
+    const refId = generateTicketId();
+    dispatch(addTicket({ id: Date.now().toString(), refId, title: 'Language Preference Update', desc: `Request to change language to ${selectedLabel}.`, category: 'Profile Update', status: 'pending', created: today, updated: today, expected: new Date(Date.now() + 86400000).toISOString().split('T')[0], loanId: '' }));
+    navigation.navigate('SuccessScreen', {
+      title: 'Request Submitted Successfully', subtitle: 'Your Language Preference will be updated within 24 hours.',
+      details: [{ label: 'Reference ID', value: refId }, { label: 'Status', value: 'Pending' }, { label: 'Submitted On', value: formatDate(today) }],
+      primaryBtn: { title: 'View Service Ticket', route: 'TrackRequests' }, secondaryBtn: { title: 'Back to Home', route: 'MainTabs' },
+    });
+  };
   return (
     <FormTemplate title="Language Preference" subtitle="Select your preferred language"
       headerTitle="Language Preference" onBack={() => { if (navigation.canGoBack()) navigation.goBack(); }}
-      btnTitle="Submit" onSubmit={() => { dispatch(setLanguage(sel)); navigation.navigate('SuccessScreen', {
-        title: 'Request Submitted Successfully', subtitle: 'Your Language Preference will be updated within 24 hours.',
-        primaryBtn: { title: 'View Service Ticket', route: 'TrackRequests' }, secondaryBtn: { title: 'Back to Home', route: 'MainTabs' },
-      }); }}>
+      btnTitle="Submit" onSubmit={handleSubmit}>
       {LANGUAGES.map(l => <RadioButton key={l.id} selected={sel === l.id} onPress={() => setSel(l.id)} label={`${l.native} (${l.label})`} />)}
     </FormTemplate>
   );
@@ -298,14 +315,22 @@ export const ChangeMPINScreen = ({ navigation }: any) => {
 
 export const ReferEarnScreen = ({ navigation }: any) => {
   const [f, setF] = useState({ name: '', contact: '', loan: '' });
+  const [errors, setErrors] = useState<{ name?: string; contact?: string }>({});
   return (
-    <FormTemplate title="Enter your friend's details" subtitle="Your friend's details are safe."
+    <FormTemplate title="Enter your friend's details" subtitle="Your friend's details are safe and will only be used for loan assistance."
       headerTitle="Fill referral form" onBack={() => { if (navigation.canGoBack()) navigation.goBack(); }}
-      btnTitle="Submit referral" onSubmit={() => navigation.navigate('SuccessScreen', {
-        title: 'Referral submitted successfully', subtitle: "We'll contact your friend shortly", primaryBtn: { title: 'Done', route: 'MainTabs' },
-      })} btnDisabled={!f.name || !f.contact}>
-      <Input label="Friend's name" placeholder="Enter name" value={f.name} onChangeText={t => setF(p => ({ ...p, name: t }))} />
-      <Input label="Contact details" placeholder="Enter mobile number" value={f.contact} onChangeText={t => setF(p => ({ ...p, contact: t }))} keyboardType="phone-pad" maxLength={10} />
+      btnTitle="Submit referral" onSubmit={() => {
+        const e: { name?: string; contact?: string } = {};
+        if (!validators.isValidName(f.name)) e.name = 'Enter a valid name';
+        if (!validators.isValidMobile(f.contact)) e.contact = 'Enter a valid 10-digit mobile number';
+        setErrors(e);
+        if (Object.keys(e).length > 0) return;
+        navigation.navigate('SuccessScreen', {
+          title: 'Referral submitted successfully', subtitle: "We'll contact your friend shortly", primaryBtn: { title: 'Done', route: 'MainTabs' },
+        });
+      }} btnDisabled={!f.name || !f.contact}>
+      <Input label="Friend's name" placeholder="Enter name" value={f.name} onChangeText={t => { setF(p => ({ ...p, name: t })); setErrors(p => ({ ...p, name: undefined })); }} error={errors.name} />
+      <Input label="Contact details" placeholder="Enter mobile number" value={f.contact} onChangeText={t => { setF(p => ({ ...p, contact: t.replace(/[^0-9]/g, '').slice(0, 10) })); setErrors(p => ({ ...p, contact: undefined })); }} keyboardType="phone-pad" maxLength={10} error={errors.contact} />
       <DropdownSelect label="Interested Loan" value={f.loan} options={[{ id: 'car', label: 'Car loan' }, { id: 'tractor', label: 'Tractor loan' }, { id: 'business', label: 'Business loan' }]} onSelect={o => setF(p => ({ ...p, loan: o.id }))} placeholder="Select loan type" />
     </FormTemplate>
   );

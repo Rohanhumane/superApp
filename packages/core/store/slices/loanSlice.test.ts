@@ -31,13 +31,15 @@ describe('loanSlice', () => {
   const initial = loanReducer(undefined, { type: '' });
 
   describe('initial state', () => {
-    it('has one default active Car Loan', () => {
-      expect(initial.loans).toHaveLength(1);
+    it('has three default active loans', () => {
+      expect(initial.loans).toHaveLength(3);
       expect(initial.loans[0].type).toBe('Car Loan');
       expect(initial.loans[0].status).toBe('active');
       expect(initial.loans[0].number).toBe('SK101010');
       expect(initial.loans[0].amount).toBe(500000);
       expect(initial.loans[0].rate).toBe(9.9);
+      expect(initial.loans[1].type).toBe('Equipment Loan');
+      expect(initial.loans[2].type).toBe('Business Loan');
     });
 
     it('has three default transactions', () => {

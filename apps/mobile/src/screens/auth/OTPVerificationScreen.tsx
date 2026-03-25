@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { View, SafeAreaView, StatusBar, TouchableOpacity, KeyboardAvoidingView, Platform, ScrollView } from 'react-native';
 import { OTPInput, Button, Text, colors, sp } from '@nbfc/ui';
-import { useAppDispatch, useAppSelector, setOTPVerified } from '@nbfc/core';
+import { useAppDispatch, useAppSelector, setOTPVerified, addTicket } from '@nbfc/core';
 import { APP_CONFIG } from '@nbfc/config';
+import { generateTicketId, formatDate } from '@nbfc/utils';
 import { otp as s } from './auth.styles';
 
 export const OTPVerificationScreen = ({ navigation, route }: any) => {
@@ -41,11 +42,23 @@ export const OTPVerificationScreen = ({ navigation, route }: any) => {
       setLoading(false);
 
       if (isVerify) {
+        const today = new Date().toISOString().split('T')[0];
+        const refId = generateTicketId();
+        const isEmail = verifyType === 'email';
+        dispatch(addTicket({
+          id: Date.now().toString(), refId,
+          title: isEmail ? 'Email Update' : 'Mobile Number Update',
+          desc: isEmail ? `Request to update email address.` : `Request to update mobile number.`,
+          category: 'Profile Update', status: 'pending',
+          created: today, updated: today,
+          expected: new Date(Date.now() + 86400000).toISOString().split('T')[0], loanId: '',
+        }));
         navigation.navigate('SuccessScreen', {
           title: 'Request Submitted Successfully',
-          subtitle: verifyType === 'email'
+          subtitle: isEmail
             ? `Your email address will be updated within ${APP_CONFIG.PROFILE_UPDATE_HOURS} hours.`
             : `Your mobile number will be updated within ${APP_CONFIG.PROFILE_UPDATE_HOURS} hours.`,
+          details: [{ label: 'Reference ID', value: refId }, { label: 'Status', value: 'Pending' }, { label: 'Submitted On', value: formatDate(today) }],
           primaryBtn: { title: 'View Service Ticket', route: 'TrackRequests' },
           secondaryBtn: { title: 'Back to Home', route: 'MainTabs' },
         });
@@ -59,7 +72,7 @@ export const OTPVerificationScreen = ({ navigation, route }: any) => {
 
       dispatch(setOTPVerified({ userType: flow === 'lead' ? 'lead' : flow === 'ntb' ? 'ntb' : 'etb' }));
       if (flow === 'etb') {
-        navigation.navigate('MPINIntro', { flow });
+        navigation.navigate('AccountDiscovery', { flow });
       } else {
         navigation.navigate('KYCForm', { flow, productId });
       }
@@ -84,7 +97,7 @@ export const OTPVerificationScreen = ({ navigation, route }: any) => {
       <StatusBar barStyle="dark-content" backgroundColor={colors.white} />
       <KeyboardAvoidingView style={s.kav} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
         <TouchableOpacity onPress={() => { if (navigation.canGoBack()) navigation.goBack(); }} style={s.backBtn}>
-          <Text variant="h3">{isVerify ? '←' : '✕'}</Text>
+          <Text variant="h3">✕</Text>
         </TouchableOpacity>
 
         <ScrollView style={{ flex: 1 }} contentContainerStyle={s.scrollContent} keyboardShouldPersistTaps="handled">

@@ -1,11 +1,12 @@
 export const validators = {
   isValidMobile: (n: string) => /^[6-9]\d{9}$/.test(n.replace(/\D/g, '')),
   isValidPAN: (p: string) => /^[A-Z]{5}[0-9]{4}[A-Z]{1}$/.test(p.toUpperCase()),
-  isValidEmail: (e: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e),
+  isValidEmail: (e: string) => /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(e),
   isValidIFSC: (i: string) => /^[A-Z]{4}0[A-Z0-9]{6}$/.test(i.toUpperCase()),
   isValidPincode: (p: string) => /^[1-9][0-9]{5}$/.test(p),
   isValidMPIN: (m: string) => /^\d{4}$/.test(m),
   isValidAccountNumber: (a: string) => /^\d{9,18}$/.test(a),
+  isValidName: (n: string) => /^[A-Za-z][A-Za-z.\s]{1,49}$/.test(n.trim()),
 };
 
 export const formatCurrency = (amount: number, symbol = true): string => {
@@ -22,7 +23,7 @@ export const formatCurrencyCompact = (amount: number): string => {
 
 export const maskMobile = (n: string) => n.length < 4 ? n : 'x'.repeat(n.length - 4) + n.slice(-4);
 export const maskPAN = (p: string) => p.length < 4 ? p : 'x'.repeat(p.length - 4) + p.slice(-4);
-export const maskAccount = (a: string) => a.length < 4 ? a : `XXXX XXXX ${a.slice(-4)}`;
+export const maskAccount = (a: string) => a.length < 4 ? a : `xxx xxx ${a.slice(-4)}`;
 
 export const formatDate = (date: Date | string, fmt: 'short' | 'long' | 'full' = 'short'): string => {
   const d = typeof date === 'string' ? new Date(date) : date;

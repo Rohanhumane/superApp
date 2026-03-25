@@ -63,6 +63,7 @@ export const MPINConfirmScreen = ({ navigation, route }: any) => {
   const dispatch = useAppDispatch();
   const isAuthenticated = useAppSelector(st => st.auth.status === 'authenticated');
   const [error, setError] = useState('');
+  const [confirmMpin, setConfirmMpin] = useState('');
   const hasNavigated = useRef(false);
 
   const handleConfirm = (confirmed: string) => {
@@ -89,6 +90,10 @@ export const MPINConfirmScreen = ({ navigation, route }: any) => {
         subtitle: "Please click the 'Login' button to proceed.",
         primaryBtn: { title: 'Login', route: 'MPINLogin' },
       });
+    } else if (flow === 'etb') {
+      // ETB first-time: go directly to dashboard after MPIN setup
+      dispatch(setAuthenticated({ accessToken: 'tok_' + Date.now(), refreshToken: 'ref_' + Date.now() }));
+      try { navigation.reset({ index: 0, routes: [{ name: 'MainTabs' }] }); } catch (_) {}
     } else {
       navigation.replace('BiometricSetup', { flow });
     }
@@ -97,8 +102,8 @@ export const MPINConfirmScreen = ({ navigation, route }: any) => {
   return (
     <FormTemplate title="Confirm MPIN" subtitle="Enter the same 4-digit MPIN again to confirm."
       onBack={() => { if (navigation.canGoBack()) navigation.goBack(); }}
-      btnTitle="" onSubmit={() => {}}>
-      <MPINInput label="Confirm MPIN" onComplete={handleConfirm} error={error} />
+      btnTitle="Confirm" onSubmit={() => { if (confirmMpin.length === 4) handleConfirm(confirmMpin); }} btnDisabled={confirmMpin.length < 4}>
+      <MPINInput label="Confirm MPIN" onComplete={m => { setConfirmMpin(m); handleConfirm(m); }} error={error} />
     </FormTemplate>
   );
 };
@@ -108,11 +113,8 @@ export const BiometricSetupScreen = ({ navigation, route }: any) => {
   const flow = route.params?.flow || 'etb';
   const dispatch = useAppDispatch();
 
-  const completeSetup = (biometric: boolean) => {
-    dispatch(setBiometricEnabled(biometric));
-    // DO NOT dispatch setAuthenticated here — it remounts the navigator via key={navKey},
-    // destroying this screen before navigation can complete. Authentication is triggered
-    // in LoginSuccess / SuccessScreen when the user taps the final button.
+  const skipBiometric = () => {
+    dispatch(setBiometricEnabled(false));
     if (flow === 'lead') {
       navigation.replace('SuccessScreen', {
         title: 'Application Submitted Successfully',
@@ -121,17 +123,21 @@ export const BiometricSetupScreen = ({ navigation, route }: any) => {
         completeAuth: true,
       });
     } else {
-      // replace removes BiometricSetup from stack — only LoginSuccess remains,
-      // so no previous MPIN screens flash when navigator remounts on authentication
       navigation.replace('LoginSuccess', { flow });
     }
+  };
+
+  const enableBiometric = () => {
+    dispatch(setBiometricEnabled(true));
+    // Navigate to SelfieCapture for face verification, then complete auth from there
+    navigation.replace('SelfieCapture', { flow, fromBiometric: true });
   };
 
   return (
     <SafeAreaView style={s.screen}>
       <StatusBar barStyle="dark-content" backgroundColor={colors.white} />
       <View style={s.skipRow}>
-        <TouchableOpacity onPress={() => completeSetup(false)} style={s.skipBtn}>
+        <TouchableOpacity onPress={skipBiometric} style={s.skipBtn}>
           <Text variant="labelMd" color={colors.text.secondary}>SKIP ›</Text>
         </TouchableOpacity>
       </View>
@@ -143,7 +149,7 @@ export const BiometricSetupScreen = ({ navigation, route }: any) => {
         </Text>
       </View>
       <View style={s.bottomBar}>
-        <Button title="Enable Face ID" onPress={() => completeSetup(true)} />
+        <Button title="Enable Face ID" onPress={enableBiometric} />
       </View>
     </SafeAreaView>
   );

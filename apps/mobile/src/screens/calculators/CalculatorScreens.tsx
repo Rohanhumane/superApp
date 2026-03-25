@@ -1,11 +1,13 @@
 import React, { useState, useMemo } from 'react';
 import { View, ScrollView, SafeAreaView, TouchableOpacity, StatusBar } from 'react-native';
 import { Text, Button, DropdownSelect, SliderWithValue, DonutChart, colors, sp, Icon } from '@nbfc/ui';
+import { useAppSelector } from '@nbfc/core';
 import { LOAN_TYPES, INCOME_SOURCES, EMI_LIMITS, ELIGIBILITY_LIMITS } from '@nbfc/config';
 import { calculateEMI, calculateEligibility, formatCurrency, formatCurrencyCompact } from '@nbfc/utils';
 import { calcStyles as s } from './calculator.styles';
 
 export const EMICalculatorScreen = ({ navigation }: any) => {
+  const isAuthenticated = useAppSelector(st => st.auth.status === 'authenticated');
   const [lt, setLt] = useState('car_loan');
   const [amt, setAmt] = useState(500000);
   const [rate, setRate] = useState(9.9);
@@ -39,13 +41,20 @@ export const EMICalculatorScreen = ({ navigation }: any) => {
         <View style={s.donutArea}><DonutChart principal={amt} interest={interest} /></View>
       </ScrollView>
       <View style={{ padding: sp.base, borderTopWidth: 1, borderTopColor: colors.border.light }}>
-        <Button title="Apply Now" onPress={() => navigation.navigate('LoginMobile', { flow: 'lead' })} style={s.applyBtn} />
+        <Button title="Apply Now" onPress={() => {
+          if (isAuthenticated) {
+            navigation.navigate('KYCForm', { flow: 'lead', productId: lt });
+          } else {
+            navigation.navigate('LoginMobile', { flow: 'lead' });
+          }
+        }} style={s.applyBtn} />
       </View>
     </SafeAreaView>
   );
 };
 
 export const EligibilityCalculatorScreen = ({ navigation }: any) => {
+  const isAuthenticated = useAppSelector(st => st.auth.status === 'authenticated');
   const [lt, setLt] = useState('car_loan');
   const [is2, setIs] = useState('salaried');
   const [inc, setInc] = useState(100000);
@@ -75,7 +84,13 @@ export const EligibilityCalculatorScreen = ({ navigation }: any) => {
         </View>
       </ScrollView>
       <View style={{ padding: sp.base, borderTopWidth: 1, borderTopColor: colors.border.light }}>
-        <Button title="Apply Now" onPress={() => navigation.navigate('LoginMobile', { flow: 'lead' })} />
+        <Button title="Apply Now" onPress={() => {
+          if (isAuthenticated) {
+            navigation.navigate('KYCForm', { flow: 'lead', productId: lt });
+          } else {
+            navigation.navigate('LoginMobile', { flow: 'lead' });
+          }
+        }} />
       </View>
     </SafeAreaView>
   );

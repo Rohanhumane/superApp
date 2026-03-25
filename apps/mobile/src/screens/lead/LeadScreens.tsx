@@ -93,22 +93,33 @@ export const ProductPageScreen = ({ navigation }: any) => (
 // ===== PRODUCT DETAIL =====
 export const ProductDetailScreen = ({ navigation, route }: any) => {
   const { productId, productLabel = 'Car Loan' } = route.params || {};
+  const isAuthenticated = useAppSelector(st => st.auth.status === 'authenticated');
   return (
     <SafeAreaView style={s.screen}>
       <ScrollView contentContainerStyle={{ padding: sp.lg }}>
         <TouchableOpacity onPress={() => { if (navigation.canGoBack()) navigation.goBack(); }} style={s.backBtn}><Icon name="back" size={24} color={colors.text.primary} /></TouchableOpacity>
         <View style={s.detailIcon}><Text style={s.detailIconText}>🚗</Text></View>
         <Text variant="h2">{productLabel}</Text>
-        <Text variant="bodyMd" color={colors.text.secondary} style={s.detailDesc}>At SK Finance, we offer loans to help you fulfill your dreams without worrying about finances.</Text>
+        <Text variant="bodyMd" color={colors.text.secondary} style={s.detailDesc}>
+          At SK Finance, we offer {productLabel.toLowerCase()}s to help you fulfill your dream of buying your very own personal or commercial vehicle without worrying about finances.
+          {'\n\n'}Be it a hatchback, sedan, or SUV, you can avail loan on any of your new car ex-showroom or existing car value at the most competitive interest rates with minimal paperwork.
+          {'\n\n'}So, why wait? Apply for your {productLabel.toLowerCase()} now!
+        </Text>
         <Text variant="h4" style={{ marginTop: sp.lg }}>Features & Benefits</Text>
-        {['Loans for all owner profiles.', 'Attractive interest rates.', '100% transparency.', 'Up to 90% of value.'].map((f, i) => (
+        {['Loans for all owner profiles.', 'Attractive interest rates.', '100% transparency in loan process.', 'Loan up to 90% of the car value.'].map((f, i) => (
           <View key={i} style={s.featureRow}>
             <Text variant="bodyMd" color={colors.secondary.base} style={s.featureCheck}>✓</Text>
             <Text variant="bodyMd" color={colors.text.secondary}>{f}</Text>
           </View>
         ))}
       </ScrollView>
-      <View style={s.bottomBar}><Button title="Apply Now" onPress={() => navigation.navigate('LoginMobile', { flow: 'lead', productId })} /></View>
+      <View style={s.bottomBar}><Button title="Apply Now" onPress={() => {
+        if (isAuthenticated) {
+          navigation.navigate('KYCForm', { flow: 'lead', productId });
+        } else {
+          navigation.navigate('LoginMobile', { flow: 'lead', productId });
+        }
+      }} /></View>
     </SafeAreaView>
   );
 };
@@ -131,6 +142,7 @@ export const KYCFormScreen = ({ navigation, route }: any) => {
   const validate = (): boolean => {
     const e: Record<string, string> = {};
     if (!f.name.trim()) e.name = 'Name is required';
+    else if (!validators.isValidName(f.name)) e.name = 'Enter a valid name (letters, spaces, dots only)';
     if (!f.dob) e.dob = 'Date of birth is required';
     if (!f.pan) e.pan = 'PAN is required';
     else if (!validators.isValidPAN(f.pan)) e.pan = 'Invalid PAN (e.g. ABCDE1234F)';
@@ -148,7 +160,7 @@ export const KYCFormScreen = ({ navigation, route }: any) => {
   const handleSubmit = () => {
     if (!validate()) return;
     dispatch(setProfile({ fullName: f.name, dob: f.dob, pan: f.pan.toUpperCase(), maskedPAN: 'xxxxxx' + f.pan.slice(-4).toUpperCase(), email: f.email || '', mobile: authMobile, maskedMobile: authMasked || ('xxxxxx' + authMobile.slice(-4)) }));
-    navigation.navigate('SelfieCapture', { flow });
+    navigation.navigate('MPINSetup', { flow });
   };
 
   const isValid = isLead ? (f.name && f.dob && f.pan && f.consent && f.loanType && f.empType) : (f.name && f.dob && f.pan && f.consent);
@@ -193,6 +205,8 @@ export const KYCFormScreen = ({ navigation, route }: any) => {
 // ===== SELFIE CAPTURE =====
 export const SelfieCaptureScreen = ({ navigation, route }: any) => {
   const flow = route.params?.flow || 'ntb';
+  const fromBiometric = route.params?.fromBiometric || false;
+  const isAuthenticated = useAppSelector(st => st.auth.status === 'authenticated');
   const [captured, setCaptured] = useState(false);
 
   const FRAME_SIZE = SCREEN_WIDTH * 0.65;
@@ -201,7 +215,28 @@ export const SelfieCaptureScreen = ({ navigation, route }: any) => {
     setCaptured(true);
     // Simulate capture delay then proceed
     setTimeout(() => {
-      navigation.navigate('MPINIntro', { flow });
+      if (isAuthenticated && !fromBiometric) {
+        // Already logged in — applying for a new loan, skip MPIN/biometric setup
+        navigation.navigate('SuccessScreen', {
+          title: 'Application Submitted Successfully',
+          subtitle: 'Our team will review and contact you soon.',
+          primaryBtn: { title: 'Back to Home', route: 'MainTabs' },
+        });
+      } else if (fromBiometric) {
+        // Coming from Enable Face ID — face captured, complete auth and go to dashboard
+        if (flow === 'lead') {
+          navigation.replace('SuccessScreen', {
+            title: 'Application Submitted Successfully',
+            subtitle: 'Our team will review and contact you soon.',
+            primaryBtn: { title: 'Go to Dashboard', route: 'MainTabs' },
+            completeAuth: true,
+          });
+        } else {
+          navigation.replace('LoginSuccess', { flow });
+        }
+      } else {
+        navigation.navigate('MPINSetup', { flow });
+      }
     }, 1200);
   };
 

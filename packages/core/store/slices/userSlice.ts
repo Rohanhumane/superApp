@@ -7,7 +7,7 @@ interface UserState {
 }
 
 const init: UserState = {
-  profile: { fullName: 'Rahul Kumar', dob: '28 March 1996', pan: 'ABCDE1234F', maskedPAN: 'xxxxxx234F', mobile: '9876543210', maskedMobile: 'xxxxxx3210', email: '', photo: null, fatherName: 'Srinivas Srivastav', age: 30 },
+  profile: { fullName: 'Rahul Kumar', dob: '28 March 1996', pan: 'ABCDE1234F', maskedPAN: 'xxxxxx234F', mobile: '9876543210', maskedMobile: 'xxx3210', email: '', photo: null, fatherName: 'Srinivas Srivastav', age: 30 },
   addresses: [
     { type: 'communication', full: '25, Opposite Ganga Bhavan, Darpan City, 86, Palligantredu, Guntur, Andhra Pradesh, Pincode-545309' },
     { type: 'permanent', full: '25, Opposite Ganga Bhavan, Darpan City, 86, Palligantredu, Guntur, Andhra Pradesh, Pincode-545309' },
@@ -20,7 +20,7 @@ const slice = createSlice({
   reducers: {
     setProfile(s, a: PayloadAction<Partial<UserState['profile']>>) { s.profile = { ...s.profile, ...a.payload }; },
     updateEmail(s, a: PayloadAction<string>) { s.profile.email = a.payload; },
-    updateMobile(s, a: PayloadAction<string>) { s.profile.mobile = a.payload; s.profile.maskedMobile = `xxxxxx${a.payload.slice(-4)}`; },
+    updateMobile(s, a: PayloadAction<string>) { s.profile.mobile = a.payload; s.profile.maskedMobile = `xxx${a.payload.slice(-4)}`; },
     setLanguage(s, a: PayloadAction<string>) { s.language = a.payload; },
   },
 });

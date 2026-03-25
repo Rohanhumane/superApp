@@ -24,6 +24,7 @@ export const DashboardScreen = ({ navigation }: any) => {
   const userType = useAppSelector(s => s.auth.userType);
   const userName = useAppSelector(s => s.user.profile.fullName);
   const loans = useAppSelector(s => s.loan.loans);
+  const leadStatus = useAppSelector(s => s.service.leadStatus);
   const isETB = userType === 'etb';
 
   const nav = (screen: string, params?: any) => {
@@ -82,14 +83,18 @@ export const DashboardScreen = ({ navigation }: any) => {
           <View style={ds.dotsRow}><View style={ds.dotOff} /><View style={ds.dotOn} /><View style={ds.dotOff} /></View>
         </View>
         <View style={ds.contentArea}>
-          <View style={ds.statusCard}>
+          {leadStatus !== 'none' && <View style={ds.statusCard}>
             <View style={ds.statusIcon}><Icon name="user" size={22} color={C.navy} /></View>
             <View style={{ flex: 1, marginLeft: 12 }}>
-              <Text style={{ fontSize: 15, fontWeight: '600', color: C.black }}>Your request is in progress.</Text>
-              <Text style={{ fontSize: 12, color: C.gray500, marginTop: 2 }}>Our team will contact you soon..</Text>
+              <Text style={{ fontSize: 15, fontWeight: '600', color: C.black }}>
+                {leadStatus === 'completed' ? 'Your application is approved!' : leadStatus === 'rejected' ? 'Application not approved' : 'Your request is in progress.'}
+              </Text>
+              <Text style={{ fontSize: 12, color: C.gray500, marginTop: 2 }}>
+                {leadStatus === 'completed' ? 'Check your loan details.' : leadStatus === 'rejected' ? 'Contact support for more info.' : 'Our team will contact you soon..'}
+              </Text>
               <TouchableOpacity style={ds.orangeBtn} onPress={() => nav('CustomerCare')}><Text style={{ fontSize: 11, fontWeight: '600', color: '#fff' }}>Contact Support</Text></TouchableOpacity>
             </View>
-          </View>
+          </View>}
           <Text style={ds.sectionTitle}>Our Products</Text>
           <View style={{ flexDirection: 'row', flexWrap: 'wrap', paddingHorizontal: 16 }}>
             {LOAN_TYPES.map(p => (

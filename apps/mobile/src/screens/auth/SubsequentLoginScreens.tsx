@@ -16,8 +16,8 @@ export const MPINLoginScreen = ({ navigation }: any) => {
 
   const handleLogin = (mpin: string) => {
     if (mpin === currentMPIN) {
+      // setAuthenticated changes navKey → navigator remounts to authenticated stack with MainTabs as first screen
       dispatch(setAuthenticated({ accessToken: 'tok_' + Date.now(), refreshToken: 'ref_' + Date.now() }));
-      navigation.reset({ index: 0, routes: [{ name: 'MainTabs' }] });
     } else {
       dispatch(incrementMPINAttempts());
       setError('Incorrect MPIN. Please try again.');
@@ -45,8 +45,7 @@ export const MPINLoginScreen = ({ navigation }: any) => {
           {biometricEnabled && (
             <TouchableOpacity
               onPress={() => {
-                dispatch(setAuthenticated({ accessToken: 'tok', refreshToken: 'ref' }));
-                navigation.reset({ index: 0, routes: [{ name: 'MainTabs' }] });
+                dispatch(setAuthenticated({ accessToken: 'tok_' + Date.now(), refreshToken: 'ref_' + Date.now() }));
               }}
               style={s.faceIdBtn}
             >
@@ -65,7 +64,11 @@ export const MPINLoginScreen = ({ navigation }: any) => {
           { id: 'locate', label: 'Locate Us', icon: 'location' },
           { id: 'more', label: 'More', icon: 'more' },
         ]}
-        onPress={() => {}}
+        onPress={(id: string) => {
+          if (id === 'call') Linking.openURL('tel:18001234567');
+          else if (id === 'support') Linking.openURL('mailto:support@skfinance.in');
+          else if (id === 'locate') Linking.openURL('https://maps.google.com/?q=SK+Finance');
+        }}
       />
     </SafeAreaView>
   );
@@ -97,7 +100,7 @@ export const AccountLockedScreen = ({ navigation }: any) => (
       <Icon name="lock" size={80} color={colors.primary.dark} />
       <Text variant="h3" align="center" style={s.lockTitle}>Account temporarily locked</Text>
       <Text variant="bodyMd" color={colors.text.secondary} align="center" style={s.lockSubtitle}>
-        Too many incorrect PIN attempts. Try again after 30 minutes.
+        Too many incorrect PIN attempts. For your security, access has been locked. Try again after 30 minutes.
       </Text>
     </View>
     <View style={s.bottomBar}>
@@ -117,7 +120,7 @@ export const SessionExpiredScreen = ({ navigation }: any) => (
       <Icon name="timer" size={80} color={colors.primary.dark} />
       <Text variant="h3" align="center" style={s.lockTitle}>Session expired</Text>
       <Text variant="bodyMd" color={colors.text.secondary} align="center" style={s.lockSubtitle}>
-        For your security, you've been logged out due to inactivity.
+        For your security, you've been logged out due to inactivity. Please log in again to continue.
       </Text>
     </View>
     <View style={s.bottomBar}>

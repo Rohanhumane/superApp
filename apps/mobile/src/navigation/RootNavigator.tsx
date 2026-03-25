@@ -9,6 +9,7 @@ import { LoginMobileScreen } from '../screens/auth/LoginMobileScreen';
 import { OTPVerificationScreen } from '../screens/auth/OTPVerificationScreen';
 import { MPINIntroScreen, MPINSetupScreen, MPINConfirmScreen, BiometricSetupScreen, LoginSuccessScreen } from '../screens/auth/MPINScreens';
 import { MPINLoginScreen, ForgotMPINScreen, AccountLockedScreen, SessionExpiredScreen } from '../screens/auth/SubsequentLoginScreens';
+import { AccountDiscoveryScreen } from '../screens/auth/AccountDiscoveryScreen';
 import { ProductPageScreen, ProductDetailScreen, KYCFormScreen, SelfieCaptureScreen } from '../screens/lead/LeadScreens';
 import { DashboardScreen } from '../screens/dashboard/DashboardScreen';
 import { ServicesHomeScreen, ServiceRequestsScreen, SelectLoanScreen, OtherRequestScreen, TrackRequestsScreen } from '../screens/services/ServiceScreens';
@@ -92,6 +93,8 @@ export const RootNavigator = () => {
           <Stack.Screen name="ProductDetail" component={ProductDetailScreen} />
           <Stack.Screen name="MPINSetup" component={MPINSetupScreen} />
           <Stack.Screen name="MPINConfirm" component={MPINConfirmScreen} />
+          <Stack.Screen name="KYCForm" component={KYCFormScreen} />
+          <Stack.Screen name="SelfieCapture" component={SelfieCaptureScreen} />
         </>
       ) : isLocked ? (
         <>
@@ -107,6 +110,11 @@ export const RootNavigator = () => {
         <>
           <Stack.Screen name="SessionExpired" component={SessionExpiredScreen} />
           <Stack.Screen name="MPINLogin" component={MPINLoginScreen} />
+          <Stack.Screen name="ForgotMPIN" component={ForgotMPINScreen} />
+          <Stack.Screen name="OTPVerification" component={OTPVerificationScreen} />
+          <Stack.Screen name="MPINSetup" component={MPINSetupScreen} />
+          <Stack.Screen name="MPINConfirm" component={MPINConfirmScreen} />
+          <Stack.Screen name="SuccessScreen" component={SuccessScreen} />
         </>
       ) : hasCompletedSetup && !isFirstTimeSetup ? (
         <>
@@ -125,6 +133,7 @@ export const RootNavigator = () => {
           <Stack.Screen name="ProductDetail" component={ProductDetailScreen} />
           <Stack.Screen name="LoginMobile" component={LoginMobileScreen} />
           <Stack.Screen name="OTPVerification" component={OTPVerificationScreen} />
+          <Stack.Screen name="AccountDiscovery" component={AccountDiscoveryScreen} />
           <Stack.Screen name="KYCForm" component={KYCFormScreen} />
           <Stack.Screen name="SelfieCapture" component={SelfieCaptureScreen} />
           <Stack.Screen name="MPINIntro" component={MPINIntroScreen} />

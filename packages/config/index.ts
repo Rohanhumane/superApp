@@ -3,7 +3,7 @@ export const APP_CONFIG = {
   APP_TAGLINE: 'Saath Aapke... Hamesha',
   APP_SUBTITLE: 'Sevak',
   APP_VERSION: '1.0',
-  OTP_LENGTH_LOGIN: 5,
+  OTP_LENGTH_LOGIN: 6,
   OTP_LENGTH_VERIFY: 6,
   MPIN_LENGTH: 4,
   OTP_RESEND_TIMER: 30,

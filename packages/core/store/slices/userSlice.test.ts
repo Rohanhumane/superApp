@@ -14,7 +14,7 @@ describe('userSlice', () => {
       expect(initial.profile.pan).toBe('ABCDE1234F');
       expect(initial.profile.maskedPAN).toBe('xxxxxx234F');
       expect(initial.profile.mobile).toBe('9876543210');
-      expect(initial.profile.maskedMobile).toBe('xxxxxx3210');
+      expect(initial.profile.maskedMobile).toBe('xxx3210');
       expect(initial.profile.email).toBe('');
       expect(initial.profile.photo).toBeNull();
       expect(initial.profile.age).toBe(30);
@@ -69,12 +69,12 @@ describe('userSlice', () => {
     it('updates mobile and recalculates mask (last 4 digits)', () => {
       const state = userReducer(initial, updateMobile('8123456789'));
       expect(state.profile.mobile).toBe('8123456789');
-      expect(state.profile.maskedMobile).toBe('xxxxxx6789');
+      expect(state.profile.maskedMobile).toBe('xxx6789');
     });
 
     it('mask always shows last 4 digits', () => {
       const state = userReducer(initial, updateMobile('7000001234'));
-      expect(state.profile.maskedMobile).toBe('xxxxxx1234');
+      expect(state.profile.maskedMobile).toBe('xxx1234');
     });
   });
 

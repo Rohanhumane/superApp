@@ -79,8 +79,8 @@ export const OtherRequestScreen = ({ navigation, route }: any) => {
       const t = { id: Date.now().toString(), refId: generateTicketId(), title: f.cat || 'Other Request', desc: f.desc, category: f.cat, status: 'pending', created: new Date().toISOString().split('T')[0], updated: new Date().toISOString().split('T')[0], expected: new Date(Date.now() + 86400000).toISOString().split('T')[0], loanId: route.params?.loanId || '1' };
       dispatch(addTicket(t as any));
       navigation.navigate('SuccessScreen', { title: 'Request Submitted Successfully', subtitle: 'Your request will be processed within 24 hours.', details: [{ label: 'Reference ID', value: t.refId }, { label: 'Status', value: 'Pending Verification' }, { label: 'Submitted On', value: formatDate(t.created) }, { label: 'Expected Response', value: formatDate(t.expected) }], primaryBtn: { title: 'View Service Ticket', route: 'TrackRequests' }, secondaryBtn: { title: 'Back to Home', route: 'MainTabs' } });
-    }} btnDisabled={!f.desc}>
-    <DropdownSelect label="Select Category" value={f.cat} options={[...SERVICE_CATEGORIES]} onSelect={o => setF(p => ({ ...p, cat: o.label }))} placeholder="e.g., Payments, Documents" />
+    }} btnDisabled={!f.cat || !f.desc}>
+    <DropdownSelect label="Select Category" required value={f.cat} options={[...SERVICE_CATEGORIES]} onSelect={o => setF(p => ({ ...p, cat: o.label }))} placeholder="e.g., Payments, Documents" />
     <DropdownSelect label="Select Sub-Category" value={f.sub} options={[{ id: 'general', label: 'General' }, { id: 'urgent', label: 'Urgent' }]} onSelect={o => setF(p => ({ ...p, sub: o.label }))} placeholder="Select Sub-Category" />
     <Input label="Description" required placeholder="Describe your issue clearly" value={f.desc} onChangeText={t => setF(p => ({ ...p, desc: t }))} multiline numberOfLines={4} style={{ height: 100, textAlignVertical: 'top' }} />
     <View style={{ marginTop: sp.base }}><Text variant="bodySm" color={colors.text.secondary}>Attachments (Optional)</Text>
