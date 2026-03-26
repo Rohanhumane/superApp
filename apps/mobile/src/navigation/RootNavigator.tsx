@@ -1,8 +1,8 @@
 import React from 'react';
-import { Text as RNText } from 'react-native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { useAppSelector } from '@nbfc/core';
+import { Icon } from '@nbfc/ui';
 
 import { WelcomeScreen } from '../screens/auth/WelcomeScreen';
 import { LoginMobileScreen } from '../screens/auth/LoginMobileScreen';
@@ -12,7 +12,7 @@ import { MPINLoginScreen, ForgotMPINScreen, AccountLockedScreen, SessionExpiredS
 import { AccountDiscoveryScreen } from '../screens/auth/AccountDiscoveryScreen';
 import { ProductPageScreen, ProductDetailScreen, KYCFormScreen, SelfieCaptureScreen } from '../screens/lead/LeadScreens';
 import { DashboardScreen } from '../screens/dashboard/DashboardScreen';
-import { ServicesHomeScreen, ServiceRequestsScreen, SelectLoanScreen, OtherRequestScreen, TrackRequestsScreen } from '../screens/services/ServiceScreens';
+import { ServicesHomeScreen, ServiceRequestsScreen, SelectLoanScreen, SelectRequestTypeScreen, OtherRequestScreen, TrackRequestsScreen } from '../screens/services/ServiceScreens';
 import { PayEMIScreen, LoanDetailsScreen, LoanCardScreen, ViewMandateScreen, SetUpAutoDebitScreen, AuthorizeMandateScreen, DocumentsStatementScreen } from '../screens/payments/PaymentScreens';
 import { MyProfileScreen, PersonalInfoScreen, UpdateMobileScreen, UpdateEmailScreen, AddressScreen, ConfirmAddressScreen, LanguagePreferenceScreen, ChangeMPINScreen, ReferEarnScreen, CustomerCareScreen } from '../screens/profile/ProfileScreens';
 import { EMICalculatorScreen, EligibilityCalculatorScreen } from '../screens/calculators/CalculatorScreens';
@@ -24,9 +24,13 @@ const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 const noHeader = { headerShown: false };
 
+const TAB_ICONS: Record<string, 'home' | 'services' | 'offers' | 'menu'> = {
+  Home: 'home', Services: 'services', Offers: 'offers', Menu: 'menu',
+};
+
 const TabIcon = ({ name, focused }: { name: string; focused: boolean }) => {
-  const icons: Record<string, string> = { Home: '🏠', Services: '🔧', Offers: '🎁', Menu: '☰' };
-  return <RNText style={{ fontSize: 20, opacity: focused ? 1 : 0.5 }}>{icons[name] || '📱'}</RNText>;
+  const iconName = TAB_ICONS[name] || 'home';
+  return <Icon name={iconName} size={22} color={focused ? '#2E3192' : '#757575'} />;
 };
 
 // Offers and Menu are now full screens imported from their own files
@@ -84,6 +88,7 @@ export const RootNavigator = () => {
           <Stack.Screen name="DocumentsStatement" component={DocumentsStatementScreen} />
           <Stack.Screen name="ServiceRequests" component={ServiceRequestsScreen} />
           <Stack.Screen name="SelectLoan" component={SelectLoanScreen} />
+          <Stack.Screen name="SelectRequestType" component={SelectRequestTypeScreen} />
           <Stack.Screen name="OtherRequest" component={OtherRequestScreen} />
           <Stack.Screen name="TrackRequests" component={TrackRequestsScreen} />
           <Stack.Screen name="EMICalculator" component={EMICalculatorScreen} />

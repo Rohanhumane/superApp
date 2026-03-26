@@ -62,7 +62,7 @@ export const SuccessScreen = ({ navigation, route }: any) => {
         <Button title={primaryBtn?.title || 'Done'} onPress={() => nav(primaryBtn?.route)} />
         {secondaryBtn && (
           <TouchableOpacity onPress={() => nav(secondaryBtn.route)} style={s.secondaryBtn}>
-            <Text variant="labelMd" color="#757575">{secondaryBtn.title}</Text>
+            <Text variant="labelMd" color={colors.text.primary} style={{ textDecorationLine: 'underline' }}>{secondaryBtn.title}</Text>
           </TouchableOpacity>
         )}
       </View>

@@ -9,11 +9,11 @@ export const successStyles = StyleSheet.create({
     paddingHorizontal: 32, paddingVertical: 40,
   },
 
-  // Check icon
+  // Check icon — large stylized checkmark matching Figma
   checkCircle: {
-    width: 88, height: 88, borderRadius: 44,
+    width: 100, height: 100, borderRadius: 20,
     backgroundColor: '#C9EEDC',
-    alignItems: 'center', justifyContent: 'center', marginBottom: 24,
+    alignItems: 'center', justifyContent: 'center', marginBottom: 28,
   },
   checkIcon: { fontSize: 40, lineHeight: 52, color: '#0C8749' },
 

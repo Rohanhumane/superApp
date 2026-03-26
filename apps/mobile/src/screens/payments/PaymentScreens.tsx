@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
-import { paymentStyles as ps } from "./payment.styles";
 import { View, ScrollView, SafeAreaView, TouchableOpacity, StatusBar, Alert, Linking } from 'react-native';
-import { Text, Button, Input, Badge, FormTemplate, SuccessTemplate, DropdownSelect, SectionHeader, TransactionRow, DocumentRow, ProgressBar, MenuItem, colors, sp, shadow, br, Icon } from '@nbfc/ui';
+import { Text, Button, Input, Badge, FormTemplate, DropdownSelect, SectionHeader, TransactionRow, DocumentRow, ProgressBar, colors, sp, shadow, br, Icon } from '@nbfc/ui';
 import { useAppSelector, useAppDispatch, addTransaction, updateMandate } from '@nbfc/core';
 import { PAYMENT_TYPES, ACCOUNT_TYPES, DOCUMENT_TYPES } from '@nbfc/config';
 import { formatCurrency, formatDate, generateRefId, validators } from '@nbfc/utils';
@@ -42,49 +41,61 @@ export const PayEMIScreen = ({ navigation, route }: any) => {
 };
 
 export const LoanDetailsScreen = ({ navigation, route }: any) => {
-  const loans = useAppSelector(s => s.loan.loans); const txns = useAppSelector(s => s.loan.transactions); const mandates = useAppSelector(s => s.loan.mandates); const assoc = useAppSelector(s => s.loan.associates); const insurances = useAppSelector(s => s.loan.insurances);
-  const loan = loans.find(l => l.id === route.params?.loanId) || loans[0]; const [tab, setTab] = useState('overview');
+  const loans = useAppSelector(s => s.loan.loans); const txns = useAppSelector(s => s.loan.transactions);
+  const loan = loans.find(l => l.id === route.params?.loanId) || loans[0];
   if (!loan) return null;
+  const remaining = loan.amount - (loan.amountPaid || 0);
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: colors.white }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: colors.bg.secondary }}>
       <StatusBar barStyle="dark-content" />
-      <View style={{ flexDirection: 'row', alignItems: 'center', padding: sp.base, borderBottomWidth: 1, borderBottomColor: colors.border.light }}><TouchableOpacity onPress={() => navigation.goBack()}><Icon name="back" size={24} color={colors.text.primary} /></TouchableOpacity><Text variant="labelLg" style={{ marginLeft: sp.base }}>Loan Details</Text></View>
-      <View style={{ flexDirection: 'row', paddingHorizontal: sp.base, paddingTop: sp.base }}>
-        {['overview', 'documents', 'transactions'].map(t => <TouchableOpacity key={t} style={{ paddingHorizontal: 14, paddingVertical: 8, borderRadius: 20, backgroundColor: tab === t ? colors.secondary.base : 'transparent', marginRight: 8 }} onPress={() => setTab(t)}>
-          <Text variant="labelSm" color={tab === t ? colors.white : colors.text.secondary}>{t === 'overview' ? 'Overview' : t === 'documents' ? 'Documents & Statement' : 'Recent Tra...'}</Text></TouchableOpacity>)}
+      <View style={{ flexDirection: 'row', alignItems: 'center', padding: sp.base, backgroundColor: colors.white, borderBottomWidth: 1, borderBottomColor: colors.border.light }}>
+        <TouchableOpacity onPress={() => navigation.goBack()}><Icon name="back" size={24} color={colors.text.primary} /></TouchableOpacity>
+        <Text variant="labelLg" style={{ marginLeft: sp.base }}>Loan Details</Text>
       </View>
       <ScrollView contentContainerStyle={{ padding: sp.base, paddingBottom: 40 }}>
-        {tab === 'overview' && <>
-          <View style={{ backgroundColor: colors.white, borderRadius: br.md, padding: sp.base, ...shadow.md }}>
-            <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}><View><Text variant="labelSm" color={colors.text.secondary}>{loan.type.toUpperCase()}</Text><Text variant="labelLg">{loan.number}</Text></View><Badge label="Active" variant="active" /></View>
-            <ProgressBar current={loan.emiPaid} total={loan.totalEMI} label="Repayment Progress" />
-            <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 4 }}><Text variant="caption" color={colors.text.secondary}>{formatCurrency(loan.amountPaid)} Paid</Text><Text variant="caption" color={colors.text.secondary}>{loan.emiPaid}/{loan.totalEMI} EMI Paid</Text></View>
-            {[[['Next Installment', formatDate(loan.nextDate)], ['EMI Amount', formatCurrency(loan.emi)]], [['Tenure', `${loan.tenure} Months`], ['Closure Date', formatDate(loan.closeDate)]]].map((row, i) =>
-              <View key={i} style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: sp.base }}>{row.map(([l, v], j) => <View key={j} style={j === 1 ? { alignItems: 'flex-end' } : {}}><Text variant="caption" color={colors.text.secondary}>{l}</Text><Text variant="labelMd">{v}</Text></View>)}</View>)}
-            <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: sp.lg }}>
-              <TouchableOpacity onPress={() => navigation.navigate('LoanCard', { loanId: loan.id })}><Text variant="labelMd" color={colors.text.secondary}>View More</Text></TouchableOpacity>
-              <Button title="Pay EMI" onPress={() => navigation.navigate('PayEMI', { loanId: loan.id })} fullWidth={false} style={{ paddingVertical: 10, paddingHorizontal: 28, borderRadius: 20 }} />
+        <View style={{ backgroundColor: colors.white, borderRadius: br.md, padding: sp.base, ...shadow.md }}>
+          <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: sp.base }}>
+            <View style={{ width: 40, height: 40, borderRadius: 20, backgroundColor: '#EEF2FF', alignItems: 'center', justifyContent: 'center', marginRight: sp.sm }}>
+              <Icon name={loan.type === 'car' ? 'car' : loan.type === 'tractor' ? 'tractor' : loan.type === 'truck' ? 'truck' : 'loan'} size={20} color="#3B5998" />
             </View>
+            <View style={{ flex: 1 }}>
+              <Text variant="caption" color={colors.text.secondary}>{loan.type.toUpperCase().replace('_', ' ')} LOAN</Text>
+              <Text variant="labelLg">{loan.number}</Text>
+            </View>
+            <Badge label="Active" variant="active" />
           </View>
-          <SectionHeader title="Documents & Statement" action="View All" onAction={() => setTab('documents')} />
-          <View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>{['Loan\nagreement', 'Repayment\nSchedule', 'Key Fact\nStatement'].map((d, i) => <TouchableOpacity key={i} onPress={() => Alert.alert('Download', 'Document will be sent to your registered email')} style={{ alignItems: 'center' }}><View style={{ width: 44, height: 44, borderRadius: 22, borderWidth: 1, borderColor: colors.border.light, alignItems: 'center', justifyContent: 'center' }}><Text>{['💰', '📅', '📋'][i]}</Text></View><Text variant="caption" align="center" style={{ marginTop: 4 }}>{d}</Text></TouchableOpacity>)}</View>
-          <SectionHeader title="Recent Transactions" action="View All" onAction={() => setTab('transactions')} />
-          {txns.slice(0, 3).map(t => <TransactionRow key={t.id} date={t.date} desc={t.desc} amount={t.amount} status={t.status} />)}
-          <SectionHeader title="Auto-Debit Account (NACH)" />
-          {mandates.map(m => <View key={m.id} style={{ flexDirection: 'row', alignItems: 'center', backgroundColor: colors.white, borderRadius: br.md, padding: sp.base, ...shadow.sm }}><Text style={{ fontSize: 24, marginRight: sp.base }}>🏦</Text><View style={{ flex: 1 }}><Text variant="labelMd">{m.bank}</Text><Text variant="caption" color={colors.text.secondary}>Account No. {m.masked}</Text><Text variant="caption" color={colors.text.secondary}>IFSC: {m.ifsc}</Text></View><Badge label="Active" variant="active" /></View>)}
-          <SectionHeader title="Linked Insurance" />
-          {insurances.map(ins => <View key={ins.id} style={{ flexDirection: 'row', alignItems: 'center', backgroundColor: colors.white, borderRadius: br.md, padding: sp.base, ...shadow.sm, marginHorizontal: sp.base }}>
-            <View style={{ width: 40, height: 40, borderRadius: 8, backgroundColor: '#FFF0F0', alignItems: 'center', justifyContent: 'center', marginRight: sp.base }}><Text style={{ fontSize: 14, fontWeight: '700', color: '#C62828' }}>A</Text></View>
-            <View style={{ flex: 1 }}><Text variant="labelMd">{ins.provider}</Text><Text variant="caption" color={colors.text.secondary}>Policy No: {ins.policyNo}</Text><Text variant="caption" color={colors.text.secondary}>Valid till: {formatDate(ins.validTill)}</Text></View>
-            <Badge label={ins.status === 'active' ? 'Active' : 'Expired'} variant={ins.status === 'active' ? 'active' : 'failed'} />
-          </View>)}
-          <SectionHeader title="Associated People" />
-          {assoc.map(a => <MenuItem key={a.id} icon="👤" label={`${a.role}\n${a.name}`} onPress={() => {}} />)}
-          <View style={{ alignItems: 'center', paddingVertical: sp.lg }}><Text style={{ fontSize: 48 }}>🎧</Text><Text variant="labelMd">Need Assistance?</Text><Text variant="caption" color={colors.text.secondary}>Available Mon-Fri.</Text>
-            <View style={{ flexDirection: 'row', gap: sp.base, marginTop: sp.base, alignItems: 'center' }}><Button title="Call Now" onPress={() => Linking.openURL('tel:18001234567')} fullWidth={false} style={{ paddingHorizontal: 24, paddingVertical: 10, borderRadius: 20 }} /><TouchableOpacity><Text variant="labelMd" color={colors.text.secondary}>FAQs</Text></TouchableOpacity></View></View>
-        </>}
-        {tab === 'documents' && DOCUMENT_TYPES.map(d => <DocumentRow key={d.id} title={d.label} onDownload={() => Alert.alert('Download', 'Document will be sent to your registered email')} />)}
-        {tab === 'transactions' && txns.map(t => <TransactionRow key={t.id} date={t.date} desc={t.desc} amount={t.amount} status={t.status} />)}
+          <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 4 }}>
+            <Text variant="caption" color={colors.text.secondary}>Repayment Progress</Text>
+            <Text variant="labelSm">{loan.emiPaid}/{loan.totalEMI} EMI Paid</Text>
+          </View>
+          <ProgressBar current={loan.emiPaid} total={loan.totalEMI} />
+          <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 4 }}>
+            <Text variant="caption" color={colors.text.secondary}>{formatCurrency(loan.amountPaid || 0)} Paid</Text>
+            <Text variant="caption" color={colors.text.secondary}>{formatCurrency(remaining)} Remaining</Text>
+          </View>
+          {[[['Next Installment', formatDate(loan.nextDate)], ['EMI Amount', formatCurrency(loan.emi)]], [['Tenure', `${loan.tenure} Months`], ['Loan Closure Date', formatDate(loan.closeDate)]]].map((row, i) =>
+            <View key={i} style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: sp.base }}>{row.map(([l, v], j) => <View key={j} style={j === 1 ? { alignItems: 'flex-end' } : {}}><Text variant="caption" color={colors.text.secondary}>{l}</Text><Text variant="labelMd">{v}</Text></View>)}</View>)}
+          <TouchableOpacity onPress={() => navigation.navigate('LoanCard', { loanId: loan.id })} style={{ alignItems: 'center', marginTop: sp.lg, paddingTop: sp.sm, borderTopWidth: 1, borderTopColor: colors.border.light }}>
+            <Text variant="labelMd" color={colors.text.secondary}>View More</Text>
+          </TouchableOpacity>
+        </View>
+        <SectionHeader title="Recent" action="View All" onAction={() => navigation.navigate('DocumentsStatement')} />
+        {txns.slice(0, 3).map(t => <TransactionRow key={t.id} date={t.date} desc={t.desc} amount={t.amount} status={t.status} />)}
+        {txns.length > 3 && (
+          <TouchableOpacity onPress={() => navigation.navigate('DocumentsStatement')} style={{ alignItems: 'center', paddingVertical: sp.base }}>
+            <Text variant="labelMd" color={colors.primary.base}>View All Transactions</Text>
+          </TouchableOpacity>
+        )}
+        <SectionHeader title="Support" />
+        <View style={{ alignItems: 'center', paddingVertical: sp.lg }}>
+          <Text style={{ fontSize: 48 }}>🎧</Text>
+          <Text variant="labelMd">Need Assistance?</Text>
+          <Text variant="caption" color={colors.text.secondary}>Available Mon-Fri.</Text>
+          <View style={{ flexDirection: 'row', gap: sp.base, marginTop: sp.base, alignItems: 'center' }}>
+            <Button title="Call Now" onPress={() => Linking.openURL('tel:18001234567')} fullWidth={false} style={{ paddingHorizontal: 24, paddingVertical: 10, borderRadius: 20 }} />
+            <TouchableOpacity><Text variant="labelMd" color={colors.text.secondary}>FAQs</Text></TouchableOpacity>
+          </View>
+        </View>
       </ScrollView>
     </SafeAreaView>
   );
@@ -93,14 +104,51 @@ export const LoanDetailsScreen = ({ navigation, route }: any) => {
 export const LoanCardScreen = ({ navigation, route }: any) => {
   const loans = useAppSelector(s => s.loan.loans); const loan = loans.find(l => l.id === route.params?.loanId) || loans[0];
   if (!loan) return null;
-  return (<FormTemplate title="" headerTitle={loan.type} onBack={() => navigation.goBack()} subtitle="">
-    <View style={{ backgroundColor: colors.white, borderRadius: br.md, padding: sp.base, ...shadow.sm }}>
-      <Text variant="h4" style={{ marginBottom: sp.base }}>Loan Details</Text>
-      {[['Loan Account No.', loan.accountNo], ['Loan Type', loan.type], ['Loan Sanctioned Amount', formatCurrency(loan.amount)], ['Loan Closure Date', formatDate(loan.closeDate)], ['Disbursal Date', formatDate(loan.disbursalDate)], ['First EMI Date', formatDate(loan.firstEMIDate)], ['Tenure', `${loan.tenure} Months`], ['Remaining Tenure', `${loan.remainingTenure} Months`], ['Current EMI', formatCurrency(loan.emi)], ['Next Installment Due', formatDate(loan.nextDate)], ['Repayment Bank', loan.bank]].map(([l, v], i) =>
-        <View key={i} style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: sp.base }}><Text variant="caption" color={colors.text.secondary}>{l}</Text><Text variant="labelMd">{v}</Text></View>)}
-      <TouchableOpacity style={{ alignSelf: 'center', marginTop: sp.base }} onPress={() => Alert.alert('Download', 'Document will be sent to your registered email')}><Text variant="labelMd" color={colors.primary.dark}>Download ⬇</Text></TouchableOpacity>
-    </View>
-  </FormTemplate>);
+  const loanLabel = loan.type ? loan.type.charAt(0).toUpperCase() + loan.type.slice(1).replace('_', ' ') + ' Loan' : 'Loan';
+  const details: [string, string][] = [
+    ['Loan Account No.', loan.accountNo || loan.number],
+    ['Loan Type', loanLabel],
+    ['Loan Sanctioned Amount', formatCurrency(loan.amount)],
+    ['Loan Closure Date', formatDate(loan.closeDate)],
+    ['Disbursal Date', formatDate(loan.disbursalDate)],
+    ['First EMI Date', formatDate(loan.firstEMIDate)],
+    ['Tenure', `${loan.tenure} Months`],
+    ['Remaining Tenure', `${loan.remainingTenure} Months`],
+    ['Current EMI', formatCurrency(loan.emi)],
+    ['Next Installment Due', formatDate(loan.nextDate)],
+    ['Repayment Bank', loan.bank || 'N/A'],
+  ];
+  // Pair into rows of 2 for grid layout
+  const rows: [string, string][][] = [];
+  for (let i = 0; i < details.length; i += 2) {
+    rows.push(details.slice(i, i + 2));
+  }
+  return (
+    <SafeAreaView style={{ flex: 1, backgroundColor: colors.white }}>
+      <StatusBar barStyle="dark-content" />
+      <View style={{ flexDirection: 'row', alignItems: 'center', padding: sp.base, borderBottomWidth: 1, borderBottomColor: colors.border.light }}>
+        <TouchableOpacity onPress={() => navigation.goBack()}><Icon name="back" size={24} color={colors.text.primary} /></TouchableOpacity>
+        <Text variant="labelLg" style={{ marginLeft: sp.base }}>{loanLabel}</Text>
+      </View>
+      <ScrollView contentContainerStyle={{ padding: sp.base, paddingBottom: 40 }}>
+        <Text variant="h3" style={{ marginBottom: sp.lg }}>Loan Details</Text>
+        {rows.map((row, i) => (
+          <View key={i} style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: sp.lg }}>
+            {row.map(([l, v], j) => (
+              <View key={j} style={j === 1 ? { alignItems: 'flex-end', flex: 1 } : { flex: 1 }}>
+                <Text variant="caption" color={colors.text.secondary}>{l}</Text>
+                <Text variant="labelMd" style={{ marginTop: 2 }}>{v}</Text>
+              </View>
+            ))}
+          </View>
+        ))}
+        <TouchableOpacity style={{ alignSelf: 'center', marginTop: sp.lg, flexDirection: 'row', alignItems: 'center', gap: sp.sm }} onPress={() => Alert.alert('Download', 'Document will be sent to your registered email')}>
+          <Text variant="labelMd" color={colors.primary.dark}>Download</Text>
+          <Icon name="download" size={18} color={colors.primary.dark} />
+        </TouchableOpacity>
+      </ScrollView>
+    </SafeAreaView>
+  );
 };
 
 export const ViewMandateScreen = ({ navigation }: any) => {

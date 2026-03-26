@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { View, ScrollView, SafeAreaView, StatusBar, TouchableOpacity, Image, Modal } from 'react-native';
+import React, { useState, useRef, useEffect } from 'react';
+import { View, ScrollView, SafeAreaView, StatusBar, TouchableOpacity, Image, Modal, Animated, Dimensions } from 'react-native';
 import { Text, Button, Input, Checkbox, FormTemplate, DropdownSelect, ProductTile, Icon, colors, sp } from '@nbfc/ui';
 import { useAppDispatch, useAppSelector, setProfile } from '@nbfc/core';
 import { LOAN_TYPES, PRODUCT_TYPES, EMPLOYMENT_TYPES } from '@nbfc/config';
@@ -59,36 +59,76 @@ const DatePickerModal = ({ visible, onClose, onSelect }: { visible: boolean; onC
 };
 
 // ===== PRODUCT PAGE =====
-export const ProductPageScreen = ({ navigation }: any) => (
-  <SafeAreaView style={s.screen}>
-    <StatusBar barStyle="light-content" backgroundColor={C.navy} />
-    <ScrollView>
-      <View style={s.heroSection}>
-        <Image source={logo} style={s.heroLogo} />
-        <Text variant="h2" color={colors.text.white} style={s.heroTitle}>Get Instant Vehicle{'\n'}Loan Approval</Text>
-        <Text variant="bodyMd" color={colors.text.white} style={s.heroSubtitle}>Get approval in minutes</Text>
-        <TouchableOpacity style={s.applyPill} onPress={() => navigation.navigate('LoginMobile', { flow: 'lead' })}>
-          <Text variant="labelMd" color={C.navy}>Apply Now ➜</Text>
-        </TouchableOpacity>
-      </View>
-      <View style={s.productsArea}>
-        <Text variant="h4" style={s.productsTitle}>Our Products</Text>
-        <View style={s.productsGrid}>
-          {LOAN_TYPES.map(p => <ProductTile key={p.id} label={p.label} icon={p.icon} onPress={() => navigation.navigate('ProductDetail', { productId: p.id, productLabel: p.label })} />)}
+const { width: SCREEN_W, height: SCREEN_H } = Dimensions.get('window');
+const LOGO_W = 70;
+const LOGO_H = 35;
+// Final position: top-left corner of hero (left:20, top:10)
+const FINAL_LEFT = 20;
+const FINAL_TOP = 10;
+// Start position: screen center (logo center aligns with screen center)
+const START_LEFT = (SCREEN_W - LOGO_W) / 2;
+const START_TOP = (SCREEN_H - LOGO_H) / 2;
+
+export const ProductPageScreen = ({ navigation }: any) => {
+  const animProgress = useRef(new Animated.Value(0)).current; // 0 = big center, 1 = small corner
+
+  useEffect(() => {
+    Animated.timing(animProgress, { toValue: 1, duration: 1200, useNativeDriver: false }).start();
+  }, []);
+
+  // Interpolate position: center → top-left
+  const logoLeft = animProgress.interpolate({ inputRange: [0, 1], outputRange: [START_LEFT, FINAL_LEFT] });
+  const logoTop = animProgress.interpolate({ inputRange: [0, 1], outputRange: [START_TOP, FINAL_TOP] });
+  // Interpolate size: big → small
+  const logoWidth = animProgress.interpolate({ inputRange: [0, 1], outputRange: [LOGO_W * 3.5, LOGO_W] });
+  const logoHeight = animProgress.interpolate({ inputRange: [0, 1], outputRange: [LOGO_H * 3.5, LOGO_H] });
+
+  return (
+    <SafeAreaView style={s.screen}>
+      <StatusBar barStyle="light-content" backgroundColor={C.navy} />
+      <ScrollView>
+        <View style={s.heroSection}>
+          {/* Placeholder space for logo so layout stays correct */}
+          <View style={{ width: LOGO_W, height: LOGO_H, marginBottom: 16 }} />
+          <Text variant="h2" color={colors.text.white} style={s.heroTitle}>Get Instant Vehicle{'\n'}Loan Approval</Text>
+          <Text variant="bodyMd" color={colors.text.white} style={s.heroSubtitle}>Get approval in minutes</Text>
+          <TouchableOpacity style={s.applyPill} onPress={() => navigation.navigate('LoginMobile', { flow: 'lead' })}>
+            <Text variant="labelMd" color={C.navy}>Apply Now ➜</Text>
+          </TouchableOpacity>
         </View>
-        <Text variant="h4" style={{ marginTop: sp.lg, marginBottom: sp.base }}>Tools & Services</Text>
-        <View style={s.toolsRow}>
-          {[{ t: 'EMI Calculator', i: '🧮', r: 'EMICalculator' }, { t: 'Eligibility Calculator', i: '📊', r: 'EligibilityCalculator' }].map(c => (
-            <TouchableOpacity key={c.t} style={s.toolCard} onPress={() => navigation.navigate(c.r)}>
-              <Text variant="labelMd">{c.t}</Text><Text style={s.toolIcon}>{c.i}</Text>
-            </TouchableOpacity>
-          ))}
+        <View style={s.productsArea}>
+          <Text variant="h4" style={s.productsTitle}>Our Products</Text>
+          <View style={s.productsGrid}>
+            {LOAN_TYPES.map(p => <ProductTile key={p.id} label={p.label} icon={p.icon} onPress={() => navigation.navigate('ProductDetail', { productId: p.id, productLabel: p.label })} />)}
+          </View>
+          <Text variant="h4" style={{ marginTop: sp.lg, marginBottom: sp.base }}>Tools & Services</Text>
+          <View style={s.toolsRow}>
+            {[{ t: 'EMI Calculator', i: '🧮', r: 'EMICalculator' }, { t: 'Eligibility Calculator', i: '📊', r: 'EligibilityCalculator' }].map(c => (
+              <TouchableOpacity key={c.t} style={s.toolCard} onPress={() => navigation.navigate(c.r)}>
+                <Text variant="labelMd">{c.t}</Text><Text style={s.toolIcon}>{c.i}</Text>
+              </TouchableOpacity>
+            ))}
+          </View>
         </View>
-      </View>
-    </ScrollView>
-    <View style={s.bottomBar}><Button title="Create Account" onPress={() => navigation.navigate('LoginMobile', { flow: 'ntb' })} /></View>
-  </SafeAreaView>
-);
+      </ScrollView>
+      <View style={s.bottomBar}><Button title="Create Account" onPress={() => navigation.navigate('LoginMobile', { flow: 'ntb' })} /></View>
+
+      {/* Animated logo: starts BIG at screen center, shrinks to top-left corner */}
+      <Animated.Image
+        source={logo}
+        style={{
+          position: 'absolute',
+          zIndex: 99,
+          left: logoLeft,
+          top: logoTop,
+          width: logoWidth,
+          height: logoHeight,
+          resizeMode: 'contain',
+        }}
+      />
+    </SafeAreaView>
+  );
+};
 
 // ===== PRODUCT DETAIL =====
 export const ProductDetailScreen = ({ navigation, route }: any) => {

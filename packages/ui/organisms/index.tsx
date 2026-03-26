@@ -11,21 +11,36 @@ import { formatCurrency, formatDate } from '@nbfc/utils';
 const SW = Dimensions.get('window').width;
 
 // ===== LOAN CARD =====
-interface LoanCardProps { type: string; number: string; status: 'active' | 'closed'; amount: number; emi: number; onView: () => void; onPay: () => void; }
+const loanTypeIcon: Record<string, IconName> = { car: 'car', 'Car Loan': 'car', tractor: 'tractor', truck: 'truck', equipment: 'equipment', 'Equipment Loan': 'equipment', business: 'business', 'Business Loan': 'business', home: 'home_loan' };
+interface LoanCardProps { type: string; number: string; status: 'active' | 'closed'; amount: number; emi: number; onView: () => void; onPay?: () => void; }
 export const LoanCard: React.FC<LoanCardProps> = ({ type, number, status, amount, emi, onView, onPay }) => (
   <View style={[os.card, { marginHorizontal: sp.base }]}>
     <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: sp.base }}>
-      <View style={{ flex: 1 }}><Text variant="labelSm" color={colors.text.secondary}>{type.toUpperCase()}</Text><Text variant="labelLg">{number}</Text></View>
+      <View style={{ width: 40, height: 40, borderRadius: 20, backgroundColor: '#EEF2FF', alignItems: 'center', justifyContent: 'center', marginRight: sp.sm }}>
+        <Icon name={loanTypeIcon[type] || 'loan'} size={20} color="#3B5998" />
+      </View>
+      <View style={{ flex: 1 }}><Text variant="caption" color={colors.text.secondary}>{type.toUpperCase().replace(' LOAN', '')} LOAN</Text><Text variant="labelLg">{number}</Text></View>
       <Badge label={status === 'active' ? 'Active' : 'Closed'} variant={status === 'active' ? 'active' : 'failed'} />
     </View>
-    <View style={{ flexDirection: 'row', justifyContent: 'space-around', marginBottom: sp.base, paddingVertical: sp.sm }}>
-      <View style={{ alignItems: 'center' }}><Text variant="caption" color={colors.text.secondary}>Loan Amount</Text><Text variant="currencySm">{formatCurrency(amount)}</Text></View>
-      <View style={{ alignItems: 'center' }}><Text variant="caption" color={colors.text.secondary}>EMI Amount</Text><Text variant="currencySm">{formatCurrency(emi)}</Text></View>
+    <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: sp.base, paddingVertical: sp.sm }}>
+      <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+        <Icon name="info" size={16} color={colors.text.secondary} />
+        <View style={{ marginLeft: sp.sm }}>
+          <Text variant="caption" color={colors.text.secondary}>Loan Amount</Text>
+          <Text variant="currencySm">{formatCurrency(amount)}</Text>
+        </View>
+      </View>
+      <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+        <Icon name="payment" size={16} color={colors.text.secondary} />
+        <View style={{ marginLeft: sp.sm }}>
+          <Text variant="caption" color={colors.text.secondary}>EMI Amount</Text>
+          <Text variant="currencySm">{formatCurrency(emi)}</Text>
+        </View>
+      </View>
     </View>
-    <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-      <TouchableOpacity onPress={onView}><Text variant="labelMd" color={colors.text.secondary}>View More</Text></TouchableOpacity>
-      <Button title="Pay EMI" onPress={onPay} fullWidth={false} style={{ paddingVertical: 10, paddingHorizontal: 28, borderRadius: 20 }} />
-    </View>
+    <TouchableOpacity onPress={onView} style={{ alignItems: 'center', paddingTop: sp.sm }}>
+      <Text variant="labelMd" color={colors.text.secondary}>View More</Text>
+    </TouchableOpacity>
   </View>
 );
 
@@ -137,19 +152,61 @@ export const SupportBar: React.FC<{ items: { id: string; label: string; icon: st
   </View>;
 };
 
-// ===== DONUT CHART (EMI breakdown) =====
-export const DonutChart: React.FC<{ principal: number; interest: number }> = ({ principal, interest }) => (
-  <View style={{ alignItems: 'center', marginVertical: sp.base }}>
-    <View style={{ width: 120, height: 120 }}>
-      <View style={{ width: 120, height: 120, borderRadius: 60, borderWidth: 20, borderColor: colors.primary.dark, opacity: 0.3 }} />
-      <View style={{ position: 'absolute', width: 120, height: 120, borderRadius: 60, borderWidth: 20, borderColor: '#C0C0C0', opacity: 0.15 }} />
+// ===== DONUT CHART (EMI breakdown — proportional ring matching Figma) =====
+export const DonutChart: React.FC<{ principal: number; interest: number }> = ({ principal, interest }) => {
+  const total = principal + interest;
+  const interestPct = total > 0 ? interest / total : 0;
+  // Use rotation to show two colored arcs via half-circle clipping
+  // Interest = dark navy, Principal = lighter blue/grey
+  const interestDeg = interestPct * 360;
+
+  return (
+    <View style={{ alignItems: 'center', marginVertical: sp.base }}>
+      <View style={{ width: 140, height: 140 }}>
+        {/* Base ring — Principal Loan Amount (lighter blue) */}
+        <View style={{ width: 140, height: 140, borderRadius: 70, borderWidth: 22, borderColor: '#A8B4E0' }} />
+        {/* Interest arc — overlay using clip */}
+        {interestDeg > 0 && interestDeg < 360 && (
+          <>
+            {/* Right half clip */}
+            <View style={{ position: 'absolute', top: 0, left: 70, width: 70, height: 140, overflow: 'hidden' }}>
+              <View style={{
+                width: 140, height: 140, borderRadius: 70, borderWidth: 22,
+                borderColor: 'transparent', borderTopColor: colors.primary.dark,
+                borderRightColor: interestDeg > 90 ? colors.primary.dark : 'transparent',
+                borderBottomColor: interestDeg > 180 ? colors.primary.dark : 'transparent',
+                position: 'absolute', left: -70, top: 0,
+                transform: [{ rotate: '0deg' }],
+              }} />
+            </View>
+            {/* Left half clip */}
+            {interestDeg > 180 && (
+              <View style={{ position: 'absolute', top: 0, left: 0, width: 70, height: 140, overflow: 'hidden' }}>
+                <View style={{
+                  width: 140, height: 140, borderRadius: 70, borderWidth: 22,
+                  borderColor: 'transparent',
+                  borderBottomColor: interestDeg > 180 ? colors.primary.dark : 'transparent',
+                  borderLeftColor: interestDeg > 270 ? colors.primary.dark : 'transparent',
+                  position: 'absolute', left: 0, top: 0,
+                }} />
+              </View>
+            )}
+          </>
+        )}
+      </View>
+      <View style={{ flexDirection: 'row', marginTop: sp.base, gap: sp.lg }}>
+        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
+          <View style={{ width: 10, height: 10, borderRadius: 5, backgroundColor: colors.primary.dark }} />
+          <Text variant="caption" color={colors.text.secondary}>Total Interest</Text>
+        </View>
+        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
+          <View style={{ width: 10, height: 10, borderRadius: 5, backgroundColor: '#A8B4E0' }} />
+          <Text variant="caption" color={colors.text.secondary}>Principal Loan Amount</Text>
+        </View>
+      </View>
     </View>
-    <View style={{ flexDirection: 'row', marginTop: sp.base, gap: sp.lg }}>
-      <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}><View style={{ width: 10, height: 10, borderRadius: 5, backgroundColor: colors.secondary.base }} /><Text variant="caption" color={colors.text.secondary}>Total Interest</Text></View>
-      <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}><View style={{ width: 10, height: 10, borderRadius: 5, backgroundColor: colors.primary.dark }} /><Text variant="caption" color={colors.text.secondary}>Principal</Text></View>
-    </View>
-  </View>
-);
+  );
+};
 
 const os = StyleSheet.create({
   card: { backgroundColor: colors.white, borderRadius: br.md, padding: sp.base, ...shadow.md },

@@ -58,6 +58,36 @@ export const serviceStyles = StyleSheet.create({
     borderTopWidth: 1, borderTopColor: C.borderLight,
   },
 
+  // Bottom bar
+  bottomBar: {
+    paddingHorizontal: 16, paddingBottom: 24, paddingTop: 12,
+    borderTopWidth: 1, borderTopColor: C.borderLight,
+  },
+
+  // Select Request Type - Radio rows
+  radioRow: {
+    flexDirection: 'row', alignItems: 'center',
+    paddingVertical: 16,
+    borderBottomWidth: 1, borderBottomColor: '#F0F0F0',
+  },
+  radioIconWrap: {
+    width: 40, height: 40, borderRadius: 8,
+    backgroundColor: '#FAFAFA', alignItems: 'center', justifyContent: 'center',
+    marginRight: 12,
+  },
+  radioOuter: {
+    width: 22, height: 22, borderRadius: 11,
+    borderWidth: 2, borderColor: '#BDBDBD',
+    alignItems: 'center', justifyContent: 'center',
+  },
+  radioOuterActive: {
+    borderColor: C.navy,
+  },
+  radioInner: {
+    width: 12, height: 12, borderRadius: 6,
+    backgroundColor: C.navy,
+  },
+
   // Upload area
   uploadArea: {
     alignItems: 'center', paddingVertical: 20,
@@ -72,6 +102,11 @@ export const serviceStyles = StyleSheet.create({
   knowledgeCard: {
     flex: 1, alignItems: 'center', backgroundColor: C.white,
     borderRadius: 12, padding: 16,
+  },
+  playIconCircle: {
+    width: 44, height: 44, borderRadius: 22,
+    borderWidth: 1.5, borderColor: C.navy,
+    alignItems: 'center', justifyContent: 'center',
   },
 
   // Support section

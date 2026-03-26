@@ -29,7 +29,9 @@ export type IconName =
   | 'calculator' | 'eligibility' | 'support' | 'headphones'
   | 'camera' | 'gallery' | 'refresh' | 'share'
   | 'success' | 'error' | 'info' | 'pending' | 'active'
-  | 'logout' | 'language' | 'gift' | 'settings';
+  | 'logout' | 'language' | 'gift' | 'settings'
+  | 'menu' | 'home' | 'services' | 'offers'
+  | 'play';
 
 // MaterialCommunityIcons mapping
 const VECTOR: Record<string, string> = {
@@ -53,6 +55,8 @@ const VECTOR: Record<string, string> = {
   success: 'check-circle', error: 'close-circle', info: 'information-outline',
   pending: 'clock-outline', active: 'lightning-bolt',
   logout: 'logout', language: 'translate', gift: 'gift-outline', settings: 'cog-outline',
+  menu: 'menu', home: 'home-outline', services: 'wrench-outline', offers: 'tag-outline',
+  play: 'play',
 };
 
 // Emoji fallback
@@ -67,6 +71,8 @@ const EMOJI: Record<string, string> = {
   camera: '📷', gallery: '🖼', refresh: '🔄', share: '↗',
   success: '✓', error: '✗', info: 'ⓘ', pending: '🕐', active: '⚡',
   logout: '🚪', language: '🌐', gift: '🎁', settings: '⚙️',
+  menu: '☰', home: '🏠', services: '🔧', offers: '🏷️',
+  play: '▶',
 };
 
 // ===== BASE ICON =====

@@ -6,10 +6,10 @@ export const leadStyles = StyleSheet.create({
 
   // Product Page - Navy header
   heroSection: {
-    backgroundColor: C.navy, padding: 20,
-    paddingTop: 32, paddingBottom: 40,
+    backgroundColor: C.navy, paddingHorizontal: 20,
+    paddingTop: 10, paddingBottom: 40,
   },
-  heroLogo: { width: 80, height: 40, resizeMode: 'contain', marginBottom: 16 },
+  heroLogo: { width: 70, height: 35, resizeMode: 'contain', marginBottom: 16, alignSelf: 'flex-start' },
   heroTitle: { lineHeight: 28 },
   heroSubtitle: { opacity: 0.7, marginTop: 4 },
   applyPill: {

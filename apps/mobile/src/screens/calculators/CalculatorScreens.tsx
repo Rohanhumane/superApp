@@ -20,7 +20,9 @@ export const EMICalculatorScreen = ({ navigation }: any) => {
   return (
     <SafeAreaView style={s.screen}>
       <StatusBar barStyle="dark-content" />
-      <TouchableOpacity onPress={() => navigation.goBack()} style={s.header}><Icon name="back" size={24} color={colors.text.primary} /></TouchableOpacity>
+      <TouchableOpacity onPress={() => navigation.goBack()} style={s.header}>
+        <Icon name="back" size={24} color={colors.text.primary} />
+      </TouchableOpacity>
       <ScrollView contentContainerStyle={s.content}>
         <Text variant="h2">EMI Calculator</Text>
         <DropdownSelect label="Loan Type" required value={lt} options={LOAN_TYPES.map(l => ({ id: l.id, label: l.label }))} onSelect={o => setLt(o.id)} />
@@ -30,24 +32,31 @@ export const EMICalculatorScreen = ({ navigation }: any) => {
           <SliderWithValue label="Tenure (Months)" value={ten} min={EMI_LIMITS.TENURE_MIN} max={EMI_LIMITS.TENURE_MAX} step={1} formatValue={v => `${v}M`} formatMin={`${EMI_LIMITS.TENURE_MIN}M`} formatMax={`${EMI_LIMITS.TENURE_MAX}M`} onValueChange={setTen} />
         </View>
         <View style={s.resultRow}>
-          <Text variant="bodyMd" style={s.resultLabel}>{sel?.label} EMI</Text>
-          <Text variant="currency" style={s.resultValue}>{formatCurrency(emi)}</Text>
+          <Text variant="bodyMd" style={s.resultLabel}>{sel?.label || 'Car Loan'} EMI</Text>
+          <Text variant="labelLg" style={s.resultValue}>{formatCurrency(emi)}</Text>
         </View>
         <View style={s.breakdownRow}>
-          <View style={s.breakdownItem}><Text variant="caption" style={s.breakdownLabel}>Total Interest{'\n'}Payable</Text><Text variant="currencySm" style={s.breakdownValue}>{formatCurrency(interest)}</Text></View>
-          <View style={{ width: 1, backgroundColor: colors.border.light }} />
-          <View style={s.breakdownItem}><Text variant="caption" style={s.breakdownLabel}>Total Amount{'\n'}Payable</Text><Text variant="currencySm" style={s.breakdownValue}>{formatCurrency(total)}</Text></View>
+          <View style={s.breakdownItem}>
+            <Text variant="caption" style={s.breakdownLabel}>Total Interest{'\n'}Payable</Text>
+            <Text variant="labelMd" style={s.breakdownValue}>{formatCurrency(interest)}</Text>
+          </View>
+          <View style={s.breakdownItem}>
+            <Text variant="caption" style={s.breakdownLabel}>Total Amount{'\n'}Payable</Text>
+            <Text variant="labelMd" style={s.breakdownValue}>{formatCurrency(total)}</Text>
+          </View>
         </View>
-        <View style={s.donutArea}><DonutChart principal={amt} interest={interest} /></View>
+        <View style={s.donutArea}>
+          <DonutChart principal={amt} interest={interest} />
+        </View>
       </ScrollView>
-      <View style={{ padding: sp.base, borderTopWidth: 1, borderTopColor: colors.border.light }}>
+      <View style={{ padding: sp.base }}>
         <Button title="Apply Now" onPress={() => {
           if (isAuthenticated) {
             navigation.navigate('KYCForm', { flow: 'lead', productId: lt });
           } else {
             navigation.navigate('LoginMobile', { flow: 'lead' });
           }
-        }} style={s.applyBtn} />
+        }} />
       </View>
     </SafeAreaView>
   );
@@ -62,11 +71,14 @@ export const EligibilityCalculatorScreen = ({ navigation }: any) => {
   const [rate, setRate] = useState(9.9);
   const [ten, setTen] = useState(12);
   const elig = useMemo(() => calculateEligibility(inc, oe, rate, ten), [inc, oe, rate, ten]);
+  const sel = LOAN_TYPES.find(l => l.id === lt);
 
   return (
     <SafeAreaView style={s.screen}>
       <StatusBar barStyle="dark-content" />
-      <TouchableOpacity onPress={() => navigation.goBack()} style={s.header}><Icon name="back" size={24} color={colors.text.primary} /></TouchableOpacity>
+      <TouchableOpacity onPress={() => navigation.goBack()} style={s.header}>
+        <Icon name="back" size={24} color={colors.text.primary} />
+      </TouchableOpacity>
       <ScrollView contentContainerStyle={s.content}>
         <Text variant="h2">Eligibility Calculator</Text>
         <DropdownSelect label="Loan Type" required value={lt} options={LOAN_TYPES.map(l => ({ id: l.id, label: l.label }))} onSelect={o => setLt(o.id)} />
@@ -78,12 +90,14 @@ export const EligibilityCalculatorScreen = ({ navigation }: any) => {
           <SliderWithValue label="Tenure (Months)" value={ten} min={ELIGIBILITY_LIMITS.TENURE_MIN} max={ELIGIBILITY_LIMITS.TENURE_MAX} step={1} formatValue={v => `${v}M`} formatMin={`${ELIGIBILITY_LIMITS.TENURE_MIN}M`} formatMax={`${ELIGIBILITY_LIMITS.TENURE_MAX}M`} onValueChange={setTen} />
         </View>
         <View style={s.eligibilityCard}>
-          <Icon name="success" size={32} color={colors.secondary.base} />
-          <Text variant="bodyMd" style={s.eligibilityLabel}>{LOAN_TYPES.find(l => l.id === lt)?.label} Eligibility is</Text>
+          <View style={{ width: 40, height: 40, borderRadius: 20, backgroundColor: '#C9EEDC', alignItems: 'center', justifyContent: 'center' }}>
+            <Icon name="success" size={24} color="#0C8749" />
+          </View>
+          <Text variant="bodyMd" style={s.eligibilityLabel}>{sel?.label || 'Car Loan'} Eligibility is</Text>
           <Text variant="h2" style={s.eligibilityAmount}>{formatCurrency(elig)}</Text>
         </View>
       </ScrollView>
-      <View style={{ padding: sp.base, borderTopWidth: 1, borderTopColor: colors.border.light }}>
+      <View style={{ padding: sp.base }}>
         <Button title="Apply Now" onPress={() => {
           if (isAuthenticated) {
             navigation.navigate('KYCForm', { flow: 'lead', productId: lt });
