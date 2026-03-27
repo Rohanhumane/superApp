@@ -2,7 +2,7 @@ import React from 'react';
 import { View, StyleSheet, TouchableOpacity, Dimensions, ScrollView } from 'react-native';
 import { Text } from '../atoms/Text';
 import { Button } from '../atoms/Button';
-import { Badge } from '../atoms/FormElements';
+import { Badge } from '../atoms/Badge';
 import { Icon, IconName } from '../atoms/Icon';
 import { colors } from '../theme/colors';
 import { sp, br, shadow } from '../theme/spacing';
@@ -152,55 +152,61 @@ export const SupportBar: React.FC<{ items: { id: string; label: string; icon: st
   </View>;
 };
 
-// ===== DONUT CHART (EMI breakdown — proportional ring matching Figma) =====
+// ===== DONUT CHART (EMI breakdown — proportional ring using nested-clip rotation) =====
+const DONUT_SIZE = 140;
+const DONUT_HALF = DONUT_SIZE / 2;
+const DONUT_RING = 22;
+const INTEREST_CLR = '#1A1C4D';
+const PRINCIPAL_CLR = '#A8B4E0';
+
 export const DonutChart: React.FC<{ principal: number; interest: number }> = ({ principal, interest }) => {
   const total = principal + interest;
-  const interestPct = total > 0 ? interest / total : 0;
-  // Use rotation to show two colored arcs via half-circle clipping
-  // Interest = dark navy, Principal = lighter blue/grey
-  const interestDeg = interestPct * 360;
+  if (total <= 0) return null;
+  const interestPct = interest / total;
+  const deg = interestPct * 360;
 
   return (
     <View style={{ alignItems: 'center', marginVertical: sp.base }}>
-      <View style={{ width: 140, height: 140 }}>
-        {/* Base ring — Principal Loan Amount (lighter blue) */}
-        <View style={{ width: 140, height: 140, borderRadius: 70, borderWidth: 22, borderColor: '#A8B4E0' }} />
-        {/* Interest arc — overlay using clip */}
-        {interestDeg > 0 && interestDeg < 360 && (
-          <>
-            {/* Right half clip */}
-            <View style={{ position: 'absolute', top: 0, left: 70, width: 70, height: 140, overflow: 'hidden' }}>
-              <View style={{
-                width: 140, height: 140, borderRadius: 70, borderWidth: 22,
-                borderColor: 'transparent', borderTopColor: colors.primary.dark,
-                borderRightColor: interestDeg > 90 ? colors.primary.dark : 'transparent',
-                borderBottomColor: interestDeg > 180 ? colors.primary.dark : 'transparent',
-                position: 'absolute', left: -70, top: 0,
-                transform: [{ rotate: '0deg' }],
-              }} />
-            </View>
-            {/* Left half clip */}
-            {interestDeg > 180 && (
-              <View style={{ position: 'absolute', top: 0, left: 0, width: 70, height: 140, overflow: 'hidden' }}>
-                <View style={{
-                  width: 140, height: 140, borderRadius: 70, borderWidth: 22,
-                  borderColor: 'transparent',
-                  borderBottomColor: interestDeg > 180 ? colors.primary.dark : 'transparent',
-                  borderLeftColor: interestDeg > 270 ? colors.primary.dark : 'transparent',
-                  position: 'absolute', left: 0, top: 0,
-                }} />
+      <View style={{ width: DONUT_SIZE, height: DONUT_SIZE }}>
+        {/* Base ring — Principal color */}
+        <View style={{ width: DONUT_SIZE, height: DONUT_SIZE, borderRadius: DONUT_HALF, borderWidth: DONUT_RING, borderColor: PRINCIPAL_CLR }} />
+
+        {/* Interest arc: first 0–180° (right half clip) */}
+        {deg > 0 && (
+          <View style={{ position: 'absolute', top: 0, left: DONUT_HALF, width: DONUT_HALF, height: DONUT_SIZE, overflow: 'hidden' }}>
+            <View style={{ width: DONUT_SIZE, height: DONUT_SIZE, marginLeft: -DONUT_HALF, transform: [{ rotate: `${Math.min(deg, 180)}deg` }] }}>
+              <View style={{ width: DONUT_HALF, height: DONUT_SIZE, overflow: 'hidden' }}>
+                <View style={{ width: DONUT_SIZE, height: DONUT_SIZE, borderRadius: DONUT_HALF, borderWidth: DONUT_RING, borderColor: INTEREST_CLR }} />
               </View>
-            )}
-          </>
+            </View>
+          </View>
         )}
+
+        {/* Interest arc: 180–360° (left half clip) */}
+        {deg > 180 && (
+          <View style={{ position: 'absolute', top: 0, left: 0, width: DONUT_HALF, height: DONUT_SIZE, overflow: 'hidden' }}>
+            <View style={{ width: DONUT_SIZE, height: DONUT_SIZE, transform: [{ rotate: `${deg - 180}deg` }] }}>
+              <View style={{ position: 'absolute', left: DONUT_HALF, width: DONUT_HALF, height: DONUT_SIZE, overflow: 'hidden' }}>
+                <View style={{ width: DONUT_SIZE, height: DONUT_SIZE, borderRadius: DONUT_HALF, borderWidth: DONUT_RING, borderColor: INTEREST_CLR, marginLeft: -DONUT_HALF }} />
+              </View>
+            </View>
+          </View>
+        )}
+
+        {/* Center label — interest percentage */}
+        <View style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, alignItems: 'center', justifyContent: 'center' }}>
+          <Text variant="labelLg" color={colors.text.primary}>{Math.round(interestPct * 100)}%</Text>
+          <Text variant="caption" color={colors.text.secondary}>Interest</Text>
+        </View>
       </View>
+      {/* Legend */}
       <View style={{ flexDirection: 'row', marginTop: sp.base, gap: sp.lg }}>
         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
-          <View style={{ width: 10, height: 10, borderRadius: 5, backgroundColor: colors.primary.dark }} />
+          <View style={{ width: 10, height: 10, borderRadius: 5, backgroundColor: INTEREST_CLR }} />
           <Text variant="caption" color={colors.text.secondary}>Total Interest</Text>
         </View>
         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
-          <View style={{ width: 10, height: 10, borderRadius: 5, backgroundColor: '#A8B4E0' }} />
+          <View style={{ width: 10, height: 10, borderRadius: 5, backgroundColor: PRINCIPAL_CLR }} />
           <Text variant="caption" color={colors.text.secondary}>Principal Loan Amount</Text>
         </View>
       </View>

@@ -1,24 +1,10 @@
 import React from 'react';
 import { View, ScrollView, TouchableOpacity, StatusBar, SafeAreaView, Alert, Linking } from 'react-native';
-import { DashboardTemplate, Text, LoanCard, SectionHeader, QuickLinkCard, RecommendCard, Icon, colors, sp } from '@nbfc/ui';
+import { DashboardTemplate, Text, LoanCard, SectionHeader, QuickLinkCard, RecommendCard, ProductIcon, Icon, colors, sp } from '@nbfc/ui';
 import { useAppSelector } from '@nbfc/core';
 import { LOAN_TYPES } from '@nbfc/config';
 import { ds } from './DashboardScreen.styles';
-import { SCREEN_WIDTH, C } from '../../styles/shared';
-
-const ProductIcon = ({ type }: { type: string }) => {
-  const cfg: Record<string, { emoji: string; bg: string }> = {
-    car: { emoji: '🚗', bg: '#EEF2FF' }, tractor: { emoji: '🚜', bg: '#EEF6EE' },
-    truck: { emoji: '🚛', bg: '#EEF2FF' }, equipment: { emoji: '⚙️', bg: '#EEF2FF' },
-    business: { emoji: '🏢', bg: '#EEF6EE' }, home: { emoji: '🏠', bg: '#EEF6EE' },
-  };
-  const c = cfg[type] || { emoji: '📦', bg: '#FAFAFA' };
-  return (
-    <View style={{ width: 56, height: 56, borderRadius: 12, backgroundColor: c.bg, alignItems: 'center', justifyContent: 'center' }}>
-      <Text style={{ fontSize: 28 }}>{c.emoji}</Text>
-    </View>
-  );
-};
+import { SCREEN_WIDTH } from '../../styles/shared';
 
 export const DashboardScreen = ({ navigation }: any) => {
   const userType = useAppSelector(s => s.auth.userType);
@@ -41,7 +27,7 @@ export const DashboardScreen = ({ navigation }: any) => {
         </ScrollView></View>}
         <SectionHeader title="Payments & Reminders" />
         <TouchableOpacity style={[ds.card, { flexDirection: 'row', alignItems: 'center', marginHorizontal: sp.base }]} onPress={() => nav('SetUpAutoDebit')}>
-          <Text style={{ fontSize: 24, marginRight: sp.base }}>🔄</Text><View style={{ flex: 1 }}><Text variant="bodySm">Never miss an EMI. Set up auto-debit.</Text><Text variant="labelSm" color={C.navy}>Set Up Auto-Debit</Text></View>
+          <Text style={{ fontSize: 24, marginRight: sp.base }}>🔄</Text><View style={{ flex: 1 }}><Text variant="bodySm">Never miss an EMI. Set up auto-debit.</Text><Text variant="labelSm" color={colors.primary.dark}>Set Up Auto-Debit</Text></View>
         </TouchableOpacity>
         <SectionHeader title="Recommended for You" />
         <RecommendCard title="Pre-Approved Two-Wheeler Loan" sub="Get up to ₹1,50,000 instantly" onPress={() => nav('ProductDetail', { productId: 'two_wheeler_loan', productLabel: 'Two-Wheeler Loan' })} />
@@ -56,8 +42,8 @@ export const DashboardScreen = ({ navigation }: any) => {
   }
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: C.navy }}>
-      <StatusBar barStyle="light-content" backgroundColor={C.navy} />
+    <SafeAreaView style={{ flex: 1, backgroundColor: colors.primary.dark }}>
+      <StatusBar barStyle="light-content" backgroundColor={colors.primary.dark} />
       <ScrollView style={{ flex: 1 }} contentContainerStyle={{ paddingBottom: 100 }} showsVerticalScrollIndicator={false} bounces={false}>
         <View style={ds.navySection}>
           <View style={ds.topBar}>
@@ -71,7 +57,7 @@ export const DashboardScreen = ({ navigation }: any) => {
               <Text variant="h3" color="#FFFFFF" style={{ lineHeight: 28, fontSize: 20 }}>Get Instant Vehicle{'\n'}Loan Approval</Text>
               <Text variant="bodySm" color="rgba(255,255,255,0.6)" style={{ marginTop: 4 }}>Get approval in minutes</Text>
               <TouchableOpacity style={ds.applyBtn} onPress={() => nav('ProductDetail', { productId: 'car_loan', productLabel: 'Car Loan' })}>
-                <Text variant="labelSm" color={C.navy}>Apply Now</Text>
+                <Text variant="labelSm" color={colors.primary.dark}>Apply Now</Text>
                 <View style={ds.applyBtnIcon}><Text variant="caption" color="#fff">➜</Text></View>
               </TouchableOpacity>
             </View>
@@ -84,12 +70,12 @@ export const DashboardScreen = ({ navigation }: any) => {
         </View>
         <View style={ds.contentArea}>
           {leadStatus !== 'none' && <View style={ds.statusCard}>
-            <View style={ds.statusIcon}><Icon name="user" size={22} color={C.navy} /></View>
+            <View style={ds.statusIcon}><Icon name="user" size={22} color={colors.primary.dark} /></View>
             <View style={{ flex: 1, marginLeft: 12 }}>
-              <Text style={{ fontSize: 15, fontWeight: '600', color: C.black }}>
+              <Text style={{ fontSize: 15, fontWeight: '600', color: colors.text.primary }}>
                 {leadStatus === 'completed' ? 'Your application is approved!' : leadStatus === 'rejected' ? 'Application not approved' : 'Your request is in progress.'}
               </Text>
-              <Text style={{ fontSize: 12, color: C.gray500, marginTop: 2 }}>
+              <Text style={{ fontSize: 12, color: colors.text.secondary, marginTop: 2 }}>
                 {leadStatus === 'completed' ? 'Check your loan details.' : leadStatus === 'rejected' ? 'Contact support for more info.' : 'Our team will contact you soon..'}
               </Text>
               <TouchableOpacity style={ds.orangeBtn} onPress={() => nav('CustomerCare')}><Text style={{ fontSize: 11, fontWeight: '600', color: '#fff' }}>Contact Support</Text></TouchableOpacity>
@@ -100,18 +86,18 @@ export const DashboardScreen = ({ navigation }: any) => {
             {LOAN_TYPES.map(p => (
               <TouchableOpacity key={p.id} style={ds.prodItem} onPress={() => nav('ProductDetail', { productId: p.id, productLabel: p.label })} activeOpacity={0.7}>
                 <ProductIcon type={p.icon} />
-                <Text style={{ fontSize: 11, textAlign: 'center', marginTop: 6, color: C.black }} numberOfLines={2}>{p.label}</Text>
+                <Text style={{ fontSize: 11, textAlign: 'center', marginTop: 6, color: colors.text.primary }} numberOfLines={2}>{p.label}</Text>
               </TouchableOpacity>
             ))}
           </View>
           <Text style={[ds.sectionTitle, { fontStyle: 'italic' }]}>Tools & Services</Text>
           <View style={{ flexDirection: 'row', paddingHorizontal: 16, gap: 12 }}>
             <TouchableOpacity style={ds.toolCard} onPress={() => nav('EMICalculator')} activeOpacity={0.7}>
-              <Text style={{ fontSize: 13, fontWeight: '600', color: C.black }}>EMI{'\n'}Calculator</Text>
+              <Text style={{ fontSize: 13, fontWeight: '600', color: colors.text.primary }}>EMI{'\n'}Calculator</Text>
               <View style={{ flex: 1, justifyContent: 'flex-end', alignItems: 'center', marginTop: 8 }}><View style={[ds.toolBubble, { backgroundColor: '#F5ECD7' }]}><Text style={{ fontSize: 36 }}>🧮</Text></View></View>
             </TouchableOpacity>
             <TouchableOpacity style={ds.toolCard} onPress={() => nav('EligibilityCalculator')} activeOpacity={0.7}>
-              <Text style={{ fontSize: 13, fontWeight: '600', color: C.black }}>Eligibility{'\n'}Calculator</Text>
+              <Text style={{ fontSize: 13, fontWeight: '600', color: colors.text.primary }}>Eligibility{'\n'}Calculator</Text>
               <View style={{ flex: 1, justifyContent: 'flex-end', alignItems: 'center', marginTop: 8 }}><View style={[ds.toolBubble, { backgroundColor: '#E2F0E2' }]}><Text style={{ fontSize: 36 }}>📊</Text></View></View>
             </TouchableOpacity>
           </View>
@@ -120,7 +106,7 @@ export const DashboardScreen = ({ navigation }: any) => {
             {[{ l: 'Chat support', i: '💬', action: () => Alert.alert('Chat Support', 'Chat support will be available soon.') }, { l: 'Email', i: '✉️', action: () => Linking.openURL('mailto:support@skfinance.in') }, { l: 'Call Us', i: '📞', action: () => Linking.openURL('tel:18001234567') }, { l: 'Locate Us', i: '📍', action: () => Linking.openURL('https://maps.google.com/?q=SK+Finance') }].map(s => (
               <TouchableOpacity key={s.l} style={{ alignItems: 'center', width: (SCREEN_WIDTH - 48) / 4 }} activeOpacity={0.7} onPress={s.action}>
                 <View style={ds.supIcon}><Text style={{ fontSize: 20 }}>{s.i}</Text></View>
-                <Text style={{ fontSize: 10, color: C.gray500, textAlign: 'center', marginTop: 6 }}>{s.l}</Text>
+                <Text style={{ fontSize: 10, color: colors.text.secondary, textAlign: 'center', marginTop: 6 }}>{s.l}</Text>
               </TouchableOpacity>
             ))}
           </View>

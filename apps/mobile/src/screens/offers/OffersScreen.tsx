@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { View, ScrollView, SafeAreaView, TouchableOpacity, StatusBar, Alert } from 'react-native';
 import { Text, Icon, colors, sp } from '@nbfc/ui';
 import { useAppSelector } from '@nbfc/core';
-import { C } from '../../styles/shared';
 
 const OFFERS = [
   {
@@ -47,9 +46,9 @@ export const OffersScreen = ({ navigation }: any) => {
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: colors.white }}>
-      <StatusBar barStyle="light-content" backgroundColor={C.navy} />
+      <StatusBar barStyle="light-content" backgroundColor={colors.primary.dark} />
       {/* Header */}
-      <View style={{ backgroundColor: C.navy, paddingHorizontal: sp.base, paddingTop: sp.base, paddingBottom: sp.lg }}>
+      <View style={{ backgroundColor: colors.primary.dark, paddingHorizontal: sp.base, paddingTop: sp.base, paddingBottom: sp.lg }}>
         <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
           <Text variant="h3" color="#FFFFFF">Offers</Text>
           <View style={{ flexDirection: 'row', gap: 16 }}>
@@ -72,7 +71,7 @@ export const OffersScreen = ({ navigation }: any) => {
               onPress={() => setFilter(f)}
               style={{
                 paddingHorizontal: 16, paddingVertical: 8, borderRadius: 20,
-                backgroundColor: active ? C.navy : '#F5F5F5',
+                backgroundColor: active ? colors.primary.dark : '#F5F5F5',
               }}
             >
               <Text variant="labelSm" color={active ? '#fff' : colors.text.secondary}>{f}</Text>
@@ -122,7 +121,7 @@ export const OffersScreen = ({ navigation }: any) => {
                 <View style={{ flexDirection: 'row', gap: 24, marginTop: 12 }}>
                   <View>
                     <Text variant="caption" color={colors.text.secondary}>Interest Rate</Text>
-                    <Text variant="labelMd" color={C.green}>{offer.rate}</Text>
+                    <Text variant="labelMd" color={colors.secondary.base}>{offer.rate}</Text>
                   </View>
                   <View>
                     <Text variant="caption" color={colors.text.secondary}>Tenure</Text>

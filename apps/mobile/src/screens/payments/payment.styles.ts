@@ -1,13 +1,13 @@
 import { StyleSheet } from 'react-native';
-import { C } from '../../styles/shared';
+import { colors } from '@nbfc/ui';
 
 export const paymentStyles = StyleSheet.create({
-  screen: { flex: 1, backgroundColor: C.white },
+  screen: { flex: 1, backgroundColor: colors.white },
 
   // Header
   header: {
     flexDirection: 'row', alignItems: 'center', padding: 16,
-    borderBottomWidth: 1, borderBottomColor: C.borderLight,
+    borderBottomWidth: 1, borderBottomColor: colors.border.light,
   },
   headerTitle: { marginLeft: 12 },
 
@@ -19,7 +19,7 @@ export const paymentStyles = StyleSheet.create({
 
   // Loan card in details
   loanCard: {
-    backgroundColor: C.white, borderRadius: 8, padding: 16,
+    backgroundColor: colors.white, borderRadius: 8, padding: 16,
     shadowColor: '#000', shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.08, shadowRadius: 6, elevation: 2,
   },
@@ -29,8 +29,8 @@ export const paymentStyles = StyleSheet.create({
 
   // Mandate card
   mandateCard: {
-    backgroundColor: C.white, borderRadius: 12, padding: 16,
-    borderWidth: 1, borderColor: C.borderLight,
+    backgroundColor: colors.white, borderRadius: 12, padding: 16,
+    borderWidth: 1, borderColor: colors.border.light,
   },
   mandateHeader: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 12 },
   mandateRow: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 8 },
@@ -44,17 +44,17 @@ export const paymentStyles = StyleSheet.create({
     flex: 1, flexDirection: 'row', alignItems: 'center',
     padding: 12, borderRadius: 8, borderWidth: 1,
   },
-  accountTypeBtnActive: { borderColor: C.blue },
-  accountTypeBtnInactive: { borderColor: C.borderLight },
+  accountTypeBtnActive: { borderColor: colors.primary.base },
+  accountTypeBtnInactive: { borderColor: colors.border.light },
   radioOuter: {
     width: 20, height: 20, borderRadius: 10, borderWidth: 2,
     alignItems: 'center', justifyContent: 'center', marginRight: 8,
   },
-  radioInner: { width: 10, height: 10, borderRadius: 5, backgroundColor: C.blue },
+  radioInner: { width: 10, height: 10, borderRadius: 5, backgroundColor: colors.primary.base },
 
   // NACH section
   nachCard: {
-    flexDirection: 'row', alignItems: 'center', backgroundColor: C.white,
+    flexDirection: 'row', alignItems: 'center', backgroundColor: colors.white,
     borderRadius: 8, padding: 16,
     shadowColor: '#000', shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.08, shadowRadius: 6, elevation: 2,

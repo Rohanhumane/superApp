@@ -1,13 +1,13 @@
 import { StyleSheet } from 'react-native';
-import { C } from '../../styles/shared';
+import { colors } from '@nbfc/ui';
 
 export const profileStyles = StyleSheet.create({
-  screen: { flex: 1, backgroundColor: C.white },
+  screen: { flex: 1, backgroundColor: colors.white },
 
   // Header
   header: {
     flexDirection: 'row', alignItems: 'center', padding: 16,
-    borderBottomWidth: 1, borderBottomColor: C.borderLight,
+    borderBottomWidth: 1, borderBottomColor: colors.border.light,
   },
   headerTitle: { marginLeft: 12 },
 
@@ -27,12 +27,12 @@ export const profileStyles = StyleSheet.create({
   // Update links
   updateRow: {
     flexDirection: 'row', justifyContent: 'space-between',
-    paddingVertical: 12, borderBottomWidth: 1, borderBottomColor: C.borderLight,
+    paddingVertical: 12, borderBottomWidth: 1, borderBottomColor: colors.border.light,
   },
 
   // Disclaimer box
   disclaimer: {
-    backgroundColor: C.bgPage, borderRadius: 8, padding: 12,
+    backgroundColor: colors.bg.secondary, borderRadius: 8, padding: 12,
     flexDirection: 'row', marginTop: 20,
   },
   disclaimerIcon: { marginRight: 8 },
@@ -42,7 +42,7 @@ export const profileStyles = StyleSheet.create({
   formSubtitle: { marginBottom: 24, lineHeight: 22 },
   bottomBar: {
     paddingHorizontal: 20, paddingBottom: 24, paddingTop: 12,
-    borderTopWidth: 1, borderTopColor: C.borderLight,
+    borderTopWidth: 1, borderTopColor: colors.border.light,
   },
 
   // Mandate info box

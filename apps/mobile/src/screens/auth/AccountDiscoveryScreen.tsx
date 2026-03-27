@@ -1,28 +1,8 @@
 import React from 'react';
 import { View, SafeAreaView, StatusBar, TouchableOpacity, ScrollView, Linking } from 'react-native';
-import { Text, Button, Icon, colors, sp } from '@nbfc/ui';
+import { Text, Button, ProductIcon, Icon, colors, sp } from '@nbfc/ui';
 import { useAppSelector } from '@nbfc/core';
 import { maskAccount } from '@nbfc/utils';
-import { C } from '../../styles/shared';
-
-const LoanIcon = ({ type }: { type: string }) => {
-  const lower = type.toLowerCase();
-  const cfg: Record<string, { emoji: string; bg: string }> = {
-    car: { emoji: '🚗', bg: '#EEF2FF' },
-    equipment: { emoji: '⚙️', bg: '#EEF6EE' },
-    business: { emoji: '🏢', bg: '#EEF6EE' },
-    tractor: { emoji: '🚜', bg: '#EEF6EE' },
-    commercial: { emoji: '🚛', bg: '#EEF2FF' },
-    home: { emoji: '🏠', bg: '#EEF6EE' },
-  };
-  const match = Object.keys(cfg).find(k => lower.includes(k));
-  const c = match ? cfg[match] : { emoji: '📦', bg: '#FAFAFA' };
-  return (
-    <View style={{ width: 48, height: 48, borderRadius: 12, backgroundColor: c.bg, alignItems: 'center', justifyContent: 'center' }}>
-      <Text style={{ fontSize: 24 }}>{c.emoji}</Text>
-    </View>
-  );
-};
 
 export const AccountDiscoveryScreen = ({ navigation, route }: any) => {
   const flow = route.params?.flow || 'etb';
@@ -64,7 +44,7 @@ export const AccountDiscoveryScreen = ({ navigation, route }: any) => {
               borderBottomColor: colors.border.light,
             }}
           >
-            <LoanIcon type={loan.type} />
+            <ProductIcon type={loan.type} size={48} />
             <View style={{ marginLeft: sp.base, flex: 1 }}>
               <Text variant="labelLg">{loan.type}</Text>
               <Text variant="bodySm" color={colors.text.secondary}>

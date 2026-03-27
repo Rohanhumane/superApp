@@ -1,24 +1,8 @@
 import React from 'react';
 import { View, ScrollView, SafeAreaView, TouchableOpacity, StatusBar, Alert, Linking } from 'react-native';
-import { Text, Avatar, Icon, colors, sp } from '@nbfc/ui';
+import { Text, Avatar, Icon, ProductIcon, IconBadge, SectionHeader, colors, sp } from '@nbfc/ui';
 import { useAppSelector, useAppDispatch, fullReset } from '@nbfc/core';
 import { LOAN_TYPES, APP_CONFIG } from '@nbfc/config';
-import { C } from '../../styles/shared';
-
-// ===== PRODUCT ICON (matches screenshot grid icons) =====
-const ProductIcon = ({ type }: { type: string }) => {
-  const cfg: Record<string, { emoji: string; bg: string }> = {
-    car: { emoji: '🚗', bg: '#EEF2FF' }, tractor: { emoji: '🚜', bg: '#EEF6EE' },
-    truck: { emoji: '🚛', bg: '#EEF2FF' }, equipment: { emoji: '⚙️', bg: '#EEF2FF' },
-    business: { emoji: '🏢', bg: '#EEF6EE' }, home: { emoji: '🏠', bg: '#EEF6EE' },
-  };
-  const c = cfg[type] || { emoji: '📦', bg: '#FAFAFA' };
-  return (
-    <View style={{ width: 48, height: 48, borderRadius: 24, backgroundColor: c.bg, alignItems: 'center', justifyContent: 'center' }}>
-      <Text style={{ fontSize: 22 }}>{c.emoji}</Text>
-    </View>
-  );
-};
 
 // ===== GRID ITEM (for products/services) =====
 const GridItem = ({ icon, label, onPress }: { icon: React.ReactNode; label: string; onPress: () => void }) => (
@@ -28,17 +12,6 @@ const GridItem = ({ icon, label, onPress }: { icon: React.ReactNode; label: stri
   </TouchableOpacity>
 );
 
-// ===== SERVICE ICON =====
-const ServiceIcon = ({ emoji, bg }: { emoji: string; bg: string }) => (
-  <View style={{ width: 48, height: 48, borderRadius: 24, backgroundColor: bg, alignItems: 'center', justifyContent: 'center' }}>
-    <Text style={{ fontSize: 20 }}>{emoji}</Text>
-  </View>
-);
-
-// ===== SECTION HEADER =====
-const SectionTitle = ({ title }: { title: string }) => (
-  <Text variant="labelLg" color={colors.text.primary} style={{ paddingHorizontal: sp.base, marginTop: 24, marginBottom: 12 }}>{title}</Text>
-);
 
 // ===== SETTINGS ROW =====
 const SettingsRow = ({ icon, label, onPress, trailing }: { icon: string; label: string; onPress: () => void; trailing?: string }) => (
@@ -77,10 +50,10 @@ export const MenuScreen = ({ navigation }: any) => {
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: colors.white }}>
-      <StatusBar barStyle="light-content" backgroundColor={C.navy} />
+      <StatusBar barStyle="light-content" backgroundColor={colors.primary.dark} />
 
       {/* ===== DARK HEADER ===== */}
-      <View style={{ backgroundColor: C.navy, paddingHorizontal: sp.base, paddingTop: sp.base, paddingBottom: sp.lg }}>
+      <View style={{ backgroundColor: colors.primary.dark, paddingHorizontal: sp.base, paddingTop: sp.base, paddingBottom: sp.lg }}>
         <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: sp.base }}>
           <Text variant="h3" color="#FFFFFF">Menu</Text>
           <View style={{ flexDirection: 'row', gap: 16 }}>
@@ -102,47 +75,47 @@ export const MenuScreen = ({ navigation }: any) => {
       <ScrollView contentContainerStyle={{ paddingBottom: 100 }} showsVerticalScrollIndicator={false}>
 
         {/* ===== OUR PRODUCTS ===== */}
-        <SectionTitle title="Our Products" />
+        <SectionHeader title="Our Products" />
         <View style={{ flexDirection: 'row', flexWrap: 'wrap', paddingHorizontal: sp.base }}>
           {LOAN_TYPES.map(p => (
-            <GridItem key={p.id} label={p.label} icon={<ProductIcon type={p.icon} />}
+            <GridItem key={p.id} label={p.label} icon={<ProductIcon type={p.icon} size={48} />}
               onPress={() => nav('ProductDetail', { productId: p.id, productLabel: p.label })} />
           ))}
         </View>
 
         {/* ===== OUR SERVICES ===== */}
-        <SectionTitle title="Our Services" />
+        <SectionHeader title="Our Services" />
         <View style={{ flexDirection: 'row', flexWrap: 'wrap', paddingHorizontal: sp.base }}>
-          <GridItem label="Upcoming EMI" icon={<ServiceIcon emoji="📅" bg="#EEF2FF" />} onPress={() => nav('PayEMI')} />
-          <GridItem label="Autopay" icon={<ServiceIcon emoji="🔄" bg="#EEF6EE" />} onPress={() => nav('ViewMandate')} />
-          <GridItem label="Relationship" icon={<ServiceIcon emoji="🤝" bg="#EEF2FF" />} onPress={() => nav('LoanDetails', { loanId: loans[0]?.id })} />
-          <GridItem label="Documents" icon={<ServiceIcon emoji="📄" bg="#EEF6EE" />} onPress={() => nav('DocumentsStatement')} />
-          <GridItem label="Customer Care" icon={<ServiceIcon emoji="🎧" bg="#EEF2FF" />} onPress={() => nav('CustomerCare')} />
+          <GridItem label="Upcoming EMI" icon={<IconBadge name="calendar" bgColor="#EEF2FF" color={colors.primary.dark} />} onPress={() => nav('PayEMI')} />
+          <GridItem label="Autopay" icon={<IconBadge name="refresh" bgColor="#EEF6EE" color={colors.secondary.dark} />} onPress={() => nav('ViewMandate')} />
+          <GridItem label="Relationship" icon={<IconBadge name="user" bgColor="#EEF2FF" color={colors.primary.dark} />} onPress={() => nav('LoanDetails', { loanId: loans[0]?.id })} />
+          <GridItem label="Documents" icon={<IconBadge name="document" bgColor="#EEF6EE" color={colors.secondary.dark} />} onPress={() => nav('DocumentsStatement')} />
+          <GridItem label="Customer Care" icon={<IconBadge name="headphones" bgColor="#EEF2FF" color={colors.primary.dark} />} onPress={() => nav('CustomerCare')} />
         </View>
 
         {/* ===== RAISE REQUEST ===== */}
-        <SectionTitle title="Raise Request" />
+        <SectionHeader title="Raise Request" />
         <View style={{ flexDirection: 'row', flexWrap: 'wrap', paddingHorizontal: sp.base }}>
-          <GridItem label={'Create Service\nRequest'} icon={<ServiceIcon emoji="📝" bg="#EEF6EE" />} onPress={() => nav('ServiceRequests')} />
-          <GridItem label={'Track Service\nRequests'} icon={<ServiceIcon emoji="📋" bg="#EEF2FF" />} onPress={() => nav('TrackRequests')} />
+          <GridItem label={'Create Service\nRequest'} icon={<IconBadge name="request" bgColor="#EEF6EE" color={colors.secondary.dark} />} onPress={() => nav('ServiceRequests')} />
+          <GridItem label={'Track Service\nRequests'} icon={<IconBadge name="track" bgColor="#EEF2FF" color={colors.primary.dark} />} onPress={() => nav('TrackRequests')} />
         </View>
 
         {/* ===== SETTINGS AND PREFERENCES ===== */}
-        <SectionTitle title="Settings and preferences" />
+        <SectionHeader title="Settings and preferences" />
         <SettingsRow icon="🔄" label="App update" onPress={() => Alert.alert('App Update', 'You are on the latest version.')} trailing="Update" />
         <SettingsRow icon="⚙️" label="App Settings" onPress={() => nav('LanguagePreference')} />
         <SettingsRow icon="🔒" label="Security Settings" onPress={() => nav('ChangeMPIN')} />
         <SettingsRow icon="💳" label="Payments Settings" onPress={() => nav('ViewMandate')} />
 
         {/* ===== ABOUT ===== */}
-        <SectionTitle title="About" />
+        <SectionHeader title="About" />
         <SettingsRow icon="🛡️" label="Privacy Policy" onPress={() => Alert.alert('Privacy Policy', 'Privacy Policy will open in browser.')} />
         <SettingsRow icon="📜" label="Terms of Service" onPress={() => Alert.alert('Terms of Service', 'Terms of Service will open in browser.')} />
         <SettingsRow icon="👥" label="About US" onPress={() => Alert.alert('About Us', 'SK Finance — Saath Aapke... Hamesha')} />
         <SettingsRow icon="⭐" label="Rate Us" onPress={() => Alert.alert('Rate Us', 'Rate us on the Play Store.')} />
 
         {/* ===== CONNECT WITH US ===== */}
-        <SectionTitle title="Connect With Us" />
+        <SectionHeader title="Connect With Us" />
         <View style={{ flexDirection: 'row', justifyContent: 'center', gap: 32, paddingVertical: 8 }}>
           <SocialIcon emoji="📘" label="Facebook" bg="#E8F0FE" onPress={() => Linking.openURL('https://facebook.com/skfinance')} />
           <SocialIcon emoji="📷" label="Instagram" bg="#FFEEF1" onPress={() => Linking.openURL('https://instagram.com/skfinance')} />

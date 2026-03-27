@@ -5,7 +5,7 @@ import { useAppDispatch, useAppSelector, setProfile } from '@nbfc/core';
 import { LOAN_TYPES, PRODUCT_TYPES, EMPLOYMENT_TYPES } from '@nbfc/config';
 import { validators } from '@nbfc/utils';
 import { leadStyles as s } from './lead.styles';
-import { C, SCREEN_WIDTH } from '../../styles/shared';
+import { SCREEN_WIDTH } from '../../styles/shared';
 
 const logo = require('../../assets/logo.png');
 
@@ -85,7 +85,7 @@ export const ProductPageScreen = ({ navigation }: any) => {
 
   return (
     <SafeAreaView style={s.screen}>
-      <StatusBar barStyle="light-content" backgroundColor={C.navy} />
+      <StatusBar barStyle="light-content" backgroundColor={colors.primary.dark} />
       <ScrollView>
         <View style={s.heroSection}>
           {/* Placeholder space for logo so layout stays correct */}
@@ -93,7 +93,7 @@ export const ProductPageScreen = ({ navigation }: any) => {
           <Text variant="h2" color={colors.text.white} style={s.heroTitle}>Get Instant Vehicle{'\n'}Loan Approval</Text>
           <Text variant="bodyMd" color={colors.text.white} style={s.heroSubtitle}>Get approval in minutes</Text>
           <TouchableOpacity style={s.applyPill} onPress={() => navigation.navigate('LoginMobile', { flow: 'lead' })}>
-            <Text variant="labelMd" color={C.navy}>Apply Now ➜</Text>
+            <Text variant="labelMd" color={colors.primary.dark}>Apply Now ➜</Text>
           </TouchableOpacity>
         </View>
         <View style={s.productsArea}>
@@ -216,7 +216,7 @@ export const KYCFormScreen = ({ navigation, route }: any) => {
           <Text variant="bodySm" color={colors.text.error}> *</Text>
         </View>
         <TouchableOpacity style={[s.dobInput, errors.dob ? s.dobInputError : s.dobInputNormal]} onPress={() => setShowDatePicker(true)} activeOpacity={0.7}>
-          <Text variant="bodyLg" color={f.dob ? C.black : C.gray500} style={s.dobPlaceholder}>{f.dob || 'DD/MM/YYYY'}</Text>
+          <Text variant="bodyLg" color={f.dob ? colors.text.primary : colors.text.secondary} style={s.dobPlaceholder}>{f.dob || 'DD/MM/YYYY'}</Text>
           <Text variant="bodyMd" color={colors.text.secondary}>📅</Text>
         </TouchableOpacity>
         {errors.dob && <Text variant="caption" color={colors.text.error} style={{ marginTop: 4 }}>{errors.dob}</Text>}

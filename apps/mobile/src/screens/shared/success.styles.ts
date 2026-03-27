@@ -1,8 +1,8 @@
 import { StyleSheet } from 'react-native';
-import { C } from '../../styles/shared';
+import { colors } from '@nbfc/ui';
 
 export const successStyles = StyleSheet.create({
-  screen: { flex: 1, backgroundColor: C.white },
+  screen: { flex: 1, backgroundColor: colors.white },
   content: { flexGrow: 1 },
   centerArea: {
     flex: 1, justifyContent: 'center', alignItems: 'center',
@@ -24,13 +24,13 @@ export const successStyles = StyleSheet.create({
   // Details card
   detailsCard: {
     width: '100%', marginTop: 8, padding: 16,
-    borderWidth: 1, borderColor: C.borderLight,
-    borderRadius: 12, backgroundColor: C.bgPage,
+    borderWidth: 1, borderColor: colors.border.light,
+    borderRadius: 12, backgroundColor: colors.bg.secondary,
   },
   detailsHeader: {
     flexDirection: 'row', justifyContent: 'space-between',
     marginBottom: 12, paddingBottom: 12,
-    borderBottomWidth: 1, borderBottomColor: C.borderLight,
+    borderBottomWidth: 1, borderBottomColor: colors.border.light,
   },
   detailRow: {
     flexDirection: 'row', justifyContent: 'space-between',

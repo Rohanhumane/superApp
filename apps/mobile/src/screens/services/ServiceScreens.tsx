@@ -5,7 +5,6 @@ import { useAppSelector, useAppDispatch, addTicket } from '@nbfc/core';
 import { SERVICE_CATEGORIES } from '@nbfc/config';
 import { generateTicketId, formatDate } from '@nbfc/utils';
 import { serviceStyles as s } from './service.styles';
-import { C } from '../../styles/shared';
 
 export const ServicesHomeScreen = ({ navigation }: any) => {
   const loans = useAppSelector(st => st.loan.loans);
@@ -77,7 +76,7 @@ export const SelectLoanScreen = ({ navigation }: any) => {
         <View style={s.tabRow}>
           {(['active', 'inactive'] as const).map(t => (
             <TouchableOpacity key={t} style={[s.tab, tab === t ? s.tabActive : {}]} onPress={() => setTab(t)}>
-              <Text variant="labelMd" color={tab === t ? C.white : colors.text.secondary}>{t === 'active' ? 'Active Loans' : 'Inactive Loans'}</Text>
+              <Text variant="labelMd" color={tab === t ? colors.white : colors.text.secondary}>{t === 'active' ? 'Active Loans' : 'Inactive Loans'}</Text>
             </TouchableOpacity>
           ))}
         </View>
@@ -232,7 +231,7 @@ export const TrackRequestsScreen = ({ navigation }: any) => {
       <View style={s.header}><TouchableOpacity onPress={() => navigation.goBack()}><Icon name="back" size={24} color={colors.text.primary} /></TouchableOpacity><Text variant="labelLg" style={s.headerTitle}>Track Service Requests</Text></View>
       <View style={s.filterRow}>
         {['All', 'Pending', 'Active', 'Done'].map(f => { const k = f.toLowerCase(); const a = filter === k;
-          return <TouchableOpacity key={f} style={[s.filterTab, a && s.filterActive]} onPress={() => setFilter(k)}><Text variant="labelMd" color={a ? C.white : colors.text.secondary}>{f}</Text></TouchableOpacity>; })}
+          return <TouchableOpacity key={f} style={[s.filterTab, a && s.filterActive]} onPress={() => setFilter(k)}><Text variant="labelMd" color={a ? colors.white : colors.text.secondary}>{f}</Text></TouchableOpacity>; })}
       </View>
       <ScrollView style={{ flex: 1, paddingHorizontal: sp.base }}>
         {filtered.map(t => <ServiceTicketCard key={t.id} title={t.title} refId={t.refId} desc={t.desc} status={t.status} created={t.created} updated={t.updated} />)}

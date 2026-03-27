@@ -117,11 +117,25 @@ const PRODUCT_THEME: Record<string, { bg: string; fg: string }> = {
   business: { bg: '#C9EEDC', fg: '#0C8749' },
   home: { bg: '#FCE4EC', fg: '#C62828' },
   home_loan: { bg: '#FCE4EC', fg: '#C62828' },
+  // Full loan type name aliases (matches Redux loan.type values)
+  'Car Loan': { bg: '#EEF2FF', fg: '#3B5998' },
+  'Tractor Loan': { bg: '#EEF6EE', fg: '#0C8749' },
+  'Commercial Vehicle Loan': { bg: '#E8EAF6', fg: '#1A1C4D' },
+  'Equipment Loan': { bg: '#FFF8E1', fg: '#E65100' },
+  'Business Loan': { bg: '#C9EEDC', fg: '#0C8749' },
+  'Home Repair Loan': { bg: '#FCE4EC', fg: '#C62828' },
+};
+
+const TYPE_TO_ICON: Record<string, IconName> = {
+  car: 'car', tractor: 'tractor', truck: 'truck', equipment: 'equipment',
+  business: 'business', home: 'home_loan', home_loan: 'home_loan',
+  'Car Loan': 'car', 'Tractor Loan': 'tractor', 'Commercial Vehicle Loan': 'truck',
+  'Equipment Loan': 'equipment', 'Business Loan': 'business', 'Home Repair Loan': 'home_loan',
 };
 
 export const ProductIcon: React.FC<{ type: string; size?: number }> = ({ type, size = 56 }) => {
   const t = PRODUCT_THEME[type] || { bg: '#FAFAFA', fg: '#757575' };
-  const iconName = (type === 'home' ? 'home_loan' : type) as IconName;
+  const iconName = TYPE_TO_ICON[type] || (type as IconName);
   return (
     <View style={[s.center, { width: size, height: size, borderRadius: size * 0.21, backgroundColor: t.bg }]}>
       <Icon name={iconName} size={size * 0.45} color={t.fg} />
