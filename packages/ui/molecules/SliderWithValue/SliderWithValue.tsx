@@ -1,4 +1,4 @@
-import React, { useRef, useCallback } from 'react';
+import React, { useRef, useCallback, useMemo } from 'react';
 import { View, PanResponder, LayoutChangeEvent } from 'react-native';
 import { Text } from '../../atoms/Text';
 import { colors } from '../../theme/colors';
@@ -9,27 +9,35 @@ export interface SliderWithValueProps { label: string; value: number; min: numbe
 export const SliderWithValue: React.FC<SliderWithValueProps> = ({ label, value, min, max, step = 1, formatValue, formatMin, formatMax, onValueChange }) => {
   const progress = Math.min(Math.max((value - min) / (max - min), 0), 1);
   const trackWidth = useRef(0);
+  const trackPageX = useRef(0);
+  const trackRef = useRef<View>(null);
+  const callbackRef = useRef({ min, max, step, onValueChange });
+  callbackRef.current = { min, max, step, onValueChange };
 
-  const onTrackLayout = useCallback((e: LayoutChangeEvent) => {
-    trackWidth.current = e.nativeEvent.layout.width;
+  const onTrackLayout = useCallback((_e: LayoutChangeEvent) => {
+    trackRef.current?.measure((_x, _y, width, _height, pageX) => {
+      trackWidth.current = width;
+      trackPageX.current = pageX;
+    });
   }, []);
 
-  const updateValue = useCallback((locationX: number) => {
+  const updateFromPageX = useCallback((pageX: number) => {
     const w = trackWidth.current || 300;
-    const ratio = Math.min(Math.max(locationX / w, 0), 1);
-    let nv = min + ratio * (max - min);
-    nv = Math.round(nv / step) * step;
-    onValueChange(Math.min(Math.max(nv, min), max));
-  }, [min, max, step, onValueChange]);
+    const relativeX = pageX - trackPageX.current;
+    const ratio = Math.min(Math.max(relativeX / w, 0), 1);
+    const { min: cMin, max: cMax, step: cStep, onValueChange: cb } = callbackRef.current;
+    let nv = cMin + ratio * (cMax - cMin);
+    nv = Math.round(nv / cStep) * cStep;
+    cb(Math.min(Math.max(nv, cMin), cMax));
+  }, []);
 
-  const panResponder = useRef(
+  const panResponder = useMemo(() =>
     PanResponder.create({
       onStartShouldSetPanResponder: () => true,
       onMoveShouldSetPanResponder: () => true,
-      onPanResponderGrant: (e) => updateValue(e.nativeEvent.locationX),
-      onPanResponderMove: (e) => updateValue(e.nativeEvent.locationX),
-    })
-  ).current;
+      onPanResponderGrant: (e) => updateFromPageX(e.nativeEvent.pageX),
+      onPanResponderMove: (e) => updateFromPageX(e.nativeEvent.pageX),
+    }), [updateFromPageX]);
 
   return (
     <View style={{ marginBottom: sp.lg }}>
@@ -41,6 +49,7 @@ export const SliderWithValue: React.FC<SliderWithValueProps> = ({ label, value, 
       </View>
       {/* Slider track with drag support */}
       <View
+        ref={trackRef}
         style={{ height: 40, justifyContent: 'center' }}
         onLayout={onTrackLayout}
         {...panResponder.panHandlers}

@@ -12,14 +12,21 @@
     "logout_confirm": "क्या आप लॉग आउट करना चाहते हैं?",
     "change": "बदलें",
     "add": "जोड़ें",
-    "update": "अपडेट करें"
+    "update": "अपडेट करें",
+    "download": "डाउनलोड",
+    "view_more": "और देखें",
+    "need_help": "मदद चाहिए?",
+    "resend_otp": "OTP पुनः भेजें",
+    "app_version": "ऐप संस्करण {{version}}"
   },
+
   "welcome": {
     "app_name": "सेवक",
     "get_started": "शुरू करें",
     "log_in": "लॉग इन करें",
     "privacy_notice": "खाता बनाकर, आप पुष्टि करते हैं कि आपने हमारी गोपनीयता नीतियों को पढ़ और समझ लिया है"
   },
+
   "login": {
     "etb_title": "वापसी पर स्वागत है",
     "etb_subtitle": "अपने SK Finance खाते से जुड़ा फ़ोन नंबर दर्ज करें",
@@ -28,6 +35,7 @@
     "get_otp": "OTP प्राप्त करें",
     "invalid_mobile": "कृपया एक वैध 10-अंकीय मोबाइल नंबर दर्ज करें"
   },
+
   "otp": {
     "title_sms": "हमने अभी आपको एक SMS भेजा है",
     "title_email": "अपना ईमेल सत्यापित करें",
@@ -35,42 +43,356 @@
     "title_reset": "अपनी पहचान सत्यापित करें",
     "subtitle": "{{contact}} पर भेजा गया {{length}}-अंकीय कोड दर्ज करें",
     "didnt_receive": "प्राप्त नहीं हुआ?",
-    "resend_in": "{{seconds}} सेकंड में पुनः भेजें"
+    "resend_in": "{{seconds}} सेकंड में पुनः भेजें",
+    "code_expires": "कोड समाप्त होगा",
+    "submit": "जमा करें"
   },
+
   "mpin": {
     "intro_title": "अपना ऐप MPIN सेट करें",
     "intro_subtitle": "त्वरित लॉगिन के लिए 4-अंकीय PIN बनाएं",
     "setup_title": "MPIN सेट करें",
     "setup_reset_title": "नया MPIN सेट करें",
+    "setup_subtitle": "अपने खाते तक त्वरित और सुरक्षित पहुँच के लिए 4-अंकीय MPIN बनाएं।",
     "confirm_title": "MPIN की पुष्टि करें",
-    "error_mismatch": "MPIN मेल नहीं खाता। कृपया पुनः प्रयास करें।"
+    "confirm_subtitle": "पुष्टि के लिए वही 4-अंकीय MPIN दोबारा दर्ज करें।",
+    "enter_label": "MPIN दर्ज करें",
+    "confirm_label": "MPIN की पुष्टि करें",
+    "error_short": "कृपया 4-अंकीय MPIN दर्ज करें",
+    "error_weak": "कृपया अधिक सुरक्षित MPIN चुनें",
+    "error_mismatch": "MPIN मेल नहीं खाता। कृपया पुनः प्रयास करें।",
+    "reset_success_title": "MPIN सफलतापूर्वक रीसेट हुआ",
+    "reset_success_subtitle": "आगे बढ़ने के लिए कृपया 'लॉगिन' बटन पर क्लिक करें।",
+    "login_btn": "लॉगिन"
   },
+
+  "biometric": {
+    "title": "Face ID सक्षम करें",
+    "subtitle": "तेज़, सुरक्षित पहुँच के लिए Face ID का उपयोग करें। आप इसे सेटिंग्स में कभी भी बदल सकते हैं।",
+    "enable_btn": "Face ID सक्षम करें"
+  },
+
+  "login_success": {
+    "title": "लॉगिन सफल!",
+    "subtitle": "आप अपने डैशबोर्ड तक जल्दी और सुरक्षित रूप से पहुँच सकते हैं।",
+    "go_dashboard": "डैशबोर्ड पर जाएं"
+  },
+
+  "subsequent": {
+    "welcome": "स्वागत है,",
+    "login_mpin": "mPIN से लॉगिन करें",
+    "forgot_mpin": "mPIN भूल गए?",
+    "use_face_id": "Face ID का उपयोग करें",
+    "incorrect_mpin": "गलत MPIN। कृपया पुनः प्रयास करें।"
+  },
+
+  "forgot_mpin": {
+    "title": "mPIN भूल गए",
+    "subtitle": "अपना MPIN रीसेट करने के लिए, आपको अपने पंजीकृत मोबाइल नंबर को OTP के माध्यम से सत्यापित करना होगा।",
+    "registered_mobile": "पंजीकृत मोबाइल नंबर"
+  },
+
+  "account_locked": {
+    "title": "खाता अस्थायी रूप से लॉक है",
+    "subtitle": "बहुत अधिक गलत PIN प्रयास। 30 मिनट बाद पुनः प्रयास करें।",
+    "reset_btn": "MPIN रीसेट करें",
+    "call_support": "सहायता को कॉल करें"
+  },
+
+  "session_expired": {
+    "title": "सत्र समाप्त",
+    "subtitle": "आपकी सुरक्षा के लिए, निष्क्रियता के कारण आपको लॉग आउट कर दिया गया है।",
+    "login_again": "पुनः लॉग इन करें"
+  },
+
   "dashboard": {
     "hero_title": "तत्काल वाहन\nऋण स्वीकृति प्राप्त करें",
     "hero_subtitle": "मिनटों में स्वीकृति प्राप्त करें",
     "status_title": "आपका अनुरोध प्रगति में है।",
     "status_subtitle": "हमारी टीम जल्द ही आपसे संपर्क करेगी..",
     "contact_support": "सहायता से संपर्क करें",
-    "our_products": "हमारे उत्पाद"
+    "our_products": "हमारे उत्पाद",
+    "tools_services": "उपकरण और सेवाएं",
+    "support": "सहायता",
+    "chat_support": "चैट सहायता",
+    "email": "ईमेल",
+    "call_us": "हमें कॉल करें",
+    "locate_us": "हमें खोजें",
+    "payments_reminders": "भुगतान और अनुस्मारक",
+    "auto_debit_prompt": "कभी EMI न चूकें। ऑटो-डेबिट सेट करें।",
+    "setup_auto_debit": "ऑटो-डेबिट सेट करें",
+    "recommended": "आपके लिए अनुशंसित",
+    "quick_links": "त्वरित लिंक",
+    "pre_approved_title": "पूर्व-स्वीकृत दोपहिया वाहन ऋण",
+    "pre_approved_sub": "तुरंत ₹1,50,000 तक प्राप्त करें",
+    "view_offer": "ऑफ़र देखें"
   },
+
+  "products": {
+    "page_title": "तत्काल वाहन\nऋण स्वीकृति प्राप्त करें",
+    "page_subtitle": "मिनटों में स्वीकृति प्राप्त करें",
+    "our_products": "हमारे उत्पाद",
+    "tools_services": "उपकरण और सेवाएं",
+    "create_account": "खाता बनाएं",
+    "features_title": "विशेषताएं और लाभ",
+    "feature_1": "सभी मालिक प्रोफ़ाइल के लिए ऋण।",
+    "feature_2": "आकर्षक ब्याज दरें।",
+    "feature_3": "100% पारदर्शिता।",
+    "feature_4": "मूल्य का 90% तक।",
+    "detail_desc": "SK Finance में, हम आपको वित्त की चिंता किए बिना आपके सपनों को पूरा करने में मदद करने के लिए ऋण प्रदान करते हैं।"
+  },
+
+  "kyc": {
+    "title": "अपने बारे में और बताएं",
+    "subtitle_lead": "सही ऋण विशेषज्ञ से जुड़ने में हमारी मदद करें",
+    "subtitle_ntb": "यह आपकी पहचान सत्यापित करने में मदद करता है",
+    "full_name": "पूरा नाम (PAN कार्ड के अनुसार)",
+    "full_name_placeholder": "जैसे राहुल शर्मा",
+    "dob": "जन्म तिथि",
+    "dob_placeholder": "DD/MM/YYYY",
+    "pan": "PAN नंबर",
+    "pan_placeholder": "ABCDE1234F",
+    "email": "ईमेल",
+    "email_placeholder": "email@example.com",
+    "pincode": "पिन कोड",
+    "pincode_placeholder": "पिनकोड दर्ज करें",
+    "loan_type": "ऋण प्रकार",
+    "loan_type_placeholder": "ऋण प्रकार चुनें",
+    "product_type": "उत्पाद प्रकार",
+    "product_type_placeholder": "उत्पाद प्रकार चुनें",
+    "employment_type": "रोज़गार प्रकार",
+    "employment_type_placeholder": "रोज़गार प्रकार चुनें",
+    "consent_text": "प्रदान की गई जानकारी का उपयोग आपकी ऋण पूछताछ को संसाधित करने के लिए किया जाएगा।",
+    "error_name": "नाम आवश्यक है",
+    "error_dob": "जन्म तिथि आवश्यक है",
+    "error_pan": "PAN आवश्यक है",
+    "error_pan_invalid": "अमान्य PAN (जैसे ABCDE1234F)",
+    "error_consent": "कृपया शर्तें स्वीकार करें",
+    "error_email": "अमान्य ईमेल",
+    "error_pincode": "अमान्य पिनकोड",
+    "error_loan_type": "ऋण प्रकार चुनें",
+    "error_employment": "रोज़गार प्रकार चुनें",
+    "date_picker_title": "जन्म तिथि चुनें",
+    "date_day": "दिन",
+    "date_month": "महीना",
+    "date_year": "वर्ष"
+  },
+
   "profile": {
     "title": "मेरी प्रोफ़ाइल",
+    "account_info": "खाता जानकारी",
     "personal_info": "व्यक्तिगत जानकारी",
     "address": "पता",
+    "settings": "सेटिंग्स",
     "change_mpin": "MPIN बदलें",
     "language_pref": "भाषा प्राथमिकता",
+    "others": "अन्य",
     "refer_earn": "रेफ़र करें और कमाएं",
-    "customer_care": "ग्राहक सेवा से संपर्क करें"
+    "customer_care": "ग्राहक सेवा से संपर्क करें",
+    "change_photo": "फ़ोटो बदलें",
+    "take_photo": "फ़ोटो लें",
+    "gallery": "गैलरी",
+    "full_name": "पूरा नाम",
+    "dob": "जन्म तिथि",
+    "pan_number": "PAN नंबर",
+    "mobile_number": "मोबाइल नंबर",
+    "alt_mobile": "वैकल्पिक मोबाइल नंबर",
+    "email_id": "ईमेल ID",
+    "disclaimer_title": "अस्वीकरण",
+    "disclaimer_text": "यहाँ किए गए अपडेट केवल आपकी प्रोफ़ाइल जानकारी पर लागू होंगे।"
   },
+
+  "update_mobile": {
+    "title": "मोबाइल नंबर अपडेट करें",
+    "subtitle": "अपना नया मोबाइल नंबर दर्ज करें। परिवर्तन की पुष्टि के लिए एक सत्यापन कोड भेजा जाएगा।",
+    "label": "नया मोबाइल नंबर",
+    "placeholder": "नया मोबाइल नंबर दर्ज करें",
+    "consent": "मैं सहमत हूँ कि SKF सत्यापन के लिए मेरे द्वारा दर्ज किए गए नए मोबाइल नंबर को बाहरी एजेंसियों के साथ साझा करेगा।",
+    "error_length": "10-अंकीय मोबाइल नंबर दर्ज करें",
+    "error_invalid": "6-9 से शुरू होने वाला वैध मोबाइल नंबर दर्ज करें"
+  },
+
+  "update_email": {
+    "title": "ईमेल पता अपडेट करें",
+    "subtitle": "अपना नया ईमेल पता दर्ज करें। भविष्य के सभी संचार इस ईमेल पर भेजे जाएंगे।",
+    "label": "नया ईमेल पता",
+    "placeholder": "नया ईमेल पता दर्ज करें",
+    "error_invalid": "वैध ईमेल पता दर्ज करें"
+  },
+
+  "change_mpin": {
+    "title": "MPIN बदलें",
+    "subtitle": "अपना MPIN बदलने के लिए, OTP के माध्यम से अपना पंजीकृत मोबाइल नंबर सत्यापित करें।",
+    "registered_mobile": "पंजीकृत मोबाइल नंबर"
+  },
+
+  "language": {
+    "title": "भाषा प्राथमिकता",
+    "subtitle": "अपनी पसंदीदा भाषा चुनें"
+  },
+
+  "address": {
+    "title": "पता",
+    "communication": "संचार पता",
+    "permanent": "स्थायी पता",
+    "confirm_title": "अपना पता पुष्टि करें",
+    "confirm_subtitle": "हमने आपके दस्तावेज़ से निम्नलिखित पता पाया है।"
+  },
+
+  "refer": {
+    "title": "अपने मित्र का विवरण दर्ज करें",
+    "subtitle": "आपके मित्र का विवरण सुरक्षित है।",
+    "header": "रेफ़रल फ़ॉर्म भरें",
+    "friend_name": "मित्र का नाम",
+    "friend_name_placeholder": "नाम दर्ज करें",
+    "contact": "संपर्क विवरण",
+    "contact_placeholder": "मोबाइल नंबर दर्ज करें",
+    "loan_interest": "रुचि वाला ऋण",
+    "loan_placeholder": "ऋण प्रकार चुनें",
+    "submit_btn": "रेफ़रल जमा करें"
+  },
+
+  "care": {
+    "title": "ग्राहक सेवा से संपर्क करें",
+    "talk_team": "हमारी टीम से बात करें",
+    "all_options": "सभी विकल्प"
+  },
+
   "calculator": {
     "emi_title": "EMI कैलकुलेटर",
     "eligibility_title": "पात्रता कैलकुलेटर",
     "loan_amount": "ऋण राशि",
     "interest_rate": "ब्याज दर (प्रति वर्ष)",
-    "tenure": "अवधि (महीने)"
+    "tenure": "अवधि (महीने)",
+    "income": "सकल मासिक आय",
+    "other_emi": "अन्य ऋण EMI",
+    "income_source": "आय स्रोत",
+    "emi_label": "{{loanType}} EMI",
+    "total_interest": "कुल ब्याज\nदेय",
+    "total_amount": "कुल राशि\nदेय",
+    "eligibility_label": "{{loanType}} पात्रता है"
   },
+
+  "payments": {
+    "pay_emi": "EMI भुगतान करें",
+    "pay_subtitle": "भुगतान करने के लिए ऋण खाता और भुगतान प्रकार चुनें",
+    "loan_account": "ऋण खाता",
+    "payment_type": "भुगतान प्रकार",
+    "customer_name": "ग्राहक का नाम",
+    "mobile_number": "मोबाइल नंबर",
+    "amount": "राशि",
+    "make_payment": "भुगतान करें",
+    "payment_success": "भुगतान सफल!",
+    "payment_success_sub": "आपका भुगतान सफलतापूर्वक पूरा हो गया है।"
+  },
+
+  "loan_details": {
+    "title": "ऋण विवरण",
+    "overview": "अवलोकन",
+    "documents": "दस्तावेज़ और विवरण",
+    "transactions": "हाल के लेनदेन",
+    "repayment_progress": "पुनर्भुगतान प्रगति",
+    "next_installment": "अगली किस्त",
+    "emi_amount": "EMI राशि",
+    "loan_amount": "ऋण राशि",
+    "tenure": "अवधि",
+    "closure_date": "ऋण समापन तिथि",
+    "paid": "भुगतान किया",
+    "remaining": "शेष",
+    "emi_paid": "EMI भुगतान",
+    "nach_title": "ऑटो-डेबिट खाता (NACH)",
+    "insurance_title": "लिंक्ड बीमा",
+    "associated_title": "संबंधित व्यक्ति"
+  },
+
+  "mandate": {
+    "title": "ऑटो-डेबिट मैंडेट",
+    "header": "ऑटो-डेबिट और भुगतान",
+    "select_loan": "ऋण चुनें",
+    "mandate_details": "मैंडेट विवरण",
+    "bank_name": "बैंक का नाम",
+    "account_number": "खाता संख्या",
+    "ifsc_code": "IFSC कोड",
+    "account_holder": "खाता धारक",
+    "emi_amount": "EMI राशि",
+    "end_date": "अंतिम तिथि",
+    "change_bank": "बैंक खाता बदलें",
+    "warning_title": "महत्वपूर्ण जानकारी",
+    "warning_text": "अपना ऑटो-डेबिट खाता बदलने से मौजूदा मैंडेट बदल जाएगा। EMI भुगतान जारी रखने के लिए आपको नए खाते को अधिकृत करना होगा।",
+    "setup_title": "मैंडेट विवरण",
+    "setup_subtitle": "आपकी EMI हर महीने इस बैंक खाते से स्वचालित रूप से डेबिट होगी।",
+    "setup_header": "ऑटो-डेबिट सेट करें",
+    "holder_name": "खाता धारक का नाम",
+    "account_type": "खाता प्रकार",
+    "authorize_title": "मैंडेट विवरण",
+    "authorize_subtitle": "ऑटो-डेबिट सक्रिय करने के लिए, कृपया बैंक प्रक्रिया पूर्ण करें।",
+    "authorize_header": "ऑटो-डेबिट अधिकृत करें",
+    "authorize_btn": "मैंडेट अधिकृत करें"
+  },
+
+  "services": {
+    "title": "सेवाएं",
+    "your_relationships": "आपके संबंध",
+    "quick_links": "त्वरित लिंक",
+    "pay_loan_emi": "ऋण\nEMI भुगतान",
+    "raise_request": "अनुरोध\nदर्ज करें",
+    "track_application": "आवेदन\nट्रैक करें",
+    "documents": "दस्तावेज़",
+    "get_documents": "दस्तावेज़ और विवरण प्राप्त करें",
+    "knowledge_center": "ज्ञान केंद्र",
+    "how_pay_emi": "EMI कैसे भुगतान करें",
+    "how_update_mandate": "मैंडेट कैसे अपडेट करें",
+    "account_management": "खाता प्रबंधन",
+    "profile_details": "प्रोफ़ाइल विवरण",
+    "manage_autopay": "ऑटोपे प्रबंधित करें",
+    "download_statement": "स्टेटमेंट डाउनलोड करें",
+    "need_assistance": "सहायता चाहिए?",
+    "available_mon_fri": "सोम-शुक्र उपलब्ध।",
+    "call_now": "अभी कॉल करें",
+    "faqs": "अक्सर पूछे जाने वाले प्रश्न"
+  },
+
+  "service_requests": {
+    "title": "सेवा अनुरोध",
+    "subtitle": "हम आज आपकी कैसे मदद कर सकते हैं?",
+    "create_title": "सेवा अनुरोध बनाएं",
+    "create_sub": "सहायता के लिए नया अनुरोध जमा करें",
+    "track_title": "सेवा अनुरोध ट्रैक करें",
+    "track_sub": "अपने मौजूदा अनुरोधों की स्थिति देखें",
+    "select_loan": "ऋण खाता चुनें",
+    "select_loan_sub": "इस सेवा अनुरोध के लिए ऋण चुनें",
+    "active_loans": "सक्रिय ऋण",
+    "inactive_loans": "निष्क्रिय ऋण",
+    "other_request": "अन्य अनुरोध",
+    "other_sub": "श्रेणी चुनें और अपनी समस्या बताएं",
+    "select_category": "श्रेणी चुनें",
+    "category_placeholder": "जैसे, भुगतान, दस्तावेज़",
+    "select_sub": "उप-श्रेणी चुनें",
+    "description": "विवरण",
+    "description_placeholder": "अपनी समस्या स्पष्ट रूप से बताएं",
+    "attachments": "अनुलग्नक (वैकल्पिक)",
+    "upload_documents": "दस्तावेज़ अपलोड करें",
+    "upload_formats": "प्रारूप: jpg, png, pdf, आदि। अधिकतम आकार: 10MB",
+    "submit_request": "अनुरोध जमा करें",
+    "no_requests": "कोई अनुरोध नहीं मिला"
+  },
+
   "success": {
     "default_title": "सफल!",
-    "request_submitted": "अनुरोध सफलतापूर्वक जमा किया गया"
+    "request_submitted": "अनुरोध सफलतापूर्वक जमा किया गया",
+    "application_submitted": "आवेदन सफलतापूर्वक जमा किया गया",
+    "application_sub": "हमारी टीम समीक्षा करके जल्द आपसे संपर्क करेगी।",
+    "view_ticket": "सेवा टिकट देखें",
+    "back_home": "होम पर वापस जाएं",
+    "go_dashboard": "डैशबोर्ड पर जाएं",
+    "confirm_details": "विवरण पुष्टि करें",
+    "mobile_update_sub": "आपका मोबाइल नंबर {{hours}} घंटे के भीतर अपडेट होगा।",
+    "email_update_sub": "आपका ईमेल पता {{hours}} घंटे के भीतर अपडेट होगा।",
+    "address_update_sub": "आपका पता 24 घंटे के भीतर अपडेट होगा।",
+    "language_update_sub": "आपकी भाषा प्राथमिकता 24 घंटे के भीतर अपडेट होगी।",
+    "referral_title": "रेफ़रल सफलतापूर्वक जमा किया गया",
+    "referral_sub": "हम जल्द ही आपके मित्र से संपर्क करेंगे",
+    "mandate_sub": "आपका मैंडेट विवरण 24 घंटे के भीतर अपडेट होगा।",
+    "service_sub": "आपका अनुरोध 24 घंटे के भीतर संसाधित होगा।"
   }
 }
